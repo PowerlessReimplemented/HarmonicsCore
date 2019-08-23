@@ -1,9 +1,9 @@
 package powerlessri.harmonics.utils;
 
 import com.google.common.base.Preconditions;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -63,11 +63,11 @@ public class Background {
         TESSELLATOR.draw();
 
         if (bodyWidth > 0 && bodyHeight > 0) {
-            GlStateManager.disableTexture2D();
+            GlStateManager.disableTexture();
             BUFFER.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
             BodyPiece.draw(bodyX, bodyY, bodyWidth, bodyHeight);
             TESSELLATOR.draw();
-            GlStateManager.enableTexture2D();
+            GlStateManager.enableTexture();
         }
     }
 
@@ -97,7 +97,6 @@ public class Background {
         private static void drawBottomRight(int x, int y) {
             plotVertexesTex(x, y, UNIT_LENGTH, UNIT_LENGTH, TX_BOTTOM_RIGHT, TY);
         }
-
     }
 
     /**
@@ -126,7 +125,6 @@ public class Background {
         private static void drawRight(int x, int y, int height) {
             plotVertexesTex(x, y, UNIT_LENGTH, height, TX_RIGHT, TY);
         }
-
     }
 
     private static class BodyPiece {
@@ -134,7 +132,6 @@ public class Background {
         private static void draw(int x, int y, int width, int height) {
             plotVertexesColor(x, y, width, height, 0xC6, 0xC6, 0xC6, 0xFF);
         }
-
     }
 
     private static void plotVertexesTex(int x1, int y1, int width, int height, int tx, int ty) {
@@ -165,6 +162,5 @@ public class Background {
         BUFFER.pos(x1, y2, 0).color(red, green, yellow, alpha).endVertex();
         BUFFER.pos(x2, y2, 0).color(red, green, yellow, alpha).endVertex();
     }
-
 }
 
