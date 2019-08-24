@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.HarmonicsCore;
 
-public class Background {
+public class BackgroundRenderer {
 
     private static final Tessellator TESSELLATOR = Tessellator.getInstance();
     private static final BufferBuilder BUFFER = TESSELLATOR.getBuffer();
