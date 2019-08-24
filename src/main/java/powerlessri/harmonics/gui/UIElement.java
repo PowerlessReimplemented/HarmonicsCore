@@ -1,5 +1,6 @@
 package powerlessri.harmonics.gui;
 
+import com.google.common.base.Preconditions;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -7,6 +8,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.world.ClientWorld;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 
 /**
@@ -17,7 +19,7 @@ import java.awt.*;
  *     | outer element                |
  *     |                              |
  *     |   [1]''''''''''''''''''''    |
- *     |   | element, border     |    |
+ *     |   | element  border     |    |
  *     |   |                     |    |
  *     |   | [2]--------------+  |    |
  *     |   | | content        |  |    |
@@ -50,10 +52,9 @@ import java.awt.*;
  *     <li>[7]: full width
  *     <li>[8]: full height
  * </ul>
- *
- * @param <E> The inherited type itself.
  */
-public abstract class UIElement<E extends UIElement<E>> {
+//public abstract class UIElement<E extends UIElement<E>> {
+public abstract class UIElement {
 
     private static final UIElement DUMMY = new UIElement() {};
 
@@ -108,30 +109,70 @@ public abstract class UIElement<E extends UIElement<E>> {
         this(0, 0, width, height);
     }
 
+    /**
+     * Attache this element to a valid parent element, and populate the default child element by firing {@link #populateChildren()} if
+     * necessary. If this is the first time attaching to some element tree, {@link #onAttach()} and {@link #populateChildren()} will be
+     * fired. Otherwise {@link #onDetach()} will be fired along with {@link #onReattach()} if the parameter is nonnull.
+     * <p>
+     * <b>Notice</b> that the return value is intended to be used for chaining directly after element construct, with no following method
+     * invocations. Additionally the return value will be automatically casted to anything that inherits from {@link UIElement}, therefore
+     * please be careful with the source type and the expected type.
+     * <p>
+     * Good example:
+     * <pre>{@code
+     *     Label label = new Label("hello, world").attach(parent);
+     * }</pre>
+     * <p>
+     * Bad example:
+     * <pre>{@code
+     *     element.attach(parent).doSomething();
+     * }</pre>
+     * In above example, the generic argument {@code THIS} will be inferred to {@link UIElement}, which is usually not very helpful.
+     * <p>
+     * Incorrect usage:
+     * <pre>{@code
+     *     TextField field = new Label("something").attach(parent);
+     * }</pre>
+     * The above example <b>will compile</b>, but will also throw a {@link ClassCastException} on execution. This is because the generic
+     * argument can be anything that's a subtype of {@link UIElement} regardless of source type. The mistake in the example is obvious and
+     * probably will not happen, however element creation sometimes go through a complicated series of method call and the original type
+     * might be lost in the process.
+     *
+     * @param parent A valid parent element to be attached onto; if {@code null}, detaches from the currently attached tree.
+     */
     @CanIgnoreReturnValue
     @SuppressWarnings("unchecked")
-    public final E attach(UIElement parent) {
-        boolean firstLoad = this.parent == null;
+    public final <THIS extends UIElement> THIS attach(@Nullable UIElement parent) {
+        Preconditions.checkArgument(parent == null || parent.isValid());
+
+        boolean firstLoad = isFirstLoad();
         if (!firstLoad) {
-            detach();
+            onDetach();
         }
 
         this.parent = parent;
-        if (firstLoad) {
-            onAttach();
-            populateChildren();
-        } else {
-            onReattach();
-        }
+        if (parent != null) {
+            if (firstLoad) {
+                onAttach();
+                populateChildren();
+            } else {
+                onReattach();
+            }
 
-        updateAbsPos();
-        return (E) this;
+            updateAbsPos();
+        } else {
+            invalidateAbsPos();
+        }
+        return (THIS) this;
     }
 
     protected void onAttach() {
     }
 
     protected void onReattach() {
+    }
+
+    protected void onDetach() {
     }
 
     /**
@@ -141,19 +182,12 @@ public abstract class UIElement<E extends UIElement<E>> {
     protected void populateChildren() {
     }
 
-    @CanIgnoreReturnValue
-    @SuppressWarnings("unchecked")
-    public final E detach() {
-        this.parent = DUMMY;
-        onDetach();
-        return (E) this;
-    }
-
-    protected void onDetach() {
-    }
-
     public boolean isValid() {
-        return parent != null && parent != DUMMY;
+        return !isFirstLoad() && parent != DUMMY;
+    }
+
+    private boolean isFirstLoad() {
+        return parent == null;
     }
 
     public Point getPosition() {
@@ -213,6 +247,11 @@ public abstract class UIElement<E extends UIElement<E>> {
     private void updateAbsPos() {
         absX = position.x + parent.getAbsoluteX();
         absY = position.y + parent.getAbsoluteY();
+    }
+
+    private void invalidateAbsPos() {
+        absX = 0;
+        absY = 0;
     }
 
     public int getAbsoluteX() {
@@ -308,5 +347,8 @@ public abstract class UIElement<E extends UIElement<E>> {
                 getAbsoluteXRight() > x &&
                 getAbsoluteY() <= y &&
                 getAbsoluteYBottom() > y;
+    }
+
+    public void render(RenderingContext context) {
     }
 }
