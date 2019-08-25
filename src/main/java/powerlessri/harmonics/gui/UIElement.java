@@ -53,7 +53,6 @@ import java.awt.*;
  *     <li>[8]: full height
  * </ul>
  */
-//public abstract class UIElement<E extends UIElement<E>> {
 public abstract class UIElement {
 
     private static final UIElement DUMMY = new UIElement() {};
