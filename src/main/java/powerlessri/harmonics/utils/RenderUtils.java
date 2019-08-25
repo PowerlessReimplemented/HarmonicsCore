@@ -28,4 +28,12 @@ public final class RenderUtils {
     public static void rectColor(int x1, int y1, int x2, int y2, int color) {
         rectColor(x1, y1, x2, y2, 0F, color);
     }
+
+    public static int getCenterX(int left, int right, int width) {
+        return left + (right - left) / 2 - width / 2;
+    }
+
+    public static int getCenterY(int top, int bottom, int height) {
+        return top + (top - bottom) / 2 - height / 2;
+    }
 }

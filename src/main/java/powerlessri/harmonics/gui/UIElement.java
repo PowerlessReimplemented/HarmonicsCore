@@ -67,6 +67,10 @@ public abstract class UIElement {
         return Minecraft.getInstance().fontRenderer;
     }
 
+    public static int textWidth(String text) {
+        return Minecraft.getInstance().fontRenderer.getStringWidth(text);
+    }
+
     public static int fontHeight() {
         return fontRenderer().FONT_HEIGHT;
     }
