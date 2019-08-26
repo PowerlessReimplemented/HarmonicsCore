@@ -8,7 +8,7 @@ import powerlessri.harmonics.utils.RenderUtils;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 
-public interface IBoxStyle {
+public interface IBoxStyle extends IStyle {
 
     void render(RenderingContext context, int x, int y, int width, int height);
 

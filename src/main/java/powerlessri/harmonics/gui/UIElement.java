@@ -115,7 +115,7 @@ public abstract class UIElement {
     /**
      * Attache this element to a valid parent element, and populate the default child element by firing {@link #populateChildren()} if
      * necessary. If this is the first time attaching to some element tree, {@link #onAttach()} and {@link #populateChildren()} will be
-     * fired. Otherwise {@link #onDetach()} will be fired along with {@link #onReattach()} if the parameter is nonnull.
+     * fired. Otherwise {@link #onDetach()} will be fired along with {@link #onReattach()} if the parameter {@code parent} is nonnull.
      * <p>
      * <b>Notice</b> that the return value is intended to be used for chaining directly after element construct, with no following method
      * invocations. Additionally the return value will be automatically casted to anything that inherits from {@link UIElement}, therefore

@@ -9,7 +9,7 @@ import static powerlessri.harmonics.gui.UIElement.*;
 import static powerlessri.harmonics.utils.RenderUtils.getCenterX;
 import static powerlessri.harmonics.utils.RenderUtils.getCenterY;
 
-public interface ITextStyle {
+public interface ITextStyle extends IStyle {
 
     void render(RenderingContext context, String text, int x, int y);
 
