@@ -1,0 +1,28 @@
+package powerlessri.harmonics.gui.actionmenu;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
+import powerlessri.harmonics.gui.IWidget;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+
+public interface IEntry extends IWidget {
+
+    /**
+     * This icon must have a size of 16*16, and action menus will assume so to function. Failure to do so might create undefined behaviors.
+     */
+    @Nullable
+    ResourceLocation getIcon();
+
+    default String getText() {
+        return I18n.format(getTranslationKey());
+    }
+
+    String getTranslationKey();
+
+    @Override
+    Dimension getDimensions();
+
+    void attach(ActionMenu actionMenu);
+}
