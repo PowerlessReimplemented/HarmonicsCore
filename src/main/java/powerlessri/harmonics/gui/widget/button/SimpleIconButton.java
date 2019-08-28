@@ -22,11 +22,6 @@ public class SimpleIconButton extends AbstractIconButton implements ResizableWid
         this.setTextures(textureNormal, textureHovering);
     }
 
-    public SimpleIconButton(Point location, Dimension dimensions, TextureWrapper textureNormal, TextureWrapper textureHovering) {
-        super(location, new Dimension());
-        this.setTextures(textureNormal, textureHovering);
-    }
-
     @Override
     public TextureWrapper getTextureNormal() {
         return textureNormal;

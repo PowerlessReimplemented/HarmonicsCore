@@ -40,11 +40,11 @@ public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin {
         this.entries = entries;
         this.contents = new Dimension();
         this.contents.width = entries.stream()
-                .max(Comparator.comparingInt(IEntry::getWidth))
+                .max(Comparator.comparingInt(IEntry::getFullWidth))
                 .orElseThrow(IllegalArgumentException::new)
-                .getWidth();
+                .getFullWidth();
         this.contents.height = entries.stream()
-                .mapToInt(IEntry::getHeight)
+                .mapToInt(IEntry::getFullHeight)
                 .sum();
         this.border = RenderingHelper.toBorder(contents, getBorderSize());
 
@@ -58,7 +58,7 @@ public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin {
         for (IEntry e : entries) {
             e.attach(this);
             e.setLocation(0, y);
-            y += e.getHeight();
+            y += e.getFullHeight();
         }
     }
 

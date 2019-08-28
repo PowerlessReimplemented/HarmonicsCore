@@ -15,8 +15,6 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
-import java.awt.*;
-
 public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     public static TextField DUMMY = new TextField(0, 0, 0, 0) {
@@ -113,10 +111,6 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     public TextField(int x, int y, int width, int height) {
         super(x, y, width, height);
-    }
-
-    public TextField(Point location, Dimension dimensions) {
-        super(location, dimensions);
     }
 
     public boolean isEditable() {

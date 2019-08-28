@@ -151,7 +151,7 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
         int sy = getScrollingSectionY();
         for (T child : searchResults) {
             int cy = child.getY();
-            if (cy + child.getHeight() > sy && cy < sy + contentArea.height) {
+            if (cy + child.getFullHeight() > sy && cy < sy + contentArea.height) {
                 child.render(mouseX, mouseY, particleTicks);
             }
         }
@@ -217,7 +217,7 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
 
     @CanIgnoreReturnValue
     public WrappingList<T> addElement(T widget) {
-        Preconditions.checkArgument(widget.getWidth() == getItemSize() && widget.getHeight() == getItemSize());
+        Preconditions.checkArgument(widget.getFullWidth() == getItemSize() && widget.getFullHeight() == getItemSize());
         contents.add(widget);
         reflow();
         return this;
@@ -365,6 +365,6 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
     }
 
     public void alignArrows() {
-        scrollDownArrow.setLocation(scrollUpArrow.getX(), scrollUpArrow.getY() + scrollUpArrow.getHeight() + getMargin());
+        scrollDownArrow.setLocation(scrollUpArrow.getX(), scrollUpArrow.getY() + scrollUpArrow.getFullHeight() + getMargin());
     }
 }

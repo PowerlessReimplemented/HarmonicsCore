@@ -17,12 +17,6 @@ public class Icon extends AbstractWidget implements INamedElement, LeafWidgetMix
         this.texture = texture;
     }
 
-    public Icon(IWidget parent, Point location, TextureWrapper texture) {
-        super(location, new Dimension(texture.getPortionWidth(), texture.getPortionHeight()));
-        setParentWidget(parent);
-        this.texture = texture;
-    }
-
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);

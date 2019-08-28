@@ -27,10 +27,6 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
         super(x, y, width, height);
     }
 
-    public Box(Point location, Dimension dimensions) {
-        super(location, dimensions);
-    }
-
     @Override
     public void onParentPositionChanged() {
         int oldAbsX = getAbsoluteX();

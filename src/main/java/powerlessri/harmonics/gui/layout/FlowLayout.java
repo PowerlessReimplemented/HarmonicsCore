@@ -23,7 +23,7 @@ public class FlowLayout {
         for (T widget : widgets) {
             if (BoxSizing.shouldIncludeWidget(widget)) {
                 widget.setLocation(x, y);
-                y += widget.getHeight();
+                y += widget.getFullHeight();
             }
         }
         return widgets;
@@ -39,17 +39,17 @@ public class FlowLayout {
                         break;
                     }
                     case CENTER: {
-                        int x = RenderingHelper.getXForAlignedCenter(0, bounds.width, widget.getWidth());
+                        int x = RenderingHelper.getXForAlignedCenter(0, bounds.width, widget.getFullWidth());
                         widget.setLocation(x, y);
                         break;
                     }
                     case RIGHT: {
-                        int x = RenderingHelper.getXForAlignedRight(bounds.width, widget.getWidth());
+                        int x = RenderingHelper.getXForAlignedRight(bounds.width, widget.getFullWidth());
                         widget.setLocation(Utils.lowerBound(x, 0), y);
                         break;
                     }
                 }
-                y += widget.getHeight();
+                y += widget.getFullHeight();
             }
         }
         return widgets;

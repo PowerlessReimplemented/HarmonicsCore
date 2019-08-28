@@ -138,7 +138,7 @@ public class GridLayout {
                 int py2 = getPy2At(gy);
                 // Expand the second vertex towards bottom right
                 if (!widget.isInside(px2, py2)) {
-                    widget.setDimensions(Math.max(widget.getWidth(), px2 - px), Math.max(widget.getHeight(), py2 - py));
+                    widget.setDimensions(Math.max(widget.getFullWidth(), px2 - px), Math.max(widget.getFullHeight(), py2 - py));
                 }
             }
         }

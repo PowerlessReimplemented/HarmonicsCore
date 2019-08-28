@@ -33,6 +33,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     public LinearList(int width, int height) {
         super(0, 0, width, height);
         this.elements = new ArrayList<>();
+        this.setBorders(4);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if (scrolling) {
-            int maxScroll = getHeight() - getBarHeight();
+            int maxScroll = getFullHeight() - getBarHeight();
             double moved = deltaY / maxScroll;
             scrollDistance += getMaxScroll() * moved;
             applyScrollLimits();
@@ -100,8 +101,8 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
         int top = getAbsoluteY();
         int right = getAbsoluteXRight();
         int bottom = getAbsoluteYBottom();
-        int width = getWidth();
-        int height = getHeight();
+        int width = getFullWidth();
+        int height = getFullHeight();
 
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder renderer = tess.getBuffer();
@@ -192,10 +193,10 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     @Override
     public void reflow() {
         int offset = (int) -scrollDistance;
-        int y = getBorder();
+        int y = getBorderTop();
         for (T child : getChildren()) {
             child.setY(y + offset);
-            y += child.getHeight() + getMarginMiddle();
+            y += child.getFullHeight() + getMarginMiddle();
         }
     }
 
@@ -214,14 +215,14 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     protected int getContentHeight() {
         int contentHeight = 0;
         for (T child : getChildren()) {
-            contentHeight += child.getHeight() + getMarginMiddle();
+            contentHeight += child.getFullHeight() + getMarginMiddle();
         }
         // Remove last unnecessary border
         return contentHeight - getMarginMiddle();
     }
 
     public int getFirstRowY() {
-        return getAbsoluteY() + getBorder();
+        return getAbsoluteY() + getBorderTop();
     }
 
     public int getScrollAmount() {
@@ -233,7 +234,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     public int getBarLeft() {
-        return getX() + getWidth() - getBarWidth();
+        return getX() + getFullWidth() - getBarWidth();
     }
 
     public int getAbsBarLeft() {
@@ -241,7 +242,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     public int getMaxScroll() {
-        return getContentHeight() - (getHeight() - getBorder());
+        return getContentHeight() - (getFullHeight() - getBorderTop());
     }
 
     private void applyScrollLimits() {
@@ -257,13 +258,13 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     public int getBarHeight() {
-        int height = getHeight();
-        return MathHelper.clamp((height * height) / getContentHeight(), 32, height - getBorder() * 2);
+        int height = getFullHeight();
+        return MathHelper.clamp((height * height) / getContentHeight(), 32, height - getVerticalBorder());
     }
 
     public int getAbsBarTop() {
         int top = getAbsoluteX();
-        return Utils.lowerBound((int) scrollDistance * (getHeight() - getBarHeight()) / getBarExtraHeight() + top, top);
+        return Utils.lowerBound((int) scrollDistance * (getFullHeight() - getBarHeight()) / getBarExtraHeight() + top, top);
     }
 
     public int getAbsBarBottom() {
@@ -271,10 +272,6 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     public int getBarExtraHeight() {
-        return (getContentHeight() + getBorder()) - getHeight();
-    }
-
-    public int getBorder() {
-        return 4;
+        return (getContentHeight() + getBorderTop()) - getFullHeight();
     }
 }

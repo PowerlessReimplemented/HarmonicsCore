@@ -54,11 +54,11 @@ public class Section extends AbstractContainer<IEntry> {
     @Override
     public void reflow() {
         int w = entries.stream()
-                .max(Comparator.comparingInt(IEntry::getWidth))
+                .max(Comparator.comparingInt(IEntry::getFullWidth))
                 .orElseThrow(IllegalArgumentException::new)
-                .getWidth();
+                .getFullWidth();
         int h = entries.stream()
-                .mapToInt(IEntry::getHeight)
+                .mapToInt(IEntry::getFullHeight)
                 .sum();
         setDimensions(w, h + MARGIN_SIDES);
 

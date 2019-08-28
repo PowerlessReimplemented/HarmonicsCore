@@ -17,10 +17,6 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
         super(x, y, width, height);
     }
 
-    public AbstractIconButton(Point location, Dimension dimensions) {
-        super(location, dimensions);
-    }
-
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         preRenderEvent(mouseX, mouseY);

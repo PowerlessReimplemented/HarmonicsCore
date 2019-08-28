@@ -20,10 +20,6 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
         super(x, y, width, height);
     }
 
-    public AbstractContainer(Point location, Dimension dimensions) {
-        super(location, dimensions);
-    }
-
     @Override
     public void setParentWidget(IWidget newParent) {
         super.setParentWidget(newParent);
@@ -60,8 +56,8 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
         int rightmost = 0;
         int bottommost = 0;
         for (IWidget child : getChildren()) {
-            int right = child.getX() + child.getWidth();
-            int bottom = child.getY() + child.getHeight();
+            int right = child.getX() + child.getFullWidth();
+            int bottom = child.getY() + child.getFullHeight();
             if (right > rightmost) {
                 rightmost = right;
             }

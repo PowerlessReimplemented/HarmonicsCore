@@ -14,13 +14,45 @@ public interface IWidget extends IRenderable {
      */
     Point getPosition();
 
+    Insets getBorders();
+
+    int getBorderTop();
+
+    int getBorderRight();
+
+    int getBorderBottom();
+
+    int getBorderLeft();
+
+    void setBorderTop(int top);
+
+    void setBorderRight(int right);
+
+    void setBorderBottom(int bottom);
+
+    void setBorderLeft(int left);
+
+    void setBorders(int top, int right, int bottom, int left);
+
+    default void setBorders(int borders) {
+        setBorders(borders, borders, borders, borders);
+    }
+
     int getX();
 
     int getY();
 
+    int getInnerX();
+
+    int getInnerY();
+
     int getAbsoluteX();
 
     int getAbsoluteY();
+
+    int getOuterAbsoluteX();
+
+    int getOuterAbsoluteY();
 
     default void setLocation(Point point) {
         setLocation(point.x, point.y);
@@ -42,24 +74,15 @@ public interface IWidget extends IRenderable {
         onRelativePositionChanged();
     }
 
-    default void moveX(int dx) {
-        setX(getX() + dx);
-    }
-
-    default void moveY(int dy) {
-        setY(getY() + dy);
-    }
-
-    default void move(int dx, int dy) {
-        moveX(dx);
-        moveY(dy);
-    }
-
     Dimension getDimensions();
 
     int getWidth();
 
     int getHeight();
+
+    int getFullWidth();
+
+    int getFullHeight();
 
     @Override
     void render(int mouseX, int mouseY, float particleTicks);

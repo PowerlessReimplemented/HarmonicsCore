@@ -133,7 +133,7 @@ public abstract class Inspections implements IRenderEventListener {
         int ax = widget.getAbsoluteX();
         int ay = widget.getAbsoluteY();
         useBlendingGLStates();
-        drawRect(ax, ay, ax + widget.getWidth(), ay + widget.getHeight(), CONTENTS);
+        drawRect(ax, ay, ax + widget.getFullWidth(), ay + widget.getFullHeight(), CONTENTS);
         useTextureGLStates();
     }
 
@@ -195,8 +195,8 @@ public abstract class Inspections implements IRenderEventListener {
         DEFAULT_INFO_RENDERER.line("Y=" + widget.getY());
         DEFAULT_INFO_RENDERER.line("AbsX=" + widget.getAbsoluteX());
         DEFAULT_INFO_RENDERER.line("AbsY=" + widget.getAbsoluteY());
-        DEFAULT_INFO_RENDERER.line("Width=" + widget.getWidth());
-        DEFAULT_INFO_RENDERER.line("Height=" + widget.getHeight());
+        DEFAULT_INFO_RENDERER.line("Width=" + widget.getFullWidth());
+        DEFAULT_INFO_RENDERER.line("Height=" + widget.getFullHeight());
     }
 
     protected void defaultOverlayInfo(IWindow window) {

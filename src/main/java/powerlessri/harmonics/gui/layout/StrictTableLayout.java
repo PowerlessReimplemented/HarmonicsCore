@@ -89,9 +89,8 @@ public final class StrictTableLayout {
     public <T extends IWidget> List<T> reflow(Dimension bounds, List<T> widgets) {
         Preconditions.checkArgument(isWidgetDimensionsIdentical(widgets));
 
-        // TODO add borders to container widgets so that we don't have to simulate borders here
-        int nextX = componentMargin;
-        int nextY = componentMargin;
+        int nextX = 0;
+        int nextY = 0;
         int headX = nextX;
         int headY = nextY;
 
@@ -102,8 +101,8 @@ public final class StrictTableLayout {
 
             widget.setLocation(nextX, nextY);
 
-            int width = widget.getWidth();
-            int height = widget.getHeight();
+            int width = widget.getFullWidth();
+            int height = widget.getFullHeight();
             nextX = stackDirection.computeNextX(nextX, width, componentMargin);
             nextY = stackDirection.computeNextY(nextY, height, componentMargin);
             if (!isCompletelyInside(nextX, nextY, width, height, bounds.width, bounds.height)) {
@@ -124,10 +123,10 @@ public final class StrictTableLayout {
         }
 
         IWidget first = widgets.get(0);
-        int commonWidth = first.getWidth();
-        int commonHeight = first.getHeight();
+        int commonWidth = first.getFullWidth();
+        int commonHeight = first.getFullHeight();
         for (IWidget widget : widgets) {
-            if (commonWidth != widget.getWidth() || commonHeight != widget.getHeight()) {
+            if (commonWidth != widget.getFullWidth() || commonHeight != widget.getFullHeight()) {
                 return false;
             }
         }

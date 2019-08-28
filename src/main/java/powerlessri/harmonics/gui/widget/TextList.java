@@ -95,7 +95,7 @@ public class TextList extends AbstractWidget implements LeafWidgetMixin {
     private void tryExpand(String line) {
         if (fitContents) {
             int w = minecraft().fontRenderer.getStringWidth(line);
-            setWidth(Math.max(getWidth(), 1 + w + 1));
+            setWidth(Math.max(getFullWidth(), 1 + w + 1));
             setHeight(1 + (fontHeight() + 2) * texts.size() + 1);
         }
     }

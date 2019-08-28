@@ -45,12 +45,9 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin {
         Dialog dialog = dialogue(message);
 
         TextField inputBox = new TextField(0, 0, 0, 16).setText(defaultText);
-//        inputBox.setMarginBotttom(4);
+        inputBox.setBorderBottom(4);
         dialog.insertBeforeButtons(inputBox);
         dialog.onPostReflow = inputBox::expandHorizontally;
-
-        // TODO add margin support
-        dialog.insertBeforeButtons(new Spacer(0, 4));
 
         dialog.buttons.addChildren(TextButton.of(confirm, b -> onConfirm.accept(b, inputBox.getText())));
         dialog.bindRemoveSelf2LastButton();
@@ -149,7 +146,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin {
                     int x = 0;
                     for (TextButton button : b) {
                         button.setLocation(x, 0);
-                        x += button.getWidth() + 2;
+                        x += button.getFullWidth() + 2;
                     }
                 });
         this.children = new ArrayList<>();
@@ -200,8 +197,8 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin {
         int rightmost = 0;
         int bottommost = 0;
         for (IWidget child : children) {
-            int right = child.getX() + child.getWidth();
-            int bottom = child.getY() + child.getHeight();
+            int right = child.getX() + child.getFullWidth();
+            int bottom = child.getY() + child.getFullHeight();
             if (right > rightmost) {
                 rightmost = right;
             }

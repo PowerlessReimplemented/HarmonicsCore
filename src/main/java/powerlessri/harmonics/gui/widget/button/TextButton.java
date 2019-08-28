@@ -100,7 +100,7 @@ public class TextButton extends AbstractWidget implements IButton, LeafWidgetMix
     }
 
     public void expandToTextWidth() {
-        setWidth(Math.max(getWidth(), 4 + fontRenderer().getStringWidth(text) + 4));
+        setWidth(Math.max(getFullWidth(), 4 + fontRenderer().getStringWidth(text) + 4));
     }
 
     public String getText() {
