@@ -12,7 +12,7 @@ import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import javax.annotation.Nullable;
 import java.awt.*;
 
-public abstract class AbstractWidget implements IWidget, Inspections.IInspectionInfoProvider, ILayoutDataProvider, ResizableWidgetMixin {
+public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, ILayoutDataProvider, ResizableWidgetMixin {
 
     public static boolean isInside(int x, int y, int mx, int my) {
         return isInside(x, y, 0, 0, mx, my);

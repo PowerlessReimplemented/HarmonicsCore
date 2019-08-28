@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.IWindow;
-import powerlessri.harmonics.gui.RenderingHelper;
 
 import java.awt.*;
 
@@ -17,7 +16,7 @@ import static powerlessri.harmonics.gui.RenderingHelper.*;
 
 public abstract class Inspections implements IRenderEventListener {
 
-    public interface IInspectionInfoProvider {
+    public interface IInfoProvider {
 
         void provideInformation(ITextReceiver receiver);
     }
@@ -130,48 +129,21 @@ public abstract class Inspections implements IRenderEventListener {
     }
 
     public void renderBox(IWidget widget) {
-        int ax = widget.getAbsoluteX();
-        int ay = widget.getAbsoluteY();
-        useBlendingGLStates();
-        drawRect(ax, ay, ax + widget.getFullWidth(), ay + widget.getFullHeight(), CONTENTS);
-        useTextureGLStates();
+        renderBorderedHighlight(widget);
     }
 
     public void renderBox(IWindow window) {
-        // Can't just do two rectangles because they are transparent
-        useBlendingGLStates();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        {
-            int x = window.getX();
-            int y = window.getY();
-            int x2 = x + window.getWidth();
-            int y2 = y + window.getHeight();
-            int bs = window.getBorderSize();
-
-            RenderingHelper.rectVertices(x, y, x2 - bs, y + bs, BORDER_R, BORDER_G, BORDER_B, BORDER_A);
-            RenderingHelper.rectVertices(x2 - bs, y, x2, y2 - bs, BORDER_R, BORDER_G, BORDER_B, BORDER_A);
-            RenderingHelper.rectVertices(x + bs, y2 - bs, x2, y2, BORDER_R, BORDER_G, BORDER_B, BORDER_A);
-            RenderingHelper.rectVertices(x, y + bs, x + bs, y2, BORDER_R, BORDER_G, BORDER_B, BORDER_A);
-        }
-        {
-            int cx = window.getContentX();
-            int cy = window.getContentY();
-            RenderingHelper.rectVertices(cx, cy, cx + window.getContentWidth(), cy + window.getContentHeight(), CONTENTS);
-        }
-        tessellator.draw();
-        useTextureGLStates();
+        renderBorderedHighlight(window);
     }
 
     public void renderOverlayInfo(IWidget widget) {
         GlStateManager.pushMatrix();
         GlStateManager.scalef(0.5F, 0.5F, 1F);
         DEFAULT_INFO_RENDERER.reset();
-        if (widget instanceof IInspectionInfoProvider) {
-            ((IInspectionInfoProvider) widget).provideInformation(DEFAULT_INFO_RENDERER);
+        if (widget instanceof IInfoProvider) {
+            ((IInfoProvider) widget).provideInformation(DEFAULT_INFO_RENDERER);
         } else {
-            defaultOverlayInfo(widget);
+            DEFAULT_INFO_RENDERER.line("(Widget does not support overlay info)");
         }
         GlStateManager.popMatrix();
     }
@@ -180,36 +152,55 @@ public abstract class Inspections implements IRenderEventListener {
         GlStateManager.pushMatrix();
         GlStateManager.scalef(0.5F, 0.5F, 1.0F);
         DEFAULT_INFO_RENDERER.reset();
-        if (window instanceof IInspectionInfoProvider) {
-            ((IInspectionInfoProvider) window).provideInformation(DEFAULT_INFO_RENDERER);
+        if (window instanceof IInfoProvider) {
+            ((IInfoProvider) window).provideInformation(DEFAULT_INFO_RENDERER);
         } else {
-            defaultOverlayInfo(window);
+            DEFAULT_INFO_RENDERER.line("(Window does not support overlay info)");
         }
         GlStateManager.popMatrix();
     }
 
-    protected void defaultOverlayInfo(IWidget widget) {
-        DEFAULT_INFO_RENDERER.line("(default inspection info)");
-        DEFAULT_INFO_RENDERER.line(widget.toString());
-        DEFAULT_INFO_RENDERER.line("X=" + widget.getX());
-        DEFAULT_INFO_RENDERER.line("Y=" + widget.getY());
-        DEFAULT_INFO_RENDERER.line("AbsX=" + widget.getAbsoluteX());
-        DEFAULT_INFO_RENDERER.line("AbsY=" + widget.getAbsoluteY());
-        DEFAULT_INFO_RENDERER.line("Width=" + widget.getFullWidth());
-        DEFAULT_INFO_RENDERER.line("Height=" + widget.getFullHeight());
+    public static void renderHighlight(int x, int y, int width, int height) {
+        useBlendingGLStates();
+        drawRect(x, y, x + width, y + height, CONTENTS);
+        useTextureGLStates();
     }
 
-    protected void defaultOverlayInfo(IWindow window) {
-        DEFAULT_INFO_RENDERER.line("(default inspection info)");
-        DEFAULT_INFO_RENDERER.line(window.toString());
-        DEFAULT_INFO_RENDERER.line("X=" + window.getX());
-        DEFAULT_INFO_RENDERER.line("Y=" + window.getY());
-        DEFAULT_INFO_RENDERER.line("Width=" + window.getWidth());
-        DEFAULT_INFO_RENDERER.line("Height=" + window.getHeight());
-        DEFAULT_INFO_RENDERER.line("ContentX=" + window.getContentX());
-        DEFAULT_INFO_RENDERER.line("ContentY=" + window.getContentY());
-        DEFAULT_INFO_RENDERER.line("ContentWidth=" + window.getContentWidth());
-        DEFAULT_INFO_RENDERER.line("ContentHeight=" + window.getContentHeight());
-        DEFAULT_INFO_RENDERER.line("BorderSize=" + window.getBorderSize());
+    public static void renderBorderedHighlight(IWidget widget) {
+        renderBorderedHighlight(
+                widget.getOuterAbsoluteX(), widget.getOuterAbsoluteY(),
+                widget.getAbsoluteX(), widget.getAbsoluteY(),
+                widget.getWidth(), widget.getHeight(),
+                widget.getFullWidth(), widget.getFullHeight());
+    }
+
+    public static void renderBorderedHighlight(IWindow window) {
+        renderBorderedHighlight(
+                window.getX(), window.getY(),
+                window.getContentX(), window.getContentY(),
+                window.getContentWidth(), window.getContentHeight(),
+                window.getWidth(), window.getHeight());
+    }
+
+    public static void renderBorderedHighlight(int x1, int y1, int ix1, int iy1, int width, int height, int fullWidth, int fullHeight) {
+        int x2 = x1 + fullWidth;
+        int y2 = y1 + fullHeight;
+        int ix2 = ix1 + width;
+        int iy2 = iy1 + height;
+
+        useBlendingGLStates();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+
+        // Can't just do two rectangles because they are transparent
+        rectVertices(ix1, iy1, x2, y1, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Top border
+        rectVertices(ix2, iy1, x2, y2, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Right border
+        rectVertices(x1, y2, ix2, iy2, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Bottom border
+        rectVertices(x1, y1, ix1, iy2, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Left border
+        rectVertices(ix1, iy1, ix2, iy2, CONTENTS);
+
+        tessellator.draw();
+        useTextureGLStates();
     }
 }

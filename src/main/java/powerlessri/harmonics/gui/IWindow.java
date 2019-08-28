@@ -1,10 +1,12 @@
 package powerlessri.harmonics.gui;
 
+import net.minecraft.client.gui.IRenderable;
+
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 
-public interface IWindow {
+public interface IWindow extends IRenderable {
 
     Dimension getBorder();
 
@@ -53,6 +55,7 @@ public interface IWindow {
         return getY() + getBorderSize();
     }
 
+    @Override
     void render(int mouseX, int mouseY, float particleTicks);
 
     @Nullable

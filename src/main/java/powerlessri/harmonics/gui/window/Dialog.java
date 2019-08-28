@@ -13,6 +13,7 @@ import powerlessri.harmonics.gui.widget.*;
 import powerlessri.harmonics.gui.widget.box.Box;
 import powerlessri.harmonics.gui.widget.button.TextButton;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
+import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -23,7 +24,7 @@ import java.util.function.*;
 import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledHeight;
 import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledWidth;
 
-public class Dialog implements IPopupWindow, NestedEventHandlerMixin {
+public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
 
     public static Dialog createPrompt(String message, BiConsumer<Integer, String> onConfirm) {
         return createPrompt(message, onConfirm, (b, t) -> {});

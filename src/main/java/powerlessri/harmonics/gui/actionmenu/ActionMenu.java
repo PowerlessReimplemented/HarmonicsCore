@@ -9,13 +9,14 @@ import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.window.DiscardCondition;
 import powerlessri.harmonics.gui.window.IPopupWindow;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
+import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 
-public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin {
+public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
 
     public static ActionMenu atCursor(double mouseX, double mouseY, List<? extends IEntry> entries) {
         return new ActionMenu((int) mouseX, (int) mouseY, entries);
