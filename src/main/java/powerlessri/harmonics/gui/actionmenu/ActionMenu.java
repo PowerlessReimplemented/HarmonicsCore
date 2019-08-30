@@ -4,9 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import powerlessri.harmonics.gui.IWidget;
-import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.RenderingHelper;
-import powerlessri.harmonics.gui.window.DiscardCondition;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
@@ -29,6 +28,8 @@ public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin, Window
 
     private final Dimension contents;
     private final Dimension border;
+
+    private boolean alive = true;
 
     public ActionMenu(int x, int y, List<? extends IEntry> entries) {
         this(new Point(x, y), entries);
@@ -81,6 +82,14 @@ public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin, Window
     }
 
     @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!isInside(mouseX, mouseY)) {
+            alive = false;
+        }
+        return false;
+    }
+
+    @Override
     public void setFocusedWidget(@Nullable IWidget widget) {
         if (widget instanceof IEntry || widget == null) {
             if (focusedEntry != null) {
@@ -123,12 +132,8 @@ public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin, Window
     }
 
     @Override
-    public int getLifespan() {
-        return -1;
+    public boolean shouldDiscard() {
+        return !alive;
     }
 
-    @Override
-    public DiscardCondition getDiscardCondition() {
-        return DiscardCondition.UNFOCUSED_CLICK;
-    }
 }

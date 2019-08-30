@@ -3,8 +3,8 @@ package powerlessri.harmonics.gui.window;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.BackgroundRenderers;
+import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
@@ -14,6 +14,7 @@ import powerlessri.harmonics.gui.widget.box.Box;
 import powerlessri.harmonics.gui.widget.button.TextButton;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
+import sun.misc.JavaLangAccess;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -128,12 +129,15 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     private TextList messageBox;
     private Box<TextButton> buttons;
     private List<AbstractWidget> children;
-    private IWidget focusedWidget;
 
     public Runnable onPreReflow = () -> {};
     public Runnable onPostReflow = () -> {};
 
+    private IWidget focusedWidget;
+    private boolean alive = true;
+
     private int initialDragLocalX, initialDragLocalY;
+
 
     public Dialog() {
         this.position = new Point();
@@ -244,8 +248,8 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     @Override
-    public int getLifespan() {
-        return -1;
+    public boolean shouldDiscard() {
+        return !alive;
     }
 
     @Override
@@ -291,11 +295,6 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
 
     private boolean isDragging() {
         return initialDragLocalX != -1 && initialDragLocalY != -1;
-    }
-
-    @Override
-    public DiscardCondition getDiscardCondition() {
-        return DiscardCondition.NONE;
     }
 
     @Override
@@ -353,11 +352,11 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         if (button.hasClickAction()) {
             IntConsumer oldAction = button.onClick;
             button.onClick = b -> {
-                WidgetScreen.getCurrentScreen().deferRemovePopupWindow(this);
+                alive = false;
                 oldAction.accept(b);
             };
         } else {
-            button.onClick = b -> WidgetScreen.getCurrentScreen().deferRemovePopupWindow(this);
+            button.onClick = b -> alive = false;
         }
     }
 

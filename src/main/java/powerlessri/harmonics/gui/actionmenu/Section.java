@@ -61,8 +61,6 @@ public class Section extends AbstractContainer<IEntry> {
                 .mapToInt(IEntry::getFullHeight)
                 .sum();
         setDimensions(w, h + MARGIN_SIDES);
-
-
     }
 
     @Override

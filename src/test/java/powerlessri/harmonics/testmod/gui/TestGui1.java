@@ -40,26 +40,38 @@ public class TestGui1 extends WidgetScreen {
 
         private final List<IWidget> children;
 
+        private boolean flatStyle = true;
+
         public Window() {
             setContents(240, 180);
             centralize();
 
-            TextButton button = TextButton.ofText("Dialog", b -> {
+            TextButton dialog = TextButton.ofText("Dialog", b -> {
                 Dialog.createPrompt("Enter some text:", (btn, t) -> {
                     Minecraft.getInstance().player.sendChatMessage("You have entered: " + t);
                 }, (btn, t) -> {
                     Minecraft.getInstance().player.sendChatMessage("You clicked cancel");
                 }).tryAddSelfToActiveGUI();
             });
-            button.setWindow(this);
-            this.children = ImmutableList.of(button);
+            dialog.setWindow(this);
+            dialog.setBorderRight(4);
 
-            updatePosition();
+            TextButton switchBkg = TextButton.ofText("Switch Background", b -> {
+                flatStyle = !flatStyle;
+                centralize();
+                updatePosition();
+            });
+            switchBkg.setWindow(this);
+            switchBkg.setBorderRight(4);
+            switchBkg.alignLeft(dialog.getXRight());
+
+            this.children = ImmutableList.of(dialog, switchBkg);
+            this.updatePosition();
         }
 
         @Override
         public int getBorderSize() {
-            return 2;
+            return flatStyle ? 2 : 4;
         }
 
         @Override
@@ -71,7 +83,11 @@ public class TestGui1 extends WidgetScreen {
         public void render(int mouseX, int mouseY, float particleTicks) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             GlStateManager.disableAlphaTest();
-            BackgroundRenderers.drawFlatStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+            if (flatStyle) {
+                BackgroundRenderers.drawFlatStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+            } else {
+                BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+            }
             renderChildren(mouseX, mouseY, particleTicks);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }

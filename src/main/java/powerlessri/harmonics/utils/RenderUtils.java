@@ -3,6 +3,7 @@ package powerlessri.harmonics.utils;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 
+// TODO complete switch to this render utils
 public final class RenderUtils {
 
     private RenderUtils() {
