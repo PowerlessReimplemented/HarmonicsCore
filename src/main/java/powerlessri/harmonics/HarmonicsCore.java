@@ -22,8 +22,7 @@ import powerlessri.harmonics.gui.debug.Inspections;
 @Mod(HarmonicsCore.MODID)
 public class HarmonicsCore {
 
-    public static final String MODID = "harmonicscore";
-    public static final String NAME = "Harmonics Core";
+    public static final String MODID = "harmonics";
 
     public static HarmonicsCore instance;
 

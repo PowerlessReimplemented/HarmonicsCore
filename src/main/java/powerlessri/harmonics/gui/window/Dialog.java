@@ -43,7 +43,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createPrompt(String message, String defaultText, String confirm, String cancel, BiConsumer<Integer, String> onConfirm, BiConsumer<Integer, String> onCancel) {
-        Dialog dialog = dialogue(message);
+        Dialog dialog = dialog(message);
 
         TextField inputBox = new TextField(0, 0, 0, 16).setText(defaultText);
         inputBox.setBorderBottom(4);
@@ -70,7 +70,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createBiSelectionDialog(String message, String confirm, String cancel, IntConsumer onConfirm, IntConsumer onCancel) {
-        Dialog dialog = dialogue(message);
+        Dialog dialog = dialog(message);
 
         dialog.buttons.addChildren(TextButton.of(confirm, onConfirm));
         dialog.bindRemoveSelf2LastButton();
@@ -91,7 +91,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createDialog(String message, String ok, IntConsumer onConfirm) {
-        Dialog dialog = dialogue(message);
+        Dialog dialog = dialog(message);
 
         dialog.buttons.addChildren(TextButton.of(ok, onConfirm));
         dialog.bindRemoveSelf2LastButton();
@@ -101,10 +101,9 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         return dialog;
     }
 
-    private static Dialog dialogue(String message) {
+    private static Dialog dialog(String message) {
         Dialog dialog = new Dialog();
-        // TODO and replace this with bottom margin
-        dialog.insertBeforeMessage(new Spacer(0, 5));
+        dialog.messageBox.setBorderTop(5);
         dialog.messageBox.addTranslatedLine(message);
         return dialog;
     }
@@ -369,9 +368,13 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     @CanIgnoreReturnValue
     public boolean tryAddSelfToActiveGUI() {
         if (Minecraft.getInstance().currentScreen instanceof WidgetScreen) {
-            WidgetScreen.getCurrentScreen().addPopupWindow(this);
+            addSelfTo(WidgetScreen.getCurrentScreen());
             return true;
         }
         return false;
+    }
+
+    public void addSelfTo(WidgetScreen gui) {
+        gui.addPopupWindow(this);
     }
 }

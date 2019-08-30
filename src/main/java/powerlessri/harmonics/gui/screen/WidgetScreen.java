@@ -1,5 +1,6 @@
 package powerlessri.harmonics.gui.screen;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -96,12 +97,9 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         primaryWindow.update(particleTicks);
     }
 
-    protected final void initializePrimaryWindow(IWindow primaryWindow) {
-        if (this.primaryWindow == null) {
-            this.primaryWindow = primaryWindow;
-        } else {
-            throw new IllegalStateException("Already initialized the primary window " + this.primaryWindow);
-        }
+    protected final void setPrimaryWindow(IWindow primaryWindow) {
+        Preconditions.checkState(this.primaryWindow == null, "Already initialized the primary window " + this.primaryWindow);
+        this.primaryWindow = primaryWindow;
     }
 
     public final IWindow getPrimaryWindow() {

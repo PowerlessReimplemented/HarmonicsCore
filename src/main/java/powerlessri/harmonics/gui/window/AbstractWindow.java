@@ -8,6 +8,9 @@ import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 import javax.annotation.Nullable;
 import java.awt.*;
 
+import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledHeight;
+import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledWidth;
+
 public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
 
     private final Point position;
@@ -30,6 +33,39 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
     @Override
     public Dimension getContents() {
         return contents;
+    }
+
+    public void setContents(int width, int height) {
+        contents.width = width;
+        contents.height = height;
+        int borderSize = getBorderSize();
+        border.width = borderSize + width + borderSize;
+        border.height = borderSize + height + borderSize;
+    }
+
+    public void setBorder(int width, int height) {
+        border.width = width;
+        border.height = height;
+        int borderSize = getBorderSize();
+        contents.width = width - borderSize * 2;
+        contents.height = height - borderSize * 2;
+    }
+
+    public void centralize() {
+        position.x = scaledWidth() / 2 - getWidth() / 2;
+        position.y = scaledHeight() / 2 - getHeight() / 2;
+    }
+
+    protected final void updatePosition() {
+        for (IWidget child : getChildren()) {
+            child.onParentPositionChanged();
+        }
+    }
+
+    protected final void renderChildren(int mouseX, int mouseY, float particleTicks) {
+        for (IWidget child : getChildren()) {
+            child.render(mouseX, mouseY, particleTicks);
+        }
     }
 
     @Override

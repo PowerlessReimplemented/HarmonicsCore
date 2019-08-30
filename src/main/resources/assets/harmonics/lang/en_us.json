@@ -1,0 +1,14 @@
+{
+  // Action names
+  "gui.harmonics.ActionMenu.General.Delete": "Delete",
+  "gui.harmonics.ActionMenu.General.Cut": "Cut",
+  "gui.harmonics.ActionMenu.General.Copy": "Copy",
+  "gui.harmonics.ActionMenu.General.Paste": "Paste",
+  "gui.harmonics.ActionMenu.Global.Preferences": "User Preferences",
+
+  "gui.harmonics.Dialogue.OK": "OK",
+  "gui.harmonics.Dialogue.Cancel": "Cancel",
+
+  "gui.harmonics.General.Seconds": "second(s)",
+  "gui.harmonics.General.Ticks": "ticks"
+}
