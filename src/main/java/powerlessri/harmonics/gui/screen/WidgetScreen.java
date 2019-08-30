@@ -96,7 +96,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         primaryWindow.update(particleTicks);
     }
 
-    protected void initializePrimaryWindow(IWindow primaryWindow) {
+    protected final void initializePrimaryWindow(IWindow primaryWindow) {
         if (this.primaryWindow == null) {
             this.primaryWindow = primaryWindow;
         } else {
@@ -104,7 +104,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         }
     }
 
-    public IWindow getPrimaryWindow() {
+    public final IWindow getPrimaryWindow() {
         return primaryWindow;
     }
 

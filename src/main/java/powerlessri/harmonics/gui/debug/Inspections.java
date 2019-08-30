@@ -59,13 +59,13 @@ public abstract class Inspections implements IRenderEventListener {
 
         @Override
         public void string(String text) {
-            fontRenderer().drawString(text, x, y, Color.WHITE.getRGB());
+            fontRenderer().drawString(text, x, y, 0xffffff);
             x += fontRenderer().getStringWidth(text);
         }
 
         @Override
         public void line(String line) {
-            fontRenderer().drawString(line, STARTING_X, y, Color.WHITE.getRGB());
+            fontRenderer().drawString(line, STARTING_X, y, 0xffffff);
             nextLine();
         }
 

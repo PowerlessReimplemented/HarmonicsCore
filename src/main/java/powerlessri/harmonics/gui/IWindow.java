@@ -20,14 +20,14 @@ public interface IWindow extends IRenderable {
 
     int getBorderSize();
 
-    Dimension getContentDimensions();
+    Dimension getContents();
 
     default int getContentWidth() {
-        return getContentDimensions().width;
+        return getContents().width;
     }
 
     default int getContentHeight() {
-        return getContentDimensions().height;
+        return getContents().height;
     }
 
     List<? extends IWidget> getChildren();

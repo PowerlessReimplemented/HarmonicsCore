@@ -12,7 +12,7 @@ public interface WindowOverlayInfoMixin extends IWindow, Inspections.IInfoProvid
         receiver.line("Position=" + this.getPosition());
         receiver.line("Dimensions=" + this.getBorder());
         receiver.line("BorderSize=" + this.getBorderSize());
-        receiver.line("ContentDimensions=" + this.getContentDimensions());
+        receiver.line("ContentDimensions=" + this.getContents());
         receiver.line("ContentX=" + this.getContentX());
         receiver.line("ContentY=" + this.getContentY());
     }

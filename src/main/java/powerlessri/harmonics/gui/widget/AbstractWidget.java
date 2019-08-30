@@ -47,7 +47,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     private int absY;
 
     public AbstractWidget(IWindow window) {
-        this(0, 0, window.getContentDimensions().width, window.getContentDimensions().height);
+        this(0, 0, window.getContents().width, window.getContents().height);
         this.window = window;
     }
 

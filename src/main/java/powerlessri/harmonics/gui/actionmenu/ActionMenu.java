@@ -103,7 +103,7 @@ public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin, Window
     }
 
     @Override
-    public Dimension getContentDimensions() {
+    public Dimension getContents() {
         return contents;
     }
 

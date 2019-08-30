@@ -1,25 +1,23 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
+# Exclude everything and include important files/directories
+/*
 
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
+# Gradle stuff
+!gradle/
+!gradlew
+!gradlew.bat
+!build.gradle
+!build.properties
+!gradle.properties
+!project.properties
+!settings.gradle
 
-# gradle
-build
-.gradle
+# Include git important files
+!.gitmodules
+!.gitignore
 
-# other
-eclipse
-run
+# Other files
+!LICENSE
+!README.md
 
-# Files from Forge MDK
-forge*changelog.txt
+# Project files
+!src/

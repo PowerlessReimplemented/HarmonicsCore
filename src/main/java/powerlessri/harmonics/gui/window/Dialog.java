@@ -310,7 +310,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     @Override
-    public Dimension getContentDimensions() {
+    public Dimension getContents() {
         return contents;
     }
 

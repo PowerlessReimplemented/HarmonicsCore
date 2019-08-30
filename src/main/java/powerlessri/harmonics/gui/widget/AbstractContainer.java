@@ -4,7 +4,6 @@ import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
 import powerlessri.harmonics.gui.widget.mixin.RelocatableContainerMixin;
 
-import java.awt.*;
 import java.util.Collection;
 
 public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T>, RelocatableContainerMixin<T> {
@@ -70,6 +69,6 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
 
     public void fillWindow() {
         setLocation(0, 0);
-        setDimensions(getWindow().getContentDimensions());
+        setDimensions(getWindow().getContents());
     }
 }
