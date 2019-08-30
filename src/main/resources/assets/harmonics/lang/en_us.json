@@ -9,6 +9,10 @@
   "gui.harmonics.Dialogue.OK": "OK",
   "gui.harmonics.Dialogue.Cancel": "Cancel",
 
-  "gui.harmonics.General.Seconds": "second(s)",
-  "gui.harmonics.General.Ticks": "ticks"
+  "message.harmonics.General.Days": "days",
+  "message.harmonics.General.Hours": "hours",
+  "message.harmonics.General.Minutes": "minutes",
+  "message.harmonics.General.Seconds": "seconds",
+  "message.harmonics.General.Ticks": "ticks",
+  "message.harmonics.General.Milliseconds": "milliseconds"
 }

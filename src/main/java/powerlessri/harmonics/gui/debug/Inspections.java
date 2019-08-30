@@ -10,8 +10,6 @@ import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.IWindow;
 
-import java.awt.*;
-
 import static powerlessri.harmonics.gui.RenderingHelper.*;
 
 public abstract class Inspections implements IRenderEventListener {
@@ -59,13 +57,13 @@ public abstract class Inspections implements IRenderEventListener {
 
         @Override
         public void string(String text) {
-            fontRenderer().drawString(text, x, y, 0xffffff);
+            fontRenderer().drawStringWithShadow(text, x, y, 0xffffff);
             x += fontRenderer().getStringWidth(text);
         }
 
         @Override
         public void line(String line) {
-            fontRenderer().drawString(line, STARTING_X, y, 0xffffff);
+            fontRenderer().drawStringWithShadow(line, STARTING_X, y, 0xffffff);
             nextLine();
         }
 
@@ -194,13 +192,25 @@ public abstract class Inspections implements IRenderEventListener {
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
         // Can't just do two rectangles because they are transparent
-        rectVertices(ix1, iy1, x2, y1, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Top border
-        rectVertices(ix2, iy1, x2, y2, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Right border
-        rectVertices(x1, y2, ix2, iy2, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Bottom border
-        rectVertices(x1, y1, ix1, iy2, BORDER_R, BORDER_G, BORDER_B, BORDER_A); // Left border
+
+        // 1------4
+        // |      |
+        // 2------3
+        quad(buffer, x1, y1, ix1, iy1, ix2, iy1, x2, y1); // Top border
+        quad(buffer, ix2, iy1, ix2, iy2, x2, y2, x2, y1); // Right border
+        quad(buffer, ix1, iy2, x1, y2, x2, y2, ix2, iy2); // Bottom border
+        quad(buffer, x1, y1, x1, y2, ix1, iy2, ix1, iy1); // Left border
         rectVertices(ix1, iy1, ix2, iy2, CONTENTS);
 
         tessellator.draw();
+
         useTextureGLStates();
+    }
+
+    private static void quad(BufferBuilder buffer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+        buffer.pos(x1, y1, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
+        buffer.pos(x2, y2, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
+        buffer.pos(x3, y3, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
+        buffer.pos(x4, y4, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
     }
 }

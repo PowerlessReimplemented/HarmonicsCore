@@ -304,12 +304,12 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     @Override
     public int getOuterAbsoluteX() {
-        return absX - border.top;
+        return absX - border.left;
     }
 
     @Override
     public int getOuterAbsoluteY() {
-        return absY - border.left;
+        return absY - border.top;
     }
 
     public int getOuterAbsoluteXRight() {
