@@ -99,6 +99,10 @@ jar {
     }
 }
 
+task runClientTests {
+    file("$buildDir/resources/main/META-INF/mods.toml").text += file("$buildDir/resources/test/META-INF/mods.toml").text
+}
+
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task
 // and then declare that to be published

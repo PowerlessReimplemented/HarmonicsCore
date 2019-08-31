@@ -1,10 +1,5 @@
 modLoader="javafml"
 loaderVersion="[28,)"
 
-#FML does not recognize this for some reason
 [[mods]]
 modId="hctest"
-version="1.0.0"
-displayName="HarmonicsCore Tests"
-description='''
-'''

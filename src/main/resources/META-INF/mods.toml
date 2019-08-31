@@ -14,13 +14,9 @@ displayName="HarmonicsCore"
 description='''
 '''
 
-#TODO move this to test source set
+#TODO move to test/mods.toml
 [[mods]]
 modId="hctest"
-version="1.0.0"
-displayName="HarmonicsCore Tests"
-description='''
-'''
 
 [[dependencies.harmonics]]
     modId="forge"
