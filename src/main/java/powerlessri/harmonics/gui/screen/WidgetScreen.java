@@ -189,8 +189,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     }
 
     @Override
-    public void onClose() {
-        super.onClose();
+    public void removed() {
         for (IWindow window : windows) {
             window.onRemoved();
         }

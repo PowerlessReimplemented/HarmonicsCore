@@ -1,7 +1,6 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.StringTextComponent;
 import powerlessri.harmonics.HarmonicsCore;
@@ -15,9 +14,9 @@ import powerlessri.harmonics.gui.window.Dialog;
 
 import java.util.List;
 
-public class TestGui1 extends WidgetScreen {
+public class DialogTest extends WidgetScreen {
 
-    public TestGui1() {
+    public DialogTest() {
         super(new StringTextComponent("Test"));
     }
 
@@ -40,38 +39,23 @@ public class TestGui1 extends WidgetScreen {
 
         private final List<IWidget> children;
 
-        private boolean flatStyle = true;
-
         public Window() {
-            setContents(240, 180);
+            setContents(100, 80);
             centralize();
 
-            TextButton dialog = TextButton.ofText("Dialog", b -> {
-                Dialog.createPrompt("Enter some text:", (btn, t) -> {
-                    Minecraft.getInstance().player.sendChatMessage("You have entered: " + t);
-                }, (btn, t) -> {
-                    Minecraft.getInstance().player.sendChatMessage("You clicked cancel");
-                }).tryAddSelfToActiveGUI();
-            });
+            TextButton dialog =
+                    TextButton.ofText("Dialog", b -> Dialog.createPrompt("Enter some text:",
+                            (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You have entered: " + t),
+                            (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You clicked cancel")).tryAddSelfToActiveGUI());
             dialog.setWindow(this);
-            dialog.setBorderRight(4);
 
-            TextButton switchBkg = TextButton.ofText("Switch Background", b -> {
-                flatStyle = !flatStyle;
-                centralize();
-                updatePosition();
-            });
-            switchBkg.setWindow(this);
-            switchBkg.setBorderRight(4);
-            switchBkg.alignLeft(dialog.getXRight());
-
-            this.children = ImmutableList.of(dialog, switchBkg);
+            this.children = ImmutableList.of(dialog);
             this.updatePosition();
         }
 
         @Override
         public int getBorderSize() {
-            return flatStyle ? 2 : 4;
+            return 4;
         }
 
         @Override
@@ -82,12 +66,7 @@ public class TestGui1 extends WidgetScreen {
         @Override
         public void render(int mouseX, int mouseY, float particleTicks) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-            GlStateManager.disableAlphaTest();
-            if (flatStyle) {
-                BackgroundRenderers.drawFlatStyle(getX(), getY(), getWidth(), getHeight(), 0F);
-            } else {
-                BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
-            }
+            BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
             renderChildren(mouseX, mouseY, particleTicks);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }

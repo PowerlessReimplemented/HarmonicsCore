@@ -14,7 +14,7 @@ displayName="HarmonicsCore"
 description='''
 '''
 
-#TODO move to src/test/resources
+#TODO move this to test source set
 [[mods]]
 modId="hctest"
 version="1.0.0"
