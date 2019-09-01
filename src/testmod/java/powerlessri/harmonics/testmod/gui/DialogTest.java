@@ -26,15 +26,6 @@ public class DialogTest extends WidgetScreen {
         setPrimaryWindow(new Window());
     }
 
-    @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
-        try {
-            super.render(mouseX, mouseY, particleTicks);
-        } catch (Throwable throwable) {
-            HarmonicsCore.logger.error(throwable);
-        }
-    }
-
     public static class Window extends AbstractWindow {
 
         private final List<IWidget> children;

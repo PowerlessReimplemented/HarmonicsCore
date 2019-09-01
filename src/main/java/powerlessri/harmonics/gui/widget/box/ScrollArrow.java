@@ -1,5 +1,6 @@
 package powerlessri.harmonics.gui.widget.box;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import powerlessri.harmonics.gui.TextureWrapper;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 public abstract class ScrollArrow extends AbstractIconButton implements LeafWidgetMixin {
 
-    private static final TextureWrapper UP_NORMAL = TextureWrapper.ofFlowComponent(0, 152, 10, 6);
+    private static final TextureWrapper UP_NORMAL = TextureWrapper.ofComponents(0, 0, 10, 6);
     private static final TextureWrapper UP_HOVERED = UP_NORMAL.toRight(10);
     private static final TextureWrapper UP_CLICKED = UP_NORMAL.toRight(10 * 2);
     private static final TextureWrapper UP_DISABLED = UP_NORMAL.toRight(10 * 3);
@@ -86,6 +87,8 @@ public abstract class ScrollArrow extends AbstractIconButton implements LeafWidg
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+        GlStateManager.enableTexture();
+        GlStateManager.color3f(1F, 1F, 1F);
         if (isEnabled()) {
             if (isClicked()) {
                 getTextureClicked().draw(getAbsoluteX(), getAbsoluteY());

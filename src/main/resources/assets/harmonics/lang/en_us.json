@@ -1,18 +1,17 @@
 {
-  // Action names
   "gui.harmonics.ActionMenu.General.Delete": "Delete",
   "gui.harmonics.ActionMenu.General.Cut": "Cut",
   "gui.harmonics.ActionMenu.General.Copy": "Copy",
   "gui.harmonics.ActionMenu.General.Paste": "Paste",
-  "gui.harmonics.ActionMenu.Global.Preferences": "User Preferences",
 
   "gui.harmonics.Dialogue.OK": "OK",
   "gui.harmonics.Dialogue.Cancel": "Cancel",
+  "gui.harmonics.SearchableList.Status": "Found: %d",
 
-  "message.harmonics.General.Days": "days",
-  "message.harmonics.General.Hours": "hours",
-  "message.harmonics.General.Minutes": "minutes",
-  "message.harmonics.General.Seconds": "seconds",
-  "message.harmonics.General.Ticks": "ticks",
-  "message.harmonics.General.Milliseconds": "milliseconds"
+  "message.harmonics.Days": "days",
+  "message.harmonics.Hours": "hours",
+  "message.harmonics.Minutes": "minutes",
+  "message.harmonics.Seconds": "seconds",
+  "message.harmonics.Ticks": "ticks",
+  "message.harmonics.Milliseconds": "milliseconds"
 }

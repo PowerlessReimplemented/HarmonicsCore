@@ -15,6 +15,8 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     public static TextField DUMMY = new TextField(0, 0, 0, 0) {
@@ -153,58 +155,74 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (Screen.hasControlDown() && !Screen.hasShiftDown() && !Screen.hasAltDown()) {
             switch (keyCode) {
-                case GLFW.GLFW_KEY_C: {
+                case GLFW_KEY_C: {
                     copyText();
                     break;
                 }
-                case GLFW.GLFW_KEY_V: {
+                case GLFW_KEY_V: {
                     pasteText();
                     break;
                 }
-                case GLFW.GLFW_KEY_X: {
+                case GLFW_KEY_X: {
                     cutText();
                     break;
                 }
-                case GLFW.GLFW_KEY_A: {
+                case GLFW_KEY_A: {
                     selectAll();
+                    break;
+                }
+                case GLFW_KEY_LEFT: {
+                    updateSelection();
+                    if (cursor > 0) {
+                        cursor = findNextWord(true);
+                    }
+                    break;
+                }
+                case GLFW_KEY_RIGHT: {
+                    updateSelection();
+                    if (cursor < text.length()) {
+                        cursor = findNextWord(false);
+                    }
                     break;
                 }
             }
         } else {
             switch (keyCode) {
-                case GLFW.GLFW_KEY_ESCAPE:
+                case GLFW_KEY_ESCAPE: {
                     getWindow().changeFocus(this, false);
-                case GLFW.GLFW_KEY_ENTER:
-                case GLFW.GLFW_KEY_DOWN:
-                case GLFW.GLFW_KEY_UP:
-                case GLFW.GLFW_KEY_TAB: {
+                    break;
+                }
+                case GLFW_KEY_ENTER:
+                case GLFW_KEY_DOWN:
+                case GLFW_KEY_UP:
+                case GLFW_KEY_TAB: {
                     return false;
                 }
-                case GLFW.GLFW_KEY_HOME: {
+                case GLFW_KEY_HOME: {
                     updateSelection();
                     cursor = 0;
                     break;
                 }
-                case GLFW.GLFW_KEY_END: {
+                case GLFW_KEY_END: {
                     updateSelection();
                     cursor = text.length();
                     break;
                 }
-                case GLFW.GLFW_KEY_LEFT: {
+                case GLFW_KEY_LEFT: {
                     updateSelection();
                     if (cursor > 0) {
                         cursor--;
                     }
                     break;
                 }
-                case GLFW.GLFW_KEY_RIGHT: {
+                case GLFW_KEY_RIGHT: {
                     updateSelection();
                     if (cursor < text.length()) {
                         cursor++;
                     }
                     break;
                 }
-                case GLFW.GLFW_KEY_BACKSPACE: {
+                case GLFW_KEY_BACKSPACE: {
                     if (isRegionSelected()) {
                         replaceSelectedRegion("");
                     } else if (!text.isEmpty() && cursor > 0) {
@@ -214,7 +232,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
                     }
                     break;
                 }
-                case GLFW.GLFW_KEY_DELETE: {
+                case GLFW_KEY_DELETE: {
                     if (isRegionSelected()) {
                         replaceSelectedRegion("");
                     } else if (cursor < text.length()) {
@@ -430,9 +448,6 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
                 int selectionStart = getSelectionStart();
                 int selectionEnd = getSelectionEnd();
 
-                // Text: abcdefghijklmn
-                // Rendered: abcdefg, length=7
-                //                 ^6
                 int renderedStart = MathHelper.clamp(selectionStart - startOffset, 0, renderedText.length());
                 int renderedEnd = MathHelper.clamp(selectionEnd - startOffset, 0, renderedText.length());
 
@@ -440,7 +455,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
                 String renderedPreSelection = renderedText.substring(0, renderedStart);
                 int selectionX = textX + fontRenderer().getStringWidth(renderedPreSelection);
                 int selectionWidth = fontRenderer().getStringWidth(renderedSelection);
-                RenderingHelper.drawColorLogic(selectionX - 1, textY, selectionWidth + 1, fontRenderer().FONT_HEIGHT, 60, 147, 242, GlStateManager.LogicOp.OR_REVERSE);
+                RenderingHelper.drawColorLogic(selectionX, textY, selectionWidth, fontRenderer().FONT_HEIGHT, 60, 147, 242, GlStateManager.LogicOp.OR_REVERSE);
             }
         } else {
             fontRenderer().drawString(renderedText, textX, textY, 0xffa0a0a0);
@@ -453,6 +468,35 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
         }
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+
+    /**
+     * Try to match a word by that is surrounded by either whitespace or ends of the text.
+     *
+     * @param reversed If {@code true}, when it will search towards left, otherwise towards right.
+     * @return Index, either end or beginning of a word. When {@code reversed}, it will return the beginning and otherwise the end.
+     */
+    private int findNextWord(boolean reversed) {
+        int change = reversed ? -1 : 1;
+        int i = cursor;
+        char last = ' ';
+        while (true) {
+            i += change;
+            if (i < 0 || i >= text.length()) {
+                break;
+            }
+
+            char c = text.charAt(i);
+            if (c == ' ' && last != ' ') {
+                break;
+            }
+            last = c;
+        }
+
+        if (reversed) {
+            return i - change;
+        }
+        return i;
     }
 
     public IBackgroundRenderer getBackgroundStyle() {

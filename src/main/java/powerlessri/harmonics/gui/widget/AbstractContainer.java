@@ -36,6 +36,15 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     @Override
+    public void setWindow(IWindow window) {
+        super.setWindow(window);
+        for (T child : getChildren()) {
+            // This will also inherit window reference from this widget
+            child.setParentWidget(this);
+        }
+    }
+
+    @Override
     public void onParentPositionChanged() {
         super.onParentPositionChanged();
         notifyChildrenForPositionChange();

@@ -7,13 +7,14 @@ import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
+import powerlessri.harmonics.gui.widget.INamedElement;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
 import java.util.function.IntConsumer;
 
 import static powerlessri.harmonics.gui.RenderingHelper.*;
 
-public class TextButton extends AbstractWidget implements IButton, LeafWidgetMixin {
+public class TextButton extends AbstractWidget implements IButton, INamedElement, LeafWidgetMixin {
 
     public static final IntConsumer DUMMY = i -> {
     };
@@ -132,5 +133,10 @@ public class TextButton extends AbstractWidget implements IButton, LeafWidgetMix
     @Override
     public boolean isClicked() {
         return clicked;
+    }
+
+    @Override
+    public String getName() {
+        return text;
     }
 }

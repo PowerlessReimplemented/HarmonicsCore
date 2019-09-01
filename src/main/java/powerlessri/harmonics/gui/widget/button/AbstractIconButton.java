@@ -1,12 +1,11 @@
 package powerlessri.harmonics.gui.widget.button;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import powerlessri.harmonics.gui.TextureWrapper;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-
-import java.awt.*;
 
 public abstract class AbstractIconButton extends AbstractWidget implements IButton, LeafWidgetMixin {
 
@@ -20,6 +19,8 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         preRenderEvent(mouseX, mouseY);
+        GlStateManager.enableTexture();
+        GlStateManager.color3f(1F, 1F, 1F);
         TextureWrapper tex = isDisabled() ? getTextureDisabled()
                 : isClicked() ? getTextureClicked()
                 : isHovered() ? getTextureHovered()

@@ -18,10 +18,8 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.*;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.testmod.gui.BackgroundTest;
-import powerlessri.harmonics.testmod.gui.DialogTest;
+import powerlessri.harmonics.testmod.gui.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +50,7 @@ public class HarmonicsCoreTest {
     private void setup(FMLCommonSetupEvent event) {
         guiTests.put("dialog", DialogTest::new);
         guiTests.put("background", BackgroundTest::new);
+        guiTests.put("searchable_list", SearchableListTest::new);
 
         DeferredWorkQueue.runLater(() -> {
             registerPackets();
