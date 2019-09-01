@@ -1,22 +1,17 @@
 modLoader="javafml"
 loaderVersion="[28,)"
+
+[[mods]]
+modId="harmonics"
+version="${file.jarVersion}"
 displayURL="https://github.com/hnOsmium0001/HarmonicsCore/"
 issueTrackerURL="https://github.com/hnOsmium0001/HarmonicsCore/issues"
 #logoFile="examplemod.png"
 #credits="Thanks for this example mod goes to Java"
 authors="hnOsmium0001"
-
-# A list of mods - how many allowed here is determined by the individual mod loader
-[[mods]]
-modId="harmonics"
-version="${file.jarVersion}"
 displayName="HarmonicsCore"
 description='''
 '''
-
-#TODO move to test/mods.toml
-[[mods]]
-modId="hctest"
 
 [[dependencies.harmonics]]
     modId="forge"

@@ -77,7 +77,7 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
     }
 
     private TextField createSearchBox(String defaultText) {
-        TextField t = new TextField(0, 0, getSearchBoxWidth(), getSearchBoxHeight()) {
+        TextField t = new TextField(0, 0, 64, 12) {
             @Override
             public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                 if (keyCode == GLFW.GLFW_KEY_ENTER) {
@@ -97,7 +97,7 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
     protected List<T> searchItems(String search) {
         List<T> result = new ArrayList<>();
         for (T child : contents) {
-            if (search.equals(child.getName())) {
+            if (search.equalsIgnoreCase(child.getName())) {
                 result.add(child);
             }
         }
@@ -139,7 +139,6 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
 //                gui.drawString(Localization.ITEMS_FOUND.toString() + " " + children.size(), getStatusTextX, getStatusTextY, 0.7F, 0x404040);
 //            }
 
-        RenderingHelper.drawRect(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom(), 0xaaffffff);
         searchBox.render(mouseX, mouseY, particleTicks);
         scrollUpArrow.render(mouseX, mouseY, particleTicks);
         scrollDownArrow.render(mouseX, mouseY, particleTicks);
@@ -251,7 +250,7 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
 
     public void updateSearch() {
         if (hasSearchBox()) {
-            searchResults = searchBox.getText().isEmpty() ? contents : searchItems(searchBox.getText().toLowerCase());
+            searchResults = searchBox.getText().isEmpty() ? contents : searchItems(searchBox.getText());
         } else {
             searchResults = contents;
         }
@@ -329,14 +328,6 @@ public class WrappingList<T extends IWidget & INamedElement> extends AbstractCon
 
     public int getScrollSpeed() {
         return 5;
-    }
-
-    public int getSearchBoxWidth() {
-        return 64;
-    }
-
-    public int getSearchBoxHeight() {
-        return 12;
     }
 
     public int getStatusTextX() {

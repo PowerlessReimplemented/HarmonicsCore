@@ -8,8 +8,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -18,6 +17,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import powerlessri.harmonics.gui.debug.Inspections;
+import powerlessri.harmonics.network.NetworkHandler;
 
 @Mod(HarmonicsCore.MODID)
 public class HarmonicsCore {
@@ -35,15 +35,17 @@ public class HarmonicsCore {
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-            eventBus.addListener(this::clientSetup);
-        });
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> eventBus.addListener(this::clientSetup));
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         HarmonicsCore mod = (HarmonicsCore) ModLoadingContext.get().getActiveContainer().getMod();
         Validate.isTrue(mod == this);
         instance = this;
+
+        DeferredWorkQueue.runLater(() -> {
+            NetworkHandler.register();
+        });
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

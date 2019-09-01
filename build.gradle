@@ -13,11 +13,25 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.0'
+version = '1.0.0'
 group = 'powerlessri.harmonics' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'HarmonicsCore'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+sourceSets {
+    testmod {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+
+        java {
+            srcDir "src/testmod/java"
+        }
+        resources {
+            srcDir "src/testmod/resources"
+        }
+    }
+}
 
 minecraft {
     mappings channel: 'snapshot', version: '20190719-1.14.3'
@@ -36,9 +50,11 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                harmonicscore {
+                harmonics {
                     source sourceSets.main
-                    source sourceSets.test
+                }
+                hctest {
+                    source sourceSets.testmod
                 }
             }
         }
@@ -53,9 +69,11 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                harmonicscore {
+                harmonics {
                     source sourceSets.main
-                    source sourceSets.test
+                }
+                hctest {
+                    source sourceSets.testmod
                 }
             }
         }
@@ -72,8 +90,11 @@ minecraft {
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                harmonicscore {
+                harmonics {
                     source sourceSets.main
+                }
+                hctest {
+                    source sourceSets.testmod
                 }
             }
         }
@@ -82,6 +103,24 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.0.74'
+}
+
+configurations {
+    testmodCompile.extendsFrom(compile)
+    testmodCompileOnly.extendsFrom(compileOnly)
+    testmodRuntimeOnly.extendsFrom(runtimeOnly)
+}
+
+processResources {
+    inputs.property "version", version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "META_INF/mods.toml"
+        expand "version": version
+    }
+    from(sourceSets.testmod.resources.srcDirs) {
+        include "META_INF/mods.toml"
+    }
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -97,10 +136,6 @@ jar {
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-}
-
-task runClientTests {
-    file("$buildDir/resources/main/META-INF/mods.toml").text += file("$buildDir/resources/test/META-INF/mods.toml").text
 }
 
 // Example configuration to allow publishing using the maven-publish task
