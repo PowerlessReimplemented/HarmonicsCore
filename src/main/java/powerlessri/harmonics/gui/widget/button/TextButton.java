@@ -9,6 +9,7 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.INamedElement;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
+import powerlessri.harmonics.utils.RenderUtils;
 
 import java.util.function.IntConsumer;
 
@@ -77,7 +78,7 @@ public class TextButton extends AbstractWidget implements IButton, INamedElement
         Tessellator.getInstance().draw();
         GlStateManager.enableAlphaTest();
 
-        drawTextCentered(text, y1, y2, x1, x2, 0xffffff);
+        RenderUtils.renderCenteredText(text, y1, y2, x1, x2, 0xffffff);
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }

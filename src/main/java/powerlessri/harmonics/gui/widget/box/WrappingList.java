@@ -6,11 +6,11 @@ package powerlessri.harmonics.gui.widget.box;
 
 import com.google.common.base.Preconditions;
 import powerlessri.harmonics.gui.IWidget;
-import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
+import powerlessri.harmonics.utils.ScissorTest;
 import powerlessri.harmonics.utils.Utils;
 
 import java.util.*;
@@ -52,6 +52,9 @@ public class WrappingList extends AbstractContainer<IWidget> {
                 return 2 + contents.size();
             }
         };
+
+        // Update arrow states
+        this.scroll(1);
     }
 
     @Override
@@ -78,9 +81,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
         scrollUpArrow.render(mouseX, mouseY, particleTicks);
         scrollDownArrow.render(mouseX, mouseY, particleTicks);
 
-        int left = getAbsoluteX();
-        int top = getAbsoluteY();
-        RenderingHelper.enableScissor(left, top, getWidth(), getHeight());
+        ScissorTest test = ScissorTest.scaled(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
 
         int rTop = 0;
         int rBottom = getHeight();
@@ -91,7 +92,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
             }
         }
 
-        RenderingHelper.disableScissor();
+        test.destroy();
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

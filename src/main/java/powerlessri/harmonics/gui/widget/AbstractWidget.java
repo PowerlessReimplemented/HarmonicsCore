@@ -8,6 +8,7 @@ import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
 import powerlessri.harmonics.gui.layout.properties.*;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
+import powerlessri.harmonics.utils.RenderUtils;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -214,11 +215,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public void alignCenterX(int left, int right) {
-        setX(RenderingHelper.getXForAlignedCenter(left, right, getFullWidth()));
+        setX(RenderUtils.computeCenterX(left, right, getFullWidth()));
     }
 
     public void alignRight(int right) {
-        setX(RenderingHelper.getXForAlignedRight(right, getFullWidth()));
+        setX(RenderUtils.computeRightX(right, getFullWidth()));
     }
 
     public void alignTop(int top) {
@@ -226,11 +227,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public void alignCenterY(int top, int bottom) {
-        setY(RenderingHelper.getYForAlignedCenter(top, bottom, getFullHeight()));
+        setY(RenderUtils.computeCenterY(top, bottom, getFullHeight()));
     }
 
     public void alignBottom(int bottom) {
-        setY(RenderingHelper.getYForAlignedBottom(bottom, getFullHeight()));
+        setY(RenderUtils.computeBottomY(bottom, getFullHeight()));
     }
 
     @Override

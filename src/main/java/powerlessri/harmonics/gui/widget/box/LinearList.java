@@ -18,6 +18,7 @@ import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
+import powerlessri.harmonics.utils.ScissorTest;
 import powerlessri.harmonics.utils.Utils;
 
 import java.util.*;
@@ -69,6 +70,9 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+            return true;
+        }
         if (scrolling) {
             int maxScroll = getFullHeight() - getBarHeight();
             double moved = deltaY / maxScroll;
@@ -77,19 +81,20 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
             reflow();
             return true;
         }
-        super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
         return false;
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
+        if (super.mouseScrolled(mouseX, mouseY, scroll)) {
+            return true;
+        }
         if (scroll != 0) {
             scrollDistance += -scroll * getScrollAmount();
             applyScrollLimits();
             reflow();
             return true;
         }
-        super.mouseScrolled(mouseX, mouseY, scroll);
         return false;
     }
 
@@ -108,7 +113,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder renderer = tess.getBuffer();
 
-        enableScissor(left, top, width, height);
+        ScissorTest test = ScissorTest.scaled(left, top, width, height);
 
         for (T child : getChildren()) {
             child.render(mouseX, mouseY, partialTicks);
@@ -134,7 +139,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
             GlStateManager.enableTexture();
         }
 
-        disableScissor();
+        test.destroy();
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

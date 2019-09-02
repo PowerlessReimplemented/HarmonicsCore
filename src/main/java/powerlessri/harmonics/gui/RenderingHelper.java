@@ -241,50 +241,6 @@ public final class RenderingHelper {
         drawTexturePortion(x1, y1, x2, y2, texture, 256, 256, tx, ty, portionWidth, portionHeight);
     }
 
-    public static int getXForAlignedRight(int right, int width) {
-        return right - width;
-    }
-
-    public static int getXForAlignedCenter(int left, int right, int width) {
-        return left + (right - left) / 2 - width / 2;
-    }
-
-    public static int getYForAlignedCenter(int top, int bottom, int height) {
-        return top + (bottom - top) / 2 - height / 2;
-    }
-
-    public static int getYForAlignedBottom(int bottom, int height) {
-        return bottom - height;
-    }
-
-    public static int getXForHorizontallyCenteredText(String text, int left, int right) {
-        int textWidth = fontRenderer().getStringWidth(text);
-        return getXForAlignedCenter(left, right, textWidth);
-    }
-
-    public static int getYForVerticallyCenteredText(int top, int bottom) {
-        return getYForAlignedCenter(top, bottom, fontHeight());
-    }
-
-    public static void drawTextCenteredVertically(String text, int leftX, int top, int bottom, int color) {
-        int y = getYForVerticallyCenteredText(top, bottom);
-        GlStateManager.enableTexture();
-        fontRenderer().drawString(text, leftX, y, color);
-    }
-
-    public static void drawTextCenteredHorizontally(String text, int left, int right, int topY, int color) {
-        int x = getXForHorizontallyCenteredText(text, left, right);
-        GlStateManager.enableTexture();
-        fontRenderer().drawString(text, x, topY, color);
-    }
-
-    public static void drawTextCentered(String text, int top, int bottom, int left, int right, int color) {
-        int x = getXForHorizontallyCenteredText(text, left, right);
-        int y = getYForVerticallyCenteredText(top, bottom);
-        GlStateManager.enableTexture();
-        fontRenderer().drawString(text, x, y, color);
-    }
-
     public static Dimension toBorder(Dimension contents, int borderSize) {
         return new Dimension(contents.width + borderSize * 2, contents.height + borderSize * 2);
     }
@@ -307,17 +263,5 @@ public final class RenderingHelper {
             path.append(segment).append("/");
         }
         return new ResourceLocation(HarmonicsCore.MODID, path.toString());
-    }
-
-    public static void enableScissor(int x, int y, int width, int height) {
-        MainWindow mainWindow = Minecraft.getInstance().mainWindow;
-        double scale = mainWindow.getGuiScaleFactor();
-        glEnable(GL_SCISSOR_TEST);
-        glScissor((int) (x * scale), (int) (mainWindow.getHeight() - ((y + height) * scale)),
-                (int) (width * scale), (int) (height * scale));
-    }
-
-    public static void disableScissor() {
-        glDisable(GL_SCISSOR_TEST);
     }
 }
