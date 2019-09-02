@@ -15,7 +15,7 @@ public final class RenderUtils {
         return Tessellator.getInstance().getBuffer();
     }
 
-    public static void rectColor(int x1, int y1, int x2, int y2, float z, int color) {
+    public static void coloredRect(int x1, int y1, int x2, int y2, float z, int color) {
         int alpha = (color >> 24) & 255;
         int red = (color >> 16) & 255;
         int green = (color >> 8) & 255;
@@ -27,8 +27,8 @@ public final class RenderUtils {
         renderer.pos(x2, y1, z).color(red, green, blue, alpha).endVertex();
     }
 
-    public static void rectColor(int x1, int y1, int x2, int y2, int color) {
-        rectColor(x1, y1, x2, y2, 0F, color);
+    public static void coloredRect(int x1, int y1, int x2, int y2, int color) {
+        coloredRect(x1, y1, x2, y2, 0F, color);
     }
 
     public static int computeCenterY(int top, int bottom, int height) {
