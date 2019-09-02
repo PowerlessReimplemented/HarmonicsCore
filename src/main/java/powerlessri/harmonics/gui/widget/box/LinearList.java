@@ -14,6 +14,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.RenderingHelper;
+import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
@@ -273,5 +274,11 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
 
     public int getBarExtraHeight() {
         return (getContentHeight() + getBorderTop()) - getFullHeight();
+    }
+
+    @Override
+    public void provideInformation(ITextReceiver receiver) {
+        super.provideInformation(receiver);
+        receiver.line("Offset=" + scrollDistance);
     }
 }

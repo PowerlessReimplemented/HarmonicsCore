@@ -1,6 +1,5 @@
 package powerlessri.harmonics.gui.widget.box;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
@@ -74,14 +73,14 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
 
     // In most cases these are not necessary because widget's position rely on the layout
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public Box<T> updateChildLocation(T child, Point point) {
         child.setLocation(point);
         reflow();
         return this;
     }
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public Box<T> updateChildLocation(T child, int x, int y) {
         child.setLocation(x, y);
         reflow();
@@ -103,13 +102,13 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
      * Cancel all reflow actions until {@link #unpause()} gets triggered. This should be used as a way to avoid unnecessary reflow (layout
      * updates) when changing widget properties in batch.
      */
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public Box<T> pause() {
         paused = true;
         return this;
     }
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public Box<T> unpause() {
         paused = false;
         reflow();
@@ -120,7 +119,7 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
         return paused;
     }
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public Box<T> setLayout(Consumer<List<T>> layout) {
         this.layout = layout;
         return this;

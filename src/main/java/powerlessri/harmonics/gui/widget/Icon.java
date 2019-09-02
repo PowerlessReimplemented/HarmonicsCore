@@ -1,12 +1,9 @@
 package powerlessri.harmonics.gui.widget;
 
-import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.TextureWrapper;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-
-import java.awt.*;
 
 public class Icon extends AbstractWidget implements INamedElement, LeafWidgetMixin {
 

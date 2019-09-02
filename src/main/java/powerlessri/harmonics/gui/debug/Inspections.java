@@ -1,6 +1,5 @@
 package powerlessri.harmonics.gui.debug;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -88,7 +87,7 @@ public abstract class Inspections implements IRenderEventListener {
 
     // Mark these final to enforce the master switch on subclasses
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWidget widget, int mx, int my) {
         if (!enabled) {
             return false;
@@ -103,7 +102,7 @@ public abstract class Inspections implements IRenderEventListener {
         return false;
     }
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWindow window, int mx, int my) {
         if (!enabled) {
             return false;

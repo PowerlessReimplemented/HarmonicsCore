@@ -5,7 +5,6 @@ import powerlessri.harmonics.gui.TextureWrapper;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 
-import java.awt.*;
 import java.util.function.IntConsumer;
 
 /**

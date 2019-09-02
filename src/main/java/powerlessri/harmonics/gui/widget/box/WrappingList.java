@@ -193,15 +193,6 @@ public class WrappingList extends AbstractContainer<IWidget> {
         return -offset;
     }
 
-    public void updateScrolling() {
-        boolean canScroll = contents.size() > getItemsPerRow() * getVisibleRows();
-        if (!canScroll) {
-            offset = 0;
-        }
-        scrollUpArrow.setEnabled(canScroll);
-        scrollDownArrow.setEnabled(canScroll);
-    }
-
     public void setDisabledScroll(boolean disabledScroll) {
         this.disabledScroll = disabledScroll;
     }

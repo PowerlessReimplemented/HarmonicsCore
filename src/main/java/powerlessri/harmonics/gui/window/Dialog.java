@@ -1,6 +1,5 @@
 package powerlessri.harmonics.gui.window;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import powerlessri.harmonics.gui.BackgroundRenderers;
@@ -14,7 +13,6 @@ import powerlessri.harmonics.gui.widget.box.Box;
 import powerlessri.harmonics.gui.widget.button.TextButton;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
-import sun.misc.JavaLangAccess;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -364,7 +362,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         bindRemoveSelf(buttons.getChildren().size() - 1);
     }
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public boolean tryAddSelfToActiveGUI() {
         if (Minecraft.getInstance().currentScreen instanceof WidgetScreen) {
             addSelfTo(WidgetScreen.getCurrentScreen());

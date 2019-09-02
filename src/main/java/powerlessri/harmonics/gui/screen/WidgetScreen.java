@@ -1,8 +1,6 @@
 package powerlessri.harmonics.gui.screen;
 
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
@@ -17,7 +15,6 @@ import powerlessri.harmonics.gui.window.IPopupWindow;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 

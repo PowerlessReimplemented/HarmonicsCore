@@ -2,8 +2,8 @@ package powerlessri.harmonics.gui.actionmenu;
 
 import net.minecraft.util.ResourceLocation;
 import powerlessri.harmonics.gui.IWindow;
-import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.RenderingHelper;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 

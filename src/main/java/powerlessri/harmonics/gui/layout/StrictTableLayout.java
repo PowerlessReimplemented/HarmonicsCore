@@ -1,7 +1,6 @@
 package powerlessri.harmonics.gui.layout;
 
 import com.google.common.base.Preconditions;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
 
@@ -85,7 +84,7 @@ public final class StrictTableLayout {
         this.componentMargin = componentMargin;
     }
 
-    @CanIgnoreReturnValue
+    @SuppressWarnings("UnusedReturnValue")
     public <T extends IWidget> List<T> reflow(Dimension bounds, List<T> widgets) {
         Preconditions.checkArgument(isWidgetDimensionsIdentical(widgets));
 

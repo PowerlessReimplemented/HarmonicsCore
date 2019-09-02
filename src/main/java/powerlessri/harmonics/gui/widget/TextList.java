@@ -2,9 +2,9 @@ package powerlessri.harmonics.gui.widget;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
-import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
 import java.util.Collections;
