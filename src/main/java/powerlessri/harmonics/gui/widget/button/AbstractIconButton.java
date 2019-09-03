@@ -88,6 +88,8 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
     @Override
     public void provideInformation(ITextReceiver receiver) {
         super.provideInformation(receiver);
+        receiver.line("Hovered=" + hovered);
+        receiver.line("Clicked=" + clicked);
         receiver.line("NormalTexture=" + getTextureNormal());
         receiver.line("HoveredTexture=" + getTextureHovered());
     }

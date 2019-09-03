@@ -252,10 +252,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     private void applyScrollLimits() {
-        int max = getMaxScroll();
-        if (max < 0) {
-            max /= 2;
-        }
+        int max = Utils.lowerBound(getMaxScroll(), 0);
         scrollDistance = MathHelper.clamp(scrollDistance, 0.0F, max);
     }
 
@@ -279,6 +276,16 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
 
     public int getBarExtraHeight() {
         return (getContentHeight() + getBorderTop()) - getFullHeight();
+    }
+
+    public float getScrollDistance() {
+        return scrollDistance;
+    }
+
+    public void setScrollDistance(float scrollDistance) {
+        this.scrollDistance = scrollDistance;
+        applyScrollLimits();
+        reflow();
     }
 
     @Override
