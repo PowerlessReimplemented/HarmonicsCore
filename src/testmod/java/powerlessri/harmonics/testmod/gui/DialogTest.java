@@ -7,7 +7,7 @@ import powerlessri.harmonics.gui.BackgroundRenderers;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.button.TextButton;
+import powerlessri.harmonics.gui.widget.button.SimpleTextButton;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 import powerlessri.harmonics.gui.window.Dialog;
 
@@ -33,8 +33,8 @@ public class DialogTest extends WidgetScreen {
             setContents(100, 80);
             centralize();
 
-            TextButton dialog =
-                    TextButton.ofText("Dialog", b -> Dialog.createPrompt("Enter some text:",
+            SimpleTextButton dialog =
+                    SimpleTextButton.ofText("Dialog", b -> Dialog.createPrompt("Enter some text:",
                             (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You have entered: " + t),
                             (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You clicked cancel")).tryAddSelfToActiveGUI());
             dialog.setWindow(this);

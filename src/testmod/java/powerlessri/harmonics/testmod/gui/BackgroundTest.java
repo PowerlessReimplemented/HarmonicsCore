@@ -7,7 +7,7 @@ import powerlessri.harmonics.gui.BackgroundRenderers;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.button.TextButton;
+import powerlessri.harmonics.gui.widget.button.SimpleTextButton;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class BackgroundTest extends WidgetScreen {
         public Window() {
             setContents(120, 80);
             centralize();
-            TextButton switchBkg = TextButton.ofText("Switch Background", b -> {
+            SimpleTextButton switchBkg = SimpleTextButton.ofText("Switch Background", b -> {
                 int next = style + 1;
                 style = next > STYLE_MAX ? 0 : next;
                 centralize();
