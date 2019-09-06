@@ -38,7 +38,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createPrompt(String message, String defaultText, BiConsumer<Integer, String> onConfirm, BiConsumer<Integer, String> onCancel) {
-        return createPrompt(message, defaultText, "gui.harmonics.Dialogue.OK", "gui.harmonics.Dialogue.Cancel", onConfirm, onCancel);
+        return createPrompt(message, defaultText, "gui.harmonics.Dialog.OK", "gui.harmonics.Dialog.Cancel", onConfirm, onCancel);
     }
 
     public static Dialog createPrompt(String message, String defaultText, String confirm, String cancel, BiConsumer<Integer, String> onConfirm, BiConsumer<Integer, String> onCancel) {
@@ -65,7 +65,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createBiSelectionDialog(String message, IntConsumer onConfirm, IntConsumer onCancel) {
-        return createBiSelectionDialog(message, "gui.harmonics.Dialogue.OK", "gui.harmonics.Dialogue.Cancel", onConfirm, onCancel);
+        return createBiSelectionDialog(message, "gui.harmonics.Dialog.OK", "gui.harmonics.Dialog.Cancel", onConfirm, onCancel);
     }
 
     public static Dialog createBiSelectionDialog(String message, String confirm, String cancel, IntConsumer onConfirm, IntConsumer onCancel) {
@@ -86,7 +86,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createDialog(String message, IntConsumer onConfirm) {
-        return createDialog(message, "gui.harmonics.Dialogue.OK", onConfirm);
+        return createDialog(message, "gui.harmonics.Dialog.OK", onConfirm);
     }
 
     public static Dialog createDialog(String message, String ok, IntConsumer onConfirm) {

@@ -3,9 +3,13 @@
   "gui.harmonics.ActionMenu.General.Cut": "Cut",
   "gui.harmonics.ActionMenu.General.Copy": "Copy",
   "gui.harmonics.ActionMenu.General.Paste": "Paste",
-  "gui.harmonics.Dialogue.OK": "OK",
-  "gui.harmonics.Dialogue.Cancel": "Cancel",
+
+  "gui.harmonics.Dialog.OK": "OK",
+  "gui.harmonics.Dialog.Cancel": "Cancel",
+  "gui.harmonics.Dialog.Yes": "Yes",
+  "gui.harmonics.Dialog.No": "No",
   "gui.harmonics.SearchableList.Status": "Found: %d",
+
   "message.harmonics.Days": "days",
   "message.harmonics.Hours": "hours",
   "message.harmonics.Minutes": "minutes",
