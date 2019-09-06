@@ -365,7 +365,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     @SuppressWarnings("UnusedReturnValue")
     public boolean tryAddSelfToActiveGUI() {
         if (Minecraft.getInstance().currentScreen instanceof WidgetScreen) {
-            addSelfTo(WidgetScreen.getCurrentScreen());
+            addSelfTo(WidgetScreen.assertActive());
             return true;
         }
         return false;

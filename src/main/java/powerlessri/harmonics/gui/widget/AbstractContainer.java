@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.widget;
 
 import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.actionmenu.ActionMenu;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
 import powerlessri.harmonics.gui.widget.mixin.RelocatableContainerMixin;
 
@@ -79,5 +80,25 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     public void fillWindow() {
         setLocation(0, 0);
         setDimensions(getWindow().getContents());
+    }
+
+    @Override
+    protected void buildActionMenu(ActionMenu actionMenu) {
+        super.buildActionMenu(actionMenu);
+        propagateBuildActionMenu(actionMenu);
+    }
+
+    private void propagateBuildActionMenu(ActionMenu actionMenu) {
+        propagateBuildActionMenu(this, actionMenu);
+    }
+
+    private static void propagateBuildActionMenu(IContainer<?> container, ActionMenu actionMenu) {
+        for (IWidget child : container.getChildren()) {
+            if (child instanceof AbstractWidget) {
+                ((AbstractWidget) child).buildActionMenu(actionMenu);
+            } else if (child instanceof IContainer<?>) {
+                propagateBuildActionMenu((IContainer<?>) child, actionMenu);
+            }
+        }
     }
 }
