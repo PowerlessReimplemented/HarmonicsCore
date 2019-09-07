@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.actionmenu;
+package powerlessri.harmonics.gui.contextmenu;
 
 import net.minecraft.util.ResourceLocation;
 

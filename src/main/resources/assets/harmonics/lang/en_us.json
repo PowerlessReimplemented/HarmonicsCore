@@ -1,8 +1,8 @@
 {
-  "gui.harmonics.ActionMenu.General.Delete": "Delete",
-  "gui.harmonics.ActionMenu.General.Cut": "Cut",
-  "gui.harmonics.ActionMenu.General.Copy": "Copy",
-  "gui.harmonics.ActionMenu.General.Paste": "Paste",
+  "gui.harmonics.ContextMenu.Delete": "Delete",
+  "gui.harmonics.ContextMenu.Cut": "Cut",
+  "gui.harmonics.ContextMenu.Copy": "Copy",
+  "gui.harmonics.ContextMenu.Paste": "Paste",
 
   "gui.harmonics.Dialog.OK": "OK",
   "gui.harmonics.Dialog.Cancel": "Cancel",

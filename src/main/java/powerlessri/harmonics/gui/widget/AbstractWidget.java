@@ -3,7 +3,7 @@ package powerlessri.harmonics.gui.widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import powerlessri.harmonics.gui.*;
-import powerlessri.harmonics.gui.actionmenu.ActionMenu;
+import powerlessri.harmonics.gui.contextmenu.ContextMenu;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
@@ -468,11 +468,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     protected final void createActionMenu(double x, double y) {
-        ActionMenu actionMenu = ActionMenu.atCursor(x, y, new ArrayList<>());
-        buildActionMenu(actionMenu);
-        WidgetScreen.assertActive().addPopupWindow(actionMenu);
+        ContextMenu contextMenu = ContextMenu.atCursor(x, y, new ArrayList<>());
+        buildActionMenu(contextMenu);
+        WidgetScreen.assertActive().addPopupWindow(contextMenu);
     }
 
-    protected void buildActionMenu(ActionMenu actionMenu) {
+    protected void buildActionMenu(ContextMenu contextMenu) {
     }
 }
