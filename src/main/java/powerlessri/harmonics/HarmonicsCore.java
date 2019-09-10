@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.network.NetworkHandler;
 
@@ -23,6 +25,7 @@ import powerlessri.harmonics.network.NetworkHandler;
 public class HarmonicsCore {
 
     public static final String MODID = "harmonics";
+    public static final ResourceLocation COMPONENTS = RenderingHelper.linkTexture("gui/default_components.png");
 
     public static HarmonicsCore instance;
 
