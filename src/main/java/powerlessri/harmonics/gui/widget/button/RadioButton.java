@@ -1,10 +1,11 @@
-package powerlessri.harmonics.gui.widget;
+package powerlessri.harmonics.gui.widget.button;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
-import powerlessri.harmonics.gui.widget.button.IButton;
+import powerlessri.harmonics.gui.widget.AbstractWidget;
+import powerlessri.harmonics.gui.widget.Label;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 import powerlessri.harmonics.utils.ITexture;
 import powerlessri.harmonics.utils.Texture;
@@ -87,6 +88,14 @@ public class RadioButton extends AbstractWidget implements IButton, IRadioButton
         if (checked) {
             controller.checkRadioButton(index);
         }
+    }
+
+    public Label label(String translationKey) {
+        return new Label(this).translate(translationKey);
+    }
+
+    public Label textLabel(String text) {
+        return new Label(this).text(text);
     }
 
     @Override

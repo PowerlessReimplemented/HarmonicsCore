@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.widget;
+package powerlessri.harmonics.gui.widget.button;
 
 import com.google.common.base.Preconditions;
 
@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RadioController {
+public final class RadioController {
 
     private final List<IRadioButton> radioButtons = new ArrayList<>();
     private int checkedIndex = -1;

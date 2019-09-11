@@ -19,7 +19,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.*;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.RadioButton;
 import powerlessri.harmonics.testmod.gui.*;
 
 import java.util.HashMap;

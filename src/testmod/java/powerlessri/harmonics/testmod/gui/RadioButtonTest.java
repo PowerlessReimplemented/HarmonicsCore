@@ -6,8 +6,8 @@ import powerlessri.harmonics.gui.BackgroundRenderers;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.RadioButton;
-import powerlessri.harmonics.gui.widget.RadioController;
+import powerlessri.harmonics.gui.widget.button.RadioButton;
+import powerlessri.harmonics.gui.widget.button.RadioController;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
 import java.util.List;
