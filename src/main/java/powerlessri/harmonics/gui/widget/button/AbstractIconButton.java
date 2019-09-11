@@ -25,7 +25,7 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
                 : isClicked() ? getTextureClicked()
                 : isHovered() ? getTextureHovered()
                 : getTextureNormal();
-        tex.draw(getAbsoluteX(), getAbsoluteY());
+        tex.draw(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom());
         postRenderEvent(mouseX, mouseY);
     }
 

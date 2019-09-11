@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,6 +24,8 @@ import powerlessri.harmonics.network.NetworkHandler;
 public class HarmonicsCore {
 
     public static final String MODID = "harmonics";
+    public static final ResourceLocation CLOSE = new ResourceLocation(MODID, "textures/gui/icons/close.png");
+    public static final ResourceLocation ITEM_SLOT = new ResourceLocation(MODID, "textures/gui/icons/item_slot.png");
 
     public static HarmonicsCore instance;
 
