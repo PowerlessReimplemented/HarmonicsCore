@@ -51,6 +51,7 @@ public class HarmonicsCoreTest {
         guiTests.put("dialog", DialogTest::new);
         guiTests.put("background", BackgroundTest::new);
         guiTests.put("searchable_list", SearchableListTest::new);
+        guiTests.put("radio_button", RadioButtonTest::new);
 
         DeferredWorkQueue.runLater(() -> {
             registerPackets();

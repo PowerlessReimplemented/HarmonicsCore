@@ -21,10 +21,8 @@ public class TextureWrapper {
         }
     };
 
-    public static final ResourceLocation COMPONENTS = RenderingHelper.linkTexture("gui/default_components.png");
-
     public static TextureWrapper ofComponents(int tx, int ty, int portionWidth, int portionHeight) {
-        return new TextureWrapper(COMPONENTS, 256, 256, tx, ty, portionWidth, portionHeight);
+        return new TextureWrapper(HarmonicsCore.COMPONENTS, 256, 256, tx, ty, portionWidth, portionHeight);
     }
 
     public static TextureWrapper ofGUITexture(String path, int textureWidth, int textureHeight, int tx, int ty, int portionWidth, int portionHeight) {

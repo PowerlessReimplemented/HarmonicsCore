@@ -17,6 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.network.NetworkHandler;
 
@@ -24,6 +25,7 @@ import powerlessri.harmonics.network.NetworkHandler;
 public class HarmonicsCore {
 
     public static final String MODID = "harmonics";
+    public static final ResourceLocation COMPONENTS = RenderingHelper.linkTexture("gui/default_components.png");
     public static final ResourceLocation CLOSE = new ResourceLocation(MODID, "textures/gui/icons/close.png");
     public static final ResourceLocation ITEM_SLOT = new ResourceLocation(MODID, "textures/gui/icons/item_slot.png");
 

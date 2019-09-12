@@ -6,7 +6,7 @@ import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 import powerlessri.harmonics.utils.RenderUtils;
 
-public class GradientButton extends AbstractWidget implements IButton, LeafWidgetMixin {
+public class GradientTextButton extends AbstractWidget implements IButton, LeafWidgetMixin {
 
     public static final int SIDE_MARGIN = 8;
 
@@ -38,12 +38,12 @@ public class GradientButton extends AbstractWidget implements IButton, LeafWidge
     private boolean hovered;
     private boolean clicked;
 
-    public GradientButton(String text) {
+    public GradientTextButton(String text) {
         this(0, 0, 0, 14, text);
         fitTextWidth();
     }
 
-    public GradientButton(int x, int y, int width, int height, String text) {
+    public GradientTextButton(int x, int y, int width, int height, String text) {
         super(x, y, width, height);
         this.text = text;
     }
@@ -53,18 +53,18 @@ public class GradientButton extends AbstractWidget implements IButton, LeafWidge
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public GradientButton setText(String text) {
+    public GradientTextButton setText(String text) {
         this.text = text;
         return this;
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public GradientButton fitTextWidth() {
+    public GradientTextButton fitTextWidth() {
         return fitTextWidth(SIDE_MARGIN);
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public GradientButton fitTextWidth(int sideMargin) {
+    public GradientTextButton fitTextWidth(int sideMargin) {
         int textWidth = fontRenderer().getStringWidth(text);
         setWidth(textWidth + sideMargin * 2);
         return this;

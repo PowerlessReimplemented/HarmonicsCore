@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import powerlessri.harmonics.gui.RenderingHelper;
 
 import java.util.Objects;
 
@@ -67,12 +68,12 @@ class PartialTexture implements ITexture {
 
     @Override
     public void render(int x1, int y1, int x2, int y2, float z) {
+        RenderingHelper.bindTexture(texture);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
         buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vertices(x1, y1, x2, y2, z);
-
         tessellator.draw();
     }
 
