@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.actionmenu;
+package powerlessri.harmonics.gui.contextmenu;
 
 import net.minecraft.util.ResourceLocation;
 import powerlessri.harmonics.gui.IWindow;
@@ -66,13 +66,13 @@ abstract class AbstractEntry extends AbstractWidget implements IEntry, LeafWidge
     }
 
     @Override
-    public void attach(ActionMenu actionMenu) {
-        setWindow(actionMenu);
+    public void attach(ContextMenu contextMenu) {
+        setWindow(contextMenu);
     }
 
     @Override
-    public ActionMenu getWindow() {
-        return (ActionMenu) super.getWindow();
+    public ContextMenu getWindow() {
+        return (ContextMenu) super.getWindow();
     }
 
     private int computeWidth() {

@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.actionmenu;
+package powerlessri.harmonics.gui.contextmenu;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -24,5 +24,5 @@ public interface IEntry extends IWidget {
     @Override
     Dimension getDimensions();
 
-    void attach(ActionMenu actionMenu);
+    void attach(ContextMenu contextMenu);
 }

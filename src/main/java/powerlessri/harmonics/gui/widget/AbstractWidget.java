@@ -3,15 +3,18 @@ package powerlessri.harmonics.gui.widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.contextmenu.ContextMenu;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
 import powerlessri.harmonics.gui.layout.properties.*;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import powerlessri.harmonics.utils.RenderUtils;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, ILayoutDataProvider, ResizableWidgetMixin {
 
@@ -462,5 +465,14 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     protected void onBorderChanged() {
         updateAbsolutePosition();
+    }
+
+    protected final void createActionMenu(double x, double y) {
+        ContextMenu contextMenu = ContextMenu.atCursor(x, y, new ArrayList<>());
+        buildActionMenu(contextMenu);
+        WidgetScreen.assertActive().addPopupWindow(contextMenu);
+    }
+
+    protected void buildActionMenu(ContextMenu contextMenu) {
     }
 }

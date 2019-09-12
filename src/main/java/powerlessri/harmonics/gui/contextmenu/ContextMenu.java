@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.actionmenu;
+package powerlessri.harmonics.gui.contextmenu;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -15,10 +15,10 @@ import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 
-public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
+public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
 
-    public static ActionMenu atCursor(double mouseX, double mouseY, List<? extends IEntry> entries) {
-        return new ActionMenu((int) mouseX, (int) mouseY, entries);
+    public static ContextMenu atCursor(double mouseX, double mouseY, List<? extends IEntry> entries) {
+        return new ContextMenu((int) mouseX, (int) mouseY, entries);
     }
 
     private final Point position;
@@ -31,11 +31,11 @@ public class ActionMenu implements IPopupWindow, NestedEventHandlerMixin, Window
 
     private boolean alive = true;
 
-    public ActionMenu(int x, int y, List<? extends IEntry> entries) {
+    public ContextMenu(int x, int y, List<? extends IEntry> entries) {
         this(new Point(x, y), entries);
     }
 
-    public ActionMenu(Point position, List<? extends IEntry> entries) {
+    public ContextMenu(Point position, List<? extends IEntry> entries) {
         Preconditions.checkArgument(!entries.isEmpty());
 
         this.position = position;

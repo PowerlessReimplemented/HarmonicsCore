@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.actionmenu;
+package powerlessri.harmonics.gui.contextmenu;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static powerlessri.harmonics.gui.actionmenu.AbstractEntry.HALF_MARGIN_SIDES;
-import static powerlessri.harmonics.gui.actionmenu.AbstractEntry.MARGIN_SIDES;
+import static powerlessri.harmonics.gui.contextmenu.AbstractEntry.HALF_MARGIN_SIDES;
+import static powerlessri.harmonics.gui.contextmenu.AbstractEntry.MARGIN_SIDES;
 
 public class Section extends AbstractContainer<IEntry> {
 
@@ -40,14 +40,14 @@ public class Section extends AbstractContainer<IEntry> {
         GlStateManager.enableTexture();
     }
 
-    public void attach(ActionMenu actionMenu) {
-        setWindow(actionMenu);
+    public void attach(ContextMenu contextMenu) {
+        setWindow(contextMenu);
         Dimension bounds = getDimensions();
-        bounds.width = actionMenu.getWidth() - MARGIN_SIDES * 2;
+        bounds.width = contextMenu.getWidth() - MARGIN_SIDES * 2;
         bounds.height = MARGIN_SIDES;
 
         for (IEntry entry : entries) {
-            entry.attach(actionMenu);
+            entry.attach(contextMenu);
         }
     }
 
@@ -83,7 +83,7 @@ public class Section extends AbstractContainer<IEntry> {
     }
 
     @Override
-    public ActionMenu getWindow() {
-        return (ActionMenu) super.getWindow();
+    public ContextMenu getWindow() {
+        return (ContextMenu) super.getWindow();
     }
 }

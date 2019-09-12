@@ -13,13 +13,33 @@ import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
 public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
-    public static WidgetScreen getCurrentScreen() {
+    /**
+     * @throws ClassCastException If the current open screen is not a WidgetScreen
+     */
+    public static WidgetScreen assertActive() {
         return (WidgetScreen) Minecraft.getInstance().currentScreen;
+    }
+
+    @Nullable
+    public static WidgetScreen activeNullable() {
+        Screen screen = Minecraft.getInstance().currentScreen;
+        if (screen instanceof WidgetScreen) {
+            return (WidgetScreen) screen;
+        }
+        return null;
+    }
+
+    @Nonnull
+    public static Optional<WidgetScreen> active() {
+        Screen screen = Minecraft.getInstance().currentScreen;
+        return Optional.ofNullable(screen instanceof WidgetScreen ? (WidgetScreen) screen : null);
     }
 
     public static int scaledWidth() {
