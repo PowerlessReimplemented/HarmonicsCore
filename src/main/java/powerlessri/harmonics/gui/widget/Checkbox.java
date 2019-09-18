@@ -1,9 +1,11 @@
 package powerlessri.harmonics.gui.widget;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
+import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
@@ -16,12 +18,13 @@ public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
     public static final int NORMAL_BORDER = 0x4d4d4d;
     public static final int UNCHECKED = 0xc3c3c3;
     public static final int CHECKED = 0x5c9e2d;
-    public static final int DISABLED_BORDER = 0x8d8d8d;
-    public static final int DISABLED_UNCHECKED = 0xd7d6d6;
-    public static final int DISABLED_CHECKED = 0x96bf79;
+    public static final int HOVERED_BORDER = 0x8d8d8d;
+    public static final int HOVERED_UNCHECKED = 0xd7d6d6;
+    public static final int HOVERED_CHECKED = 0x96bf79;
 
     private boolean checked = false;
-    private BooleanConsumer onStateChange = b -> {};
+
+    public BooleanConsumer onStateChange = b -> {};
 
     public Checkbox() {
         this(0, 0, 9, 9);
@@ -38,11 +41,14 @@ public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
         int y1 = getAbsoluteY();
         int x2 = getAbsoluteXRight();
         int y2 = getAbsoluteYBottom();
-        int borderColor = isEnabled() ? NORMAL_BORDER : DISABLED_BORDER;
-        int contentColor = isEnabled()
-                ? (checked ? CHECKED : UNCHECKED)
-                : (checked ? DISABLED_CHECKED : DISABLED_UNCHECKED);
+        boolean hovered = isInside(mouseX, mouseY);
+        int borderColor = hovered ? HOVERED_BORDER : NORMAL_BORDER;
+        int contentColor = hovered
+                ? (checked ? HOVERED_CHECKED : HOVERED_UNCHECKED)
+                : (checked ? CHECKED : UNCHECKED);
 
+        GlStateManager.disableAlphaTest();
+        GlStateManager.disableTexture();
         getRenderer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         rectVertices(x1, y1, x2, y2, borderColor);
         rectVertices(x1 + 1, y1 + 1, x2 - 1, y2 - 1, contentColor);
@@ -62,16 +68,18 @@ public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
         onStateChange.accept(checked);
     }
 
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+        onStateChange.accept(checked);
+    }
+
     public boolean isChecked() {
         return checked;
     }
 
-    public BooleanConsumer getActionOnStateChange() {
-        return onStateChange;
-    }
-
-    public void setActionOnStateChange(BooleanConsumer onStateChange) {
-        this.onStateChange = onStateChange;
-        onStateChange.accept(checked);
+    @Override
+    public void provideInformation(ITextReceiver receiver) {
+        super.provideInformation(receiver);
+        receiver.line("Checked=" + checked);
     }
 }

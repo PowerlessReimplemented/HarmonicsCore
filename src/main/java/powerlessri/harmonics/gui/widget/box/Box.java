@@ -22,6 +22,14 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     };
     private boolean paused = false;
 
+    public Box(int width, int height) {
+        this(0, 0, width, height);
+    }
+
+    public Box() {
+        this(0, 0, 0, 0);
+    }
+
     public Box(int x, int y, int width, int height) {
         super(x, y, width, height);
     }

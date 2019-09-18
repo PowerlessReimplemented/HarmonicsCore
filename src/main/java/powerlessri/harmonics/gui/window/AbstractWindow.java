@@ -2,12 +2,14 @@ package powerlessri.harmonics.gui.window;
 
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.IWindow;
+import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledHeight;
 import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledWidth;
 
@@ -33,6 +35,18 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
     @Override
     public Dimension getContents() {
         return contents;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+            for (IWidget child : getChildren()) {
+                if (child instanceof AbstractWidget) {
+                    ((AbstractWidget) child).createContextMenu(mouseX, mouseY);
+                }
+            }
+        }
+        return NestedEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
     }
 
     public void setContents(int width, int height) {

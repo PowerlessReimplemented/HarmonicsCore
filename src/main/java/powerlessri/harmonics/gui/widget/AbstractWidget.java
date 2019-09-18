@@ -467,12 +467,12 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         updateAbsolutePosition();
     }
 
-    protected final void createActionMenu(double x, double y) {
+    public final void createContextMenu(double x, double y) {
         ContextMenu contextMenu = ContextMenu.atCursor(x, y, new ArrayList<>());
-        buildActionMenu(contextMenu);
+        buildContextMenu(contextMenu);
         WidgetScreen.assertActive().addPopupWindow(contextMenu);
     }
 
-    protected void buildActionMenu(ContextMenu contextMenu) {
+    protected void buildContextMenu(ContextMenu contextMenu) {
     }
 }

@@ -48,8 +48,9 @@ public class HarmonicsCoreTest {
     }
 
     private void setup(FMLCommonSetupEvent event) {
-        guiTests.put("dialog", DialogTest::new);
+        guiTests.put("context_menu", ContextMenuTest::new);
         guiTests.put("background", BackgroundTest::new);
+        guiTests.put("dialog", DialogTest::new);
         guiTests.put("searchable_list", SearchableListTest::new);
         guiTests.put("radio_button", RadioButtonTest::new);
 

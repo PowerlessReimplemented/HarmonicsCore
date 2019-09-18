@@ -83,8 +83,8 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     @Override
-    protected void buildActionMenu(ContextMenu contextMenu) {
-        super.buildActionMenu(contextMenu);
+    protected void buildContextMenu(ContextMenu contextMenu) {
+        super.buildContextMenu(contextMenu);
         propagateBuildActionMenu(contextMenu);
     }
 
@@ -95,7 +95,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     private static void propagateBuildActionMenu(IContainer<?> container, ContextMenu contextMenu) {
         for (IWidget child : container.getChildren()) {
             if (child instanceof AbstractWidget) {
-                ((AbstractWidget) child).buildActionMenu(contextMenu);
+                ((AbstractWidget) child).buildContextMenu(contextMenu);
             } else if (child instanceof IContainer<?>) {
                 propagateBuildActionMenu((IContainer<?>) child, contextMenu);
             }
