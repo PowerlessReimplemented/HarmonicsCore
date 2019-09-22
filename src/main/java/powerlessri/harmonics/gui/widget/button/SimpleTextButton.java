@@ -10,7 +10,7 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.INamedElement;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-import powerlessri.harmonics.utils.RenderUtils;
+import powerlessri.harmonics.gui.Render2D;
 
 import java.util.function.IntConsumer;
 
@@ -103,7 +103,7 @@ public class SimpleTextButton extends AbstractWidget implements IButton, INamedE
     }
 
     protected void renderText() {
-        RenderUtils.renderCenteredText(getText(), getAbsoluteY(), getAbsoluteYBottom(), getAbsoluteX(), getAbsoluteXRight(), 0xffffff);
+        Render2D.renderCenteredText(getText(), getAbsoluteY(), getAbsoluteYBottom(), getAbsoluteX(), getAbsoluteXRight(), 0xffffff);
     }
 
     @Override

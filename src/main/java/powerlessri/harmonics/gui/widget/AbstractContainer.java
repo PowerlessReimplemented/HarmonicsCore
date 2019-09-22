@@ -21,9 +21,9 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     @Override
-    public void setParentWidget(IWidget newParent) {
-        super.setParentWidget(newParent);
-        ContainerWidgetMixin.super.setParentWidget(newParent);
+    public void attach(IWidget newParent) {
+        super.attach(newParent);
+        ContainerWidgetMixin.super.attach(newParent);
     }
 
     @Override
@@ -41,7 +41,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
         super.setWindow(window);
         for (T child : getChildren()) {
             // This will also inherit window reference from this widget
-            child.setParentWidget(this);
+            child.attach(this);
         }
     }
 

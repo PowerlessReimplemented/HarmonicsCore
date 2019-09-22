@@ -5,7 +5,7 @@ import net.minecraft.client.resources.I18n;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-import powerlessri.harmonics.utils.RenderUtils;
+import powerlessri.harmonics.gui.Render2D;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,10 +39,10 @@ public class TextList extends AbstractWidget implements LeafWidgetMixin {
                     fontRenderer().drawString(text, x, y, 0x000000);
                     break;
                 case CENTER:
-                    RenderUtils.renderHorizontallyCenteredText(text, x, x2, y, 0x000000);
+                    Render2D.renderHorizontallyCenteredText(text, x, x2, y, 0x000000);
                     break;
                 case RIGHT:
-                    fontRenderer().drawString(text, RenderUtils.computeRightX(x2, textWidth(text)), y, 0x000000);
+                    fontRenderer().drawString(text, Render2D.computeRightX(x2, textWidth(text)), y, 0x000000);
                     break;
             }
             y += fontHeight();

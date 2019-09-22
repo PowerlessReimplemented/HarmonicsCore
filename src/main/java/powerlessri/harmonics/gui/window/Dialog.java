@@ -2,7 +2,7 @@ package powerlessri.harmonics.gui.window;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import powerlessri.harmonics.gui.BackgroundRenderers;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;

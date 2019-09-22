@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui;
+package powerlessri.harmonics.gui.screen;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

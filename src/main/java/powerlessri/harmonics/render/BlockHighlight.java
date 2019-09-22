@@ -1,4 +1,4 @@
-package powerlessri.harmonics.utils;
+package powerlessri.harmonics.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
@@ -6,13 +6,19 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import powerlessri.harmonics.HarmonicsCore;
 
 import java.util.*;
 
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.glLineWidth;
 
+@EventBusSubscriber(modid = HarmonicsCore.MODID, value = Dist.CLIENT, bus = Bus.FORGE)
 public final class BlockHighlight {
 
     private static List<BlockHighlight> highlights = new ArrayList<>();
@@ -22,7 +28,8 @@ public final class BlockHighlight {
         highlights.add(new BlockHighlight(pos, expireTime));
     }
 
-    public static void renderWorld(RenderWorldLastEvent event) {
+    @SubscribeEvent
+    public static void onRenderWorldLast(RenderWorldLastEvent event) {
         float particleTicks = event.getPartialTicks();
         for (BlockHighlight highlight : highlights) {
             highlight.render(particleTicks);

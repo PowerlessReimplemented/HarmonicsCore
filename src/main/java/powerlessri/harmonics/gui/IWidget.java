@@ -4,6 +4,7 @@ import net.minecraft.client.gui.IRenderable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 
 @OnlyIn(Dist.CLIENT)
@@ -107,7 +108,9 @@ public interface IWidget extends IRenderable {
      * @implSpec Calling this method should update the value returned by {@link #getParentWidget()} and trigger {@link
      * #onParentPositionChanged()}.
      */
-    void setParentWidget(IWidget newParent);
+    void attach(IWidget newParent);
+
+    boolean isValid();
 
     void onParentPositionChanged();
 

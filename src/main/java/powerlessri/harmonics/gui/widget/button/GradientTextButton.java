@@ -4,7 +4,7 @@ import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-import powerlessri.harmonics.utils.RenderUtils;
+import powerlessri.harmonics.gui.Render2D;
 
 public class GradientTextButton extends AbstractWidget implements IButton, LeafWidgetMixin {
 
@@ -73,7 +73,7 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         clicked = true;
-        getWindow().setFocusedWidget(this);
+        setFocused(true);
         return true;
     }
 
@@ -105,7 +105,7 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
         RenderingHelper.drawRect(x, y, x2 - 1, y2 - 2, getTopLeftColor());
         RenderingHelper.drawVerticalGradientRect(x + 1, y + 1, x2 - 1, y2 - 1, getGradientStartColor(), getGradientEndColor());
 
-        RenderUtils.renderCenteredText(text, y, y2, x, x2, getTextColor());
+        Render2D.renderCenteredText(text, y, y2, x, x2, getTextColor());
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }

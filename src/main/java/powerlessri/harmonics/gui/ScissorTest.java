@@ -1,4 +1,4 @@
-package powerlessri.harmonics.utils;
+package powerlessri.harmonics.gui;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;

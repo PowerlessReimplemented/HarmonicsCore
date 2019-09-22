@@ -2,14 +2,12 @@ package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.common.WorldWorkerManager;
-import powerlessri.harmonics.gui.BackgroundRenderers;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.contextmenu.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.Spacer;
-import powerlessri.harmonics.gui.widget.box.Box;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
 import java.util.List;

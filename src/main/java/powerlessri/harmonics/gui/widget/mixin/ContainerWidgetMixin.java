@@ -118,11 +118,11 @@ public interface ContainerWidgetMixin<T extends IWidget> extends IContainer<T> {
     }
 
     @Override
-    default void setParentWidget(IWidget newParent) {
+    default void attach(IWidget newParent) {
         // Pre-init execution safety
         if (getChildren() != null) {
             for (IWidget child : getChildren()) {
-                child.setParentWidget(this);
+                child.attach(this);
             }
         }
     }

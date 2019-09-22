@@ -10,7 +10,7 @@ import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
-import powerlessri.harmonics.utils.ScissorTest;
+import powerlessri.harmonics.gui.ScissorTest;
 import powerlessri.harmonics.utils.Utils;
 
 import java.util.*;
@@ -32,9 +32,9 @@ public class WrappingList extends AbstractContainer<IWidget> {
         super(0, 0, 80, 80);
 
         this.scrollUpArrow = ScrollArrow.up(0, 0);
-        this.scrollUpArrow.setParentWidget(this);
+        this.scrollUpArrow.attach(this);
         this.scrollDownArrow = ScrollArrow.down(0, 0);
-        this.scrollDownArrow.setParentWidget(this);
+        this.scrollDownArrow.attach(this);
         this.alignArrows();
 
         this.children = new AbstractList<IWidget>() {
@@ -150,7 +150,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
     @Override
     public WrappingList addChildren(IWidget widget) {
         Preconditions.checkArgument(widget.getFullWidth() == getItemSize() && widget.getFullHeight() == getItemSize());
-        widget.setParentWidget(this);
+        widget.attach(this);
         contents.add(widget);
         reflow();
         return this;
@@ -160,7 +160,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
     public WrappingList addChildren(Collection<IWidget> widgets) {
         for (IWidget widget : widgets) {
             Preconditions.checkArgument(widget.getFullWidth() == getItemSize() && widget.getFullHeight() == getItemSize());
-            widget.setParentWidget(this);
+            widget.attach(this);
             contents.add(widget);
         }
         reflow();
@@ -170,7 +170,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
     public void setContentList(List<IWidget> list) {
         this.contents = list;
         for (IWidget widget : list) {
-            widget.setParentWidget(this);
+            widget.attach(this);
         }
     }
 

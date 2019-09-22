@@ -6,7 +6,7 @@ import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-import powerlessri.harmonics.utils.RenderUtils;
+import powerlessri.harmonics.gui.Render2D;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -50,7 +50,7 @@ public abstract class AbstractEntry extends AbstractWidget implements IEntry, Le
         }
 
         int textX = x + MARGIN_SIDES + RENDERED_ICON_WIDTH + 2;
-        RenderUtils.renderVerticallyCenteredText(getText(), textX, y, y2, 0xffffffff);
+        Render2D.renderVerticallyCenteredText(getText(), textX, y, y2, 0xffffffff);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

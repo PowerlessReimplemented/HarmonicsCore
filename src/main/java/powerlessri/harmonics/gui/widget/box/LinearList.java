@@ -18,7 +18,7 @@ import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
-import powerlessri.harmonics.utils.ScissorTest;
+import powerlessri.harmonics.gui.ScissorTest;
 import powerlessri.harmonics.utils.Utils;
 
 import java.util.*;
@@ -42,13 +42,13 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         scrolling = button == GLFW.GLFW_MOUSE_BUTTON_LEFT && isInsideBar(mouseX, mouseY);
         if (scrolling) {
-            getWindow().setFocusedWidget(this);
+            setFocused(true);
             return true;
         }
         if (super.mouseClicked(mouseX, mouseY, button)) {
             return true;
         }
-        getWindow().setFocusedWidget(this);
+        setFocused(true);
         return false;
     }
 

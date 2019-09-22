@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.widget.button.SimpleIconButton;
 import powerlessri.harmonics.gui.widget.slot.*;
 

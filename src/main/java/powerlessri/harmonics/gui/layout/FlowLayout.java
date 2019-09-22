@@ -3,7 +3,7 @@ package powerlessri.harmonics.gui.layout;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
-import powerlessri.harmonics.utils.RenderUtils;
+import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.utils.Utils;
 
 import java.awt.*;
@@ -39,12 +39,12 @@ public class FlowLayout {
                         break;
                     }
                     case CENTER: {
-                        int x = RenderUtils.computeCenterX(0, bounds.width, widget.getFullWidth());
+                        int x = Render2D.computeCenterX(0, bounds.width, widget.getFullWidth());
                         widget.setLocation(x, y);
                         break;
                     }
                     case RIGHT: {
-                        int x = RenderUtils.computeRightX(bounds.width, widget.getFullWidth());
+                        int x = Render2D.computeRightX(bounds.width, widget.getFullWidth());
                         widget.setLocation(Utils.lowerBound(x, 0), y);
                         break;
                     }

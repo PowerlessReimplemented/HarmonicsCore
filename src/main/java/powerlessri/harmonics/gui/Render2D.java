@@ -1,4 +1,4 @@
-package powerlessri.harmonics.utils;
+package powerlessri.harmonics.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -6,9 +6,9 @@ import net.minecraft.client.renderer.Tessellator;
 import powerlessri.harmonics.gui.RenderingHelper;
 
 // TODO complete switch to this render utils
-public final class RenderUtils {
+public final class Render2D {
 
-    private RenderUtils() {
+    private Render2D() {
     }
 
     public static BufferBuilder getBuffer() {

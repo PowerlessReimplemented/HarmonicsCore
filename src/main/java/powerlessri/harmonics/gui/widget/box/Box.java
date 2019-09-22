@@ -54,7 +54,7 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     @Override
     public Box<T> addChildren(T widget) {
         children.add(widget);
-        widget.setParentWidget(this);
+        widget.attach(this);
         reflow();
         return this;
     }
@@ -62,7 +62,7 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     @Override
     public Box<T> addChildren(Collection<T> widgets) {
         children.addAll(widgets);
-        widgets.forEach(widget -> widget.setParentWidget(this));
+        widgets.forEach(widget -> widget.attach(this));
         reflow();
         return this;
     }

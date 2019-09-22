@@ -7,6 +7,7 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.INamedElement;
 import powerlessri.harmonics.gui.widget.TextField;

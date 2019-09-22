@@ -10,7 +10,7 @@ import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
 import powerlessri.harmonics.gui.layout.properties.*;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
-import powerlessri.harmonics.utils.RenderUtils;
+import powerlessri.harmonics.gui.Render2D;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -65,10 +65,32 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     @Override
-    public void setParentWidget(IWidget newParent) {
+    public void attach(IWidget newParent) {
+        IWidget oldParent = parent;
         this.parent = newParent;
         this.window = newParent.getWindow();
         onParentPositionChanged();
+        onAttach(oldParent, newParent);
+        if (oldParent == null) {
+            onInitialAttach();
+        }
+    }
+
+    public void onAttach(@Nullable IWidget oldParent, IWidget newParent) {
+    }
+
+    public void onInitialAttach() {
+    }
+
+    @Override
+    public boolean isValid() {
+        return parent != null;
+    }
+
+    public void setFocused(boolean focused) {
+        if (getWindow() != null) {
+            getWindow().setFocusedWidget(focused ? this : null);
+        }
     }
 
     public void setWindow(IWindow window) {
@@ -218,11 +240,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public void alignCenterX(int left, int right) {
-        setX(RenderUtils.computeCenterX(left, right, getFullWidth()));
+        setX(Render2D.computeCenterX(left, right, getFullWidth()));
     }
 
     public void alignRight(int right) {
-        setX(RenderUtils.computeRightX(right, getFullWidth()));
+        setX(Render2D.computeRightX(right, getFullWidth()));
     }
 
     public void alignTop(int top) {
@@ -230,11 +252,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public void alignCenterY(int top, int bottom) {
-        setY(RenderUtils.computeCenterY(top, bottom, getFullHeight()));
+        setY(Render2D.computeCenterY(top, bottom, getFullHeight()));
     }
 
     public void alignBottom(int bottom) {
-        setY(RenderUtils.computeBottomY(bottom, getFullHeight()));
+        setY(Render2D.computeBottomY(bottom, getFullHeight()));
     }
 
     @Override
