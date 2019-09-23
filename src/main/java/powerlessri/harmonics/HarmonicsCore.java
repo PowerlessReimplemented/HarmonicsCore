@@ -25,9 +25,6 @@ import powerlessri.harmonics.network.NetworkHandler;
 public class HarmonicsCore {
 
     public static final String MODID = "harmonics";
-    public static final ResourceLocation COMPONENTS = RenderingHelper.linkTexture("gui/default_components.png");
-    public static final ResourceLocation CLOSE = new ResourceLocation(MODID, "textures/gui/icons/close.png");
-    public static final ResourceLocation ITEM_SLOT = new ResourceLocation(MODID, "textures/gui/icons/item_slot.png");
 
     public static HarmonicsCore instance;
 

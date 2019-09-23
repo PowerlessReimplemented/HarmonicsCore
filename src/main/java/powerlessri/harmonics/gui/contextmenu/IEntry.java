@@ -3,11 +3,12 @@ package powerlessri.harmonics.gui.contextmenu;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 
-public interface IEntry extends IWidget {
+public interface IEntry extends IWidget, ResizableWidgetMixin {
 
     /**
      * This icon must have a size of 16*16, and action menus will assume so to function. Failure to do so might create undefined behaviors.

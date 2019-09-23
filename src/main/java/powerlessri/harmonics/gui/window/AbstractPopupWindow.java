@@ -50,6 +50,10 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
         return initialDragLocalX != -1 && initialDragLocalY != -1;
     }
 
+    public void discard() {
+        alive = false;
+    }
+
     @Override
     public boolean shouldDiscard() {
         return !alive;

@@ -4,13 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.contextmenu.ContextMenu;
+import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
 import powerlessri.harmonics.gui.layout.properties.*;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
-import powerlessri.harmonics.gui.Render2D;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -93,7 +93,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         }
     }
 
-    public void setWindow(IWindow window) {
+    public void attachWindow(IWindow window) {
         this.window = window;
         onParentPositionChanged();
     }
@@ -416,11 +416,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     @Override
     public void provideInformation(ITextReceiver receiver) {
         receiver.line(this.toString());
-        receiver.line("Position=" + this.getPosition());
+        receiver.line("Position=(" + location.x + ", " + location.y + ")");
         receiver.line("AbsX=" + this.getAbsoluteX());
         receiver.line("AbsY=" + this.getAbsoluteY());
-        receiver.line("Dimensions=" + this.getDimensions());
-        receiver.line("Borders=" + this.getBorders());
+        receiver.line("Dimensions=(" + dimensions.width + ", " + dimensions.width + ")");
+        receiver.line(String.format("Borders={top: %d, right: %d, bottom: %d, left: %d}", border.top, border.right, border.bottom, border.left));
         receiver.line("Enabled=" + this.isEnabled());
     }
 
@@ -490,11 +490,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public final void createContextMenu(double x, double y) {
-        ContextMenu contextMenu = ContextMenu.atCursor(x, y, new ArrayList<>());
-        buildContextMenu(contextMenu);
-        WidgetScreen.assertActive().addPopupWindow(contextMenu);
+        ContextMenuBuilder builder = new ContextMenuBuilder();
+        buildContextMenu(builder);
+        WidgetScreen.assertActive().addPopupWindow(builder.build());
     }
 
-    protected void buildContextMenu(ContextMenu contextMenu) {
+    protected void buildContextMenu(ContextMenuBuilder builder) {
     }
 }

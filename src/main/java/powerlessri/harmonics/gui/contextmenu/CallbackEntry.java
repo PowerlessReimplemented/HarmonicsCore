@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 import java.util.function.IntConsumer;
 
-public class CallbackEntry extends AbstractEntry {
+public class CallbackEntry extends DefaultEntry {
 
     private final IntConsumer callback;
 
@@ -16,6 +16,7 @@ public class CallbackEntry extends AbstractEntry {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
         callback.accept(button);
         return true;
     }

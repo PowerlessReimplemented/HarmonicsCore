@@ -2,10 +2,10 @@ package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.StringTextComponent;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.contextmenu.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.Spacer;
 import powerlessri.harmonics.gui.window.AbstractWindow;
@@ -32,16 +32,25 @@ public class ContextMenuTest extends WidgetScreen {
             setContents(100, 80);
             centralize();
 
-            IWidget widget = new Spacer(getContentWidth(), getContentHeight()) {
+            Spacer spacer = new Spacer(getContentWidth(), getContentHeight()) {
                 @Override
-                protected void buildContextMenu(ContextMenu contextMenu) {
-                    super.buildContextMenu(contextMenu);
-                    AbstractEntry test1 = new CallbackEntry(null, "Test1", b -> minecraft().player.sendChatMessage("First entry got clicked!"));
-                    // TODO
+                protected void buildContextMenu(ContextMenuBuilder builder) {
+                    Section section1 = builder.getSection("Section1");
+                    section1.addChildren(new CallbackEntry(null, "Test1", b -> minecraft().player.sendChatMessage("First entry got clicked!")));
+
+                    Section section2 = builder.getSection("Section2");
+                    section2.addChildren(new DefaultEntry(null, "S2 Test1"));
+                    section2.addChildren(new DefaultEntry(null, "S2T2"));
+                    section2.addChildren(new CallbackEntry(null, "S2 Test3", b -> minecraft().player.sendChatMessage("You clicked on an entry below S2T2")));
+
+                    Section section3 = builder.getSection("Section3");
+                    section3.addChildren(new DefaultEntry(null, "S3 Test1 and this is a very long context menu entry"));
+                    section3.addChildren(new DefaultEntry(null, "S4 Test2"));
                 }
             };
+            spacer.attachWindow(this);
 
-            this.children = ImmutableList.of(widget);
+            this.children = ImmutableList.of(spacer);
         }
 
         @Override

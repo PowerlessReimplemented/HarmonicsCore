@@ -2,14 +2,18 @@ package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.StringTextComponent;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
+import powerlessri.harmonics.gui.layout.properties.Side;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
+import powerlessri.harmonics.gui.widget.Label;
 import powerlessri.harmonics.gui.widget.button.RadioButton;
 import powerlessri.harmonics.gui.widget.button.RadioController;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RadioButtonTest extends WidgetScreen {
@@ -28,25 +32,24 @@ public class RadioButtonTest extends WidgetScreen {
 
         private final List<IWidget> children;
 
-        private RadioController controller;
-
         public Window() {
             setContents(120, 80);
             centralize();
 
-            controller = new RadioController();
-            RadioButton btn1 = new RadioButton(controller);
-            RadioButton btn2 = new RadioButton(controller);
-            RadioButton btn3 = new RadioButton(controller);
-            btn1.setWindow(this);
-            btn2.setWindow(this);
-            btn3.setWindow(this);
+            RadioController controller = new RadioController();
+            children = new ArrayList<>();
+            int y = 0;
+            for (int i = 0; i < 6; i++) {
+                RadioButton radioButton = new RadioButton(controller);
+                radioButton.attachWindow(this);
+                radioButton.setLocation(0, y);
+                Label label = radioButton.textLabel("Radio button " + (i + 1));
 
-            btn1.setLocation(0, 0);
-            btn2.setLocation(0, btn1.getYBottom() + 2);
-            btn3.setLocation(0, btn2.getYBottom() + 2);
+                children.add(radioButton);
+                children.add(label);
 
-            children = ImmutableList.of(btn1, btn2, btn3);
+                y += radioButton.getFullHeight() + 2;
+            }
         }
 
         @Override

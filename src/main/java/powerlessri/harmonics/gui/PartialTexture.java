@@ -1,11 +1,10 @@
-package powerlessri.harmonics.utils;
+package powerlessri.harmonics.gui;
 
 import com.google.common.base.MoreObjects;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import powerlessri.harmonics.gui.RenderingHelper;
 
 import java.util.Objects;
 

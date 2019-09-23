@@ -22,7 +22,7 @@ public class TextureWrapper {
     };
 
     public static TextureWrapper ofComponents(int tx, int ty, int portionWidth, int portionHeight) {
-        return new TextureWrapper(HarmonicsCore.COMPONENTS, 256, 256, tx, ty, portionWidth, portionHeight);
+        return new TextureWrapper(Render2D.COMPONENTS, 256, 256, tx, ty, portionWidth, portionHeight);
     }
 
     public static TextureWrapper ofGUITexture(String path, int textureWidth, int textureHeight, int tx, int ty, int portionWidth, int portionHeight) {

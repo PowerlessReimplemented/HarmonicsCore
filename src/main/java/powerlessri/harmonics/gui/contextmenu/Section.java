@@ -1,6 +1,8 @@
 package powerlessri.harmonics.gui.contextmenu;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import powerlessri.harmonics.gui.IWindow;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 
 import java.awt.*;
@@ -8,8 +10,8 @@ import java.util.List;
 import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static powerlessri.harmonics.gui.contextmenu.AbstractEntry.HALF_MARGIN_SIDES;
-import static powerlessri.harmonics.gui.contextmenu.AbstractEntry.MARGIN_SIDES;
+import static powerlessri.harmonics.gui.contextmenu.DefaultEntry.HALF_MARGIN_SIDES;
+import static powerlessri.harmonics.gui.contextmenu.DefaultEntry.MARGIN_SIDES;
 
 public class Section extends AbstractContainer<IEntry> {
 
@@ -21,19 +23,22 @@ public class Section extends AbstractContainer<IEntry> {
 
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
-        if (!getWindow().isLastSection(this)) {
+        RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+        super.render(mouseX, mouseY, particleTicks);
+        if (!getContextMenu().isLastSection(this)) {
             renderLine();
         }
+        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
     private void renderLine() {
         int bx = getAbsoluteX() + HALF_MARGIN_SIDES;
-        int bx2 = getAbsoluteXRight() - 1;
-        int by = getAbsoluteY() + 1;
+        int bx2 = getAbsoluteXRight() - HALF_MARGIN_SIDES;
+        int by = getAbsoluteYBottom() + 1;
         GlStateManager.disableTexture();
         GlStateManager.color3f(LINE_COLOR, LINE_COLOR, LINE_COLOR);
         glLineWidth(1F);
-        glBegin(GL_LINE);
+        glBegin(GL_LINES);
         glVertex2f(bx, by);
         glVertex2f(bx2, by);
         glEnd();
@@ -41,26 +46,32 @@ public class Section extends AbstractContainer<IEntry> {
     }
 
     public void attach(ContextMenu contextMenu) {
-        setWindow(contextMenu);
+        super.attachWindow(contextMenu);
         Dimension bounds = getDimensions();
         bounds.width = contextMenu.getWidth() - MARGIN_SIDES * 2;
         bounds.height = MARGIN_SIDES;
+    }
 
-        for (IEntry entry : entries) {
-            entry.attach(contextMenu);
-        }
+    @Override
+    public void attachWindow(IWindow window) {
+        throw new UnsupportedOperationException("Use attach(ContextMenu) instead!");
     }
 
     @Override
     public void reflow() {
-        int w = entries.stream()
-                .max(Comparator.comparingInt(IEntry::getFullWidth))
-                .orElseThrow(IllegalArgumentException::new)
-                .getFullWidth();
-        int h = entries.stream()
-                .mapToInt(IEntry::getFullHeight)
-                .sum();
-        setDimensions(w, h + MARGIN_SIDES);
+        int width = 0;
+        int height = 0;
+        int y = 0;
+        for (IEntry entry : entries) {
+            width = Math.max(width, entry.getFullWidth());
+            height += entry.getFullHeight();
+            entry.setLocation(0, y);
+            y += entry.getFullHeight();
+        }
+        setDimensions(width, height);
+        if (!getContextMenu().isLastSection(this)) {
+            setBorderBottom(3);
+        }
     }
 
     @Override
@@ -71,19 +82,24 @@ public class Section extends AbstractContainer<IEntry> {
     @Override
     public Section addChildren(IEntry widget) {
         entries.add(widget);
-        reflow();
         return this;
     }
 
     @Override
     public Section addChildren(Collection<IEntry> widgets) {
         entries.addAll(widgets);
-        reflow();
         return this;
     }
 
-    @Override
-    public ContextMenu getWindow() {
+    public ContextMenu getContextMenu() {
         return (ContextMenu) super.getWindow();
+    }
+
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        for (IEntry entry : entries) {
+            entry.setWidth(width);
+        }
     }
 }

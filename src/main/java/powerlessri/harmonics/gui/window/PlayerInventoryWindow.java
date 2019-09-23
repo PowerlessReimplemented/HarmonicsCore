@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
@@ -14,12 +13,11 @@ import powerlessri.harmonics.gui.widget.slot.*;
 import java.util.List;
 import java.util.function.Function;
 
-public class PlayerInventoryWindow extends AbstractWindow implements IPopupWindow {
+public class PlayerInventoryWindow extends AbstractPopupWindow {
 
-    private static final TextureWrapper CLOSE = new TextureWrapper(HarmonicsCore.CLOSE, 64, 64, 0, 0, 64, 64);
+    private static final TextureWrapper CLOSE = new TextureWrapper(Render2D.CLOSE, 16, 16, 0, 0, 16, 16);
 
     private final List<IWidget> children;
-    private boolean alive = true;
 
     public PlayerInventoryWindow() {
         this(0, 0, ItemSlot::new);
@@ -37,7 +35,7 @@ public class PlayerInventoryWindow extends AbstractWindow implements IPopupWindo
         hotbar.setLocation(0, inventory.getYBottom());
         SimpleIconButton close = new SimpleIconButton(inventory.getWidth() - 8, 0, CLOSE, CLOSE);
         close.setDimensions(8, 8);
-        close.onClick(b -> alive = false);
+        close.onClick(b -> discard());
         children = ImmutableList.of(close, inventory, hotbar);
 
         setContents(inventory.getWidth(), inventory.getFullHeight() + hotbar.getFullHeight());
@@ -59,10 +57,5 @@ public class PlayerInventoryWindow extends AbstractWindow implements IPopupWindo
         BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
         renderChildren(mouseX, mouseY, particleTicks);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
-    }
-
-    @Override
-    public boolean shouldDiscard() {
-        return !alive;
     }
 }

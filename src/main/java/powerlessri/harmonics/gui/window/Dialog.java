@@ -221,7 +221,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         for (AbstractWidget child : children) {
             // This will update the absolute position as well (because we know all the children are at least AbstractWidget)
             // so no need to call child.onParentPositionChanged() here
-            child.setWindow(this);
+            child.attachWindow(this);
         }
     }
 

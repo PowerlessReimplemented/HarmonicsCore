@@ -41,7 +41,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             for (IWidget child : getChildren()) {
-                if (child instanceof AbstractWidget) {
+                if (child.isInside(mouseX, mouseY) && child instanceof AbstractWidget) {
                     ((AbstractWidget) child).createContextMenu(mouseX, mouseY);
                 }
             }

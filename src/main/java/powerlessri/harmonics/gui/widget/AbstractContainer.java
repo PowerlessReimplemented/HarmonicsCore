@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.widget;
 
 import powerlessri.harmonics.gui.*;
-import powerlessri.harmonics.gui.contextmenu.ContextMenu;
+import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
 import powerlessri.harmonics.gui.widget.mixin.RelocatableContainerMixin;
 
@@ -37,8 +37,8 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     @Override
-    public void setWindow(IWindow window) {
-        super.setWindow(window);
+    public void attachWindow(IWindow window) {
+        super.attachWindow(window);
         for (T child : getChildren()) {
             // This will also inherit window reference from this widget
             child.attach(this);
@@ -83,21 +83,20 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     @Override
-    protected void buildContextMenu(ContextMenu contextMenu) {
-        super.buildContextMenu(contextMenu);
-        propagateBuildActionMenu(contextMenu);
+    protected void buildContextMenu(ContextMenuBuilder builder) {
+        propagateBuildActionMenu(builder);
     }
 
-    private void propagateBuildActionMenu(ContextMenu contextMenu) {
-        propagateBuildActionMenu(this, contextMenu);
+    private void propagateBuildActionMenu(ContextMenuBuilder builder) {
+        propagateBuildActionMenu(this, builder);
     }
 
-    private static void propagateBuildActionMenu(IContainer<?> container, ContextMenu contextMenu) {
+    private static void propagateBuildActionMenu(IContainer<?> container, ContextMenuBuilder builder) {
         for (IWidget child : container.getChildren()) {
             if (child instanceof AbstractWidget) {
-                ((AbstractWidget) child).buildContextMenu(contextMenu);
+                ((AbstractWidget) child).buildContextMenu(builder);
             } else if (child instanceof IContainer<?>) {
-                propagateBuildActionMenu((IContainer<?>) child, contextMenu);
+                propagateBuildActionMenu((IContainer<?>) child, builder);
             }
         }
     }

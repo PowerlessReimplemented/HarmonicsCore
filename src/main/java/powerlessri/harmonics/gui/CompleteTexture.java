@@ -1,4 +1,4 @@
-package powerlessri.harmonics.utils;
+package powerlessri.harmonics.gui;
 
 import com.google.common.base.MoreObjects;
 import net.minecraft.client.renderer.BufferBuilder;

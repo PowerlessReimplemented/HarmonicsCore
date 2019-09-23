@@ -42,7 +42,7 @@ public class BackgroundTest extends WidgetScreen {
                 centralize();
                 updatePosition();
             });
-            switchBkg.setWindow(this);
+            switchBkg.attachWindow(this);
             this.children = ImmutableList.of(switchBkg);
         }
 

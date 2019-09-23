@@ -37,7 +37,7 @@ public class DialogTest extends WidgetScreen {
                     SimpleTextButton.ofText("Dialog", b -> Dialog.createPrompt("Enter some text:",
                             (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You have entered: " + t),
                             (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You clicked cancel")).tryAddSelfToActiveGUI());
-            dialog.setWindow(this);
+            dialog.attachWindow(this);
 
             this.children = ImmutableList.of(dialog);
             this.updatePosition();

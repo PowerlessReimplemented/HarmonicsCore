@@ -23,6 +23,7 @@ public class PacketOpenGUI {
         ctx.enqueueWork(() -> {
             Preconditions.checkState(EffectiveSide.get() == LogicalSide.CLIENT);
             HarmonicsCoreTest.openGUI(msg.id);
+            ctx.setPacketHandled(true);
         });
     }
 

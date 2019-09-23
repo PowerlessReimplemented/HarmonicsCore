@@ -1,17 +1,15 @@
 package powerlessri.harmonics.gui.contextmenu;
 
 import net.minecraft.util.ResourceLocation;
-import powerlessri.harmonics.gui.IWindow;
-import powerlessri.harmonics.gui.RenderingHelper;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-import powerlessri.harmonics.gui.Render2D;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 
-public abstract class AbstractEntry extends AbstractWidget implements IEntry, LeafWidgetMixin {
+public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMixin {
 
     public static final int MARGIN_SIDES = 2;
     public static final int HALF_MARGIN_SIDES = MARGIN_SIDES / 2;
@@ -21,7 +19,7 @@ public abstract class AbstractEntry extends AbstractWidget implements IEntry, Le
     private final ResourceLocation icon;
     private final String translationKey;
 
-    public AbstractEntry(@Nullable ResourceLocation icon, String translationKey) {
+    public DefaultEntry(@Nullable ResourceLocation icon, String translationKey) {
         super();
         this.icon = icon;
         this.translationKey = translationKey;
@@ -67,11 +65,10 @@ public abstract class AbstractEntry extends AbstractWidget implements IEntry, Le
 
     @Override
     public void attach(ContextMenu contextMenu) {
-        setWindow(contextMenu);
+        attachWindow(contextMenu);
     }
 
-    @Override
-    public ContextMenu getWindow() {
+    public ContextMenu getContextMenu() {
         return (ContextMenu) super.getWindow();
     }
 
@@ -81,5 +78,11 @@ public abstract class AbstractEntry extends AbstractWidget implements IEntry, Le
 
     private int computeHeight() {
         return MARGIN_SIDES + RENDERED_ICON_HEIGHT + MARGIN_SIDES;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        getContextMenu().discard();
+        return true;
     }
 }

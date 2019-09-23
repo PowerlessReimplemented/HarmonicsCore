@@ -19,6 +19,14 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
 
     public Label(IWidget target) {
         this.target = target;
+        IWidget parent = target.getParentWidget();
+        if (parent != null) {
+            this.attach(parent);
+        } else {
+            this.attachWindow(target.getWindow());
+        }
+        setBorders(1);
+        updatePosition();
     }
 
     public String getText() {
@@ -61,6 +69,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     @SuppressWarnings("UnusedReturnValue")
     public Label setSide(Side side) {
         this.side = side;
+        updatePosition();
         return this;
     }
 
@@ -71,6 +80,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     @SuppressWarnings("UnusedReturnValue")
     public Label setAlignment(HorizontalAlignment alignment) {
         this.alignment = alignment;
+        updatePosition();
         return this;
     }
 

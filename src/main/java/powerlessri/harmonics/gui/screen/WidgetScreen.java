@@ -55,8 +55,6 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     private List<IPopupWindow> popupWindows = new ArrayList<>();
     private Collection<IWindow> windows;
 
-    private final Queue<Consumer<WidgetScreen>> tasks = new ArrayDeque<>();
-
     private final WidgetTreeInspections inspectionHandler = new WidgetTreeInspections();
 
     protected WidgetScreen(ITextComponent title) {
@@ -77,11 +75,13 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public void tick() {
-        while (!tasks.isEmpty()) {
-            tasks.remove().accept(this);
-        }
-
-        popupWindows.removeIf(IPopupWindow::shouldDiscard);
+        popupWindows.removeIf(popup -> {
+            if (popup.shouldDiscard()) {
+                popup.onRemoved();
+                return true;
+            }
+            return false;
+        });
 
         float particleTicks = Minecraft.getInstance().getRenderPartialTicks();
         for (IWindow window : windows) {
@@ -162,7 +162,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        for (IWindow window : regularWindows) {
+        for (IWindow window : windows) {
             window.mouseMoved(mouseX, mouseY);
         }
         primaryWindow.mouseMoved(mouseX, mouseY);
@@ -213,10 +213,6 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         primaryWindow.onRemoved();
     }
 
-    public void scheduleTask(Consumer<WidgetScreen> task) {
-        tasks.add(task);
-    }
-
     @Override
     public boolean isPauseScreen() {
         return false;
@@ -229,9 +225,5 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     public void removePopupWindow(IPopupWindow popup) {
         popupWindows.remove(popup);
         popup.onRemoved();
-    }
-
-    public void deferRemovePopupWindow(IPopupWindow popup) {
-        scheduleTask(self -> self.removePopupWindow(popup));
     }
 }

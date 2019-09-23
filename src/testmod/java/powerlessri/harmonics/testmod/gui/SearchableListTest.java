@@ -48,11 +48,11 @@ public class SearchableListTest extends WidgetScreen {
             Pair<WrappingList, TextField> pair = FilteredList.createSearchableList(buttons.build(), "");
 
             TextField textField = pair.getRight();
-            textField.setWindow(this);
+            textField.attachWindow(this);
             textField.setLocation(0, 0);
 
             WrappingList list = pair.getLeft();
-            list.setWindow(this);
+            list.attachWindow(this);
             list.setItemsPerRow(4);
             list.setVisibleRows(4);
             list.setHeight(60);
