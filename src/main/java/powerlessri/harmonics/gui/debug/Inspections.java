@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
+import powerlessri.harmonics.ClientConfig;
 import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.IWindow;
 
@@ -73,11 +74,6 @@ public abstract class Inspections implements IRenderEventListener {
         }
     };
 
-    /**
-     * Master switch for enabling/disabling inspection. Used for SFM setting 'InspectionBoxHighlighting'.
-     */
-    public static boolean enabled;
-
     public static final int CONTENTS = 0x662696ff;
     public static final int BORDER = 0x88e38a42;
     public static final int BORDER_A = BORDER >> 24 & 255;
@@ -89,7 +85,7 @@ public abstract class Inspections implements IRenderEventListener {
 
     @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWidget widget, int mx, int my) {
-        if (!enabled) {
+        if (!ClientConfig.INSPECTIONS.boxHighlighting.get()) {
             return false;
         }
         if (widget.isInside(mx, my) && shouldRender(widget, mx, my)) {
@@ -104,7 +100,7 @@ public abstract class Inspections implements IRenderEventListener {
 
     @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWindow window, int mx, int my) {
-        if (!enabled) {
+        if (!ClientConfig.INSPECTIONS.boxHighlighting.get()) {
             return false;
         }
         if (window.isInside(mx, my) && shouldRender(window, mx, my)) {

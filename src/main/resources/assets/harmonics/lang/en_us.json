@@ -15,5 +15,7 @@
   "message.harmonics.Minutes": "minutes",
   "message.harmonics.Seconds": "seconds",
   "message.harmonics.Ticks": "ticks",
-  "message.harmonics.Milliseconds": "milliseconds"
+  "message.harmonics.Milliseconds": "milliseconds",
+
+  "config.harmonics.client.inspections.BoxHighlighting": "Box highlighting"
 }

@@ -3,19 +3,24 @@ loaderVersion="[28,)"
 
 [[mods]]
 modId="harmonics"
-version="${file.jarVersion}"
-displayURL="https://github.com/hnOsmium0001/HarmonicsCore/"
-issueTrackerURL="https://github.com/hnOsmium0001/HarmonicsCore/issues"
-#logoFile="examplemod.png"
-#credits="Thanks for this example mod goes to Java"
+version="${version}"
+displayURL="https://github.com/PowerlessReimplemented/HarmonicsCore/"
+issueTrackerURL="https://github.com/PowerlessReimplemented/HarmonicsCore/issues"
 authors="hnOsmium0001"
-displayName="HarmonicsCore"
+displayName="Harmonics Core"
 description='''
 '''
 
 [[dependencies.harmonics]]
-    modId="forge"
-    mandatory=true
-    versionRange="[28,)"
-    ordering="NONE"
-    side="BOTH"
+modId="minecraft"
+mandatory=true
+versionRange="[1.14.4]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.harmonics]]
+modId="forge"
+mandatory=true
+versionRange="[28,)"
+ordering="NONE"
+side="BOTH"
