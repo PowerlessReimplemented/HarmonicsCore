@@ -7,16 +7,23 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.ClientConfig;
-import powerlessri.harmonics.gui.IWidget;
-import powerlessri.harmonics.gui.IWindow;
+import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.window.IWindow;
 
 import static powerlessri.harmonics.gui.RenderingHelper.*;
+import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledHeight;
 
 public abstract class Inspections implements IRenderEventListener {
 
     public interface IInfoProvider {
 
         void provideInformation(ITextReceiver receiver);
+    }
+
+    public interface IHighlightRenderer {
+
+        void renderHighlight();
     }
 
     public static final Inspections INSTANCE = new Inspections() {
@@ -76,10 +83,6 @@ public abstract class Inspections implements IRenderEventListener {
 
     public static final int CONTENTS = 0x662696ff;
     public static final int BORDER = 0x88e38a42;
-    public static final int BORDER_A = BORDER >> 24 & 255;
-    public static final int BORDER_R = BORDER >> 16 & 255;
-    public static final int BORDER_G = BORDER >> 8 & 255;
-    public static final int BORDER_B = BORDER & 255;
 
     // Mark these final to enforce the master switch on subclasses
 
@@ -122,11 +125,19 @@ public abstract class Inspections implements IRenderEventListener {
     }
 
     public void renderBox(IWidget widget) {
-        renderBorderedHighlight(widget);
+        if (widget instanceof IHighlightRenderer) {
+            ((IHighlightRenderer) widget).renderHighlight();
+        } else {
+            fontRenderer().drawStringWithShadow("(Widget does not support highlight)", 0, scaledHeight() - fontHeight(), 0xffffff);
+        }
     }
 
     public void renderBox(IWindow window) {
-        renderBorderedHighlight(window);
+        if (window instanceof IHighlightRenderer) {
+            ((IHighlightRenderer) window).renderHighlight();
+        } else {
+            fontRenderer().drawStringWithShadow("(Window does not support highlight)", 0, scaledHeight() - fontHeight(), 0xffffff);
+        }
     }
 
     public void renderOverlayInfo(IWidget widget) {
@@ -159,22 +170,6 @@ public abstract class Inspections implements IRenderEventListener {
         useTextureGLStates();
     }
 
-    public static void renderBorderedHighlight(IWidget widget) {
-        renderBorderedHighlight(
-                widget.getOuterAbsoluteX(), widget.getOuterAbsoluteY(),
-                widget.getAbsoluteX(), widget.getAbsoluteY(),
-                widget.getWidth(), widget.getHeight(),
-                widget.getFullWidth(), widget.getFullHeight());
-    }
-
-    public static void renderBorderedHighlight(IWindow window) {
-        renderBorderedHighlight(
-                window.getX(), window.getY(),
-                window.getContentX(), window.getContentY(),
-                window.getContentWidth(), window.getContentHeight(),
-                window.getWidth(), window.getHeight());
-    }
-
     public static void renderBorderedHighlight(int x1, int y1, int ix1, int iy1, int width, int height, int fullWidth, int fullHeight) {
         int x2 = x1 + fullWidth;
         int y2 = y1 + fullHeight;
@@ -191,21 +186,14 @@ public abstract class Inspections implements IRenderEventListener {
         // 1------4
         // |      |
         // 2------3
-        quad(buffer, x1, y1, ix1, iy1, ix2, iy1, x2, y1); // Top border
-        quad(buffer, ix2, iy1, ix2, iy2, x2, y2, x2, y1); // Right border
-        quad(buffer, ix1, iy2, x1, y2, x2, y2, ix2, iy2); // Bottom border
-        quad(buffer, x1, y1, x1, y2, ix1, iy2, ix1, iy1); // Left border
+        Render2D.quad(buffer, x1, y1, ix1, iy1, ix2, iy1, x2, y1, BORDER); // Top border
+        Render2D.quad(buffer, ix2, iy1, ix2, iy2, x2, y2, x2, y1, BORDER); // Right border
+        Render2D.quad(buffer, ix1, iy2, x1, y2, x2, y2, ix2, iy2, BORDER); // Bottom border
+        Render2D.quad(buffer, x1, y1, x1, y2, ix1, iy2, ix1, iy1, BORDER); // Left border
         rectVertices(ix1, iy1, ix2, iy2, CONTENTS);
 
         tessellator.draw();
-
         useTextureGLStates();
     }
 
-    private static void quad(BufferBuilder buffer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
-        buffer.pos(x1, y1, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
-        buffer.pos(x2, y2, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
-        buffer.pos(x3, y3, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
-        buffer.pos(x4, y4, 0D).color(BORDER_R, BORDER_G, BORDER_B, BORDER_A).endVertex();
-    }
 }

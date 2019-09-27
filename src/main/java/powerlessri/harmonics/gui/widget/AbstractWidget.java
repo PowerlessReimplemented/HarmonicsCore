@@ -2,21 +2,22 @@ package powerlessri.harmonics.gui.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import powerlessri.harmonics.gui.*;
-import powerlessri.harmonics.gui.contextmenu.ContextMenu;
+import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
-import powerlessri.harmonics.gui.layout.properties.*;
+import powerlessri.harmonics.gui.layout.properties.BoxSizing;
+import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
+import powerlessri.harmonics.gui.layout.properties.Side;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
+import powerlessri.harmonics.gui.window.IWindow;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.ArrayList;
 
-public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, ILayoutDataProvider, ResizableWidgetMixin {
+public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, Inspections.IHighlightRenderer, ILayoutDataProvider, ResizableWidgetMixin {
 
     public static boolean isInside(int x, int y, int mx, int my) {
         return isInside(x, y, 0, 0, mx, my);
@@ -343,7 +344,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public int getOuterAbsoluteYBottom() {
-        return absY + getFullWidth();
+        return absY + getFullHeight();
     }
 
     @Override
@@ -402,10 +403,10 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     @Override
     public boolean isInside(double x, double y) {
-        return getAbsoluteX() <= x &&
-                getAbsoluteXRight() > x &&
-                getAbsoluteY() <= y &&
-                getAbsoluteYBottom() > y;
+        return getOuterAbsoluteX() <= x &&
+                getOuterAbsoluteXRight() > x &&
+                getOuterAbsoluteY() <= y &&
+                getOuterAbsoluteYBottom() > y;
     }
 
     @Override
@@ -419,9 +420,18 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         receiver.line("Position=(" + location.x + ", " + location.y + ")");
         receiver.line("AbsX=" + this.getAbsoluteX());
         receiver.line("AbsY=" + this.getAbsoluteY());
-        receiver.line("Dimensions=(" + dimensions.width + ", " + dimensions.width + ")");
+        receiver.line("Dimensions=(" + dimensions.width + ", " + dimensions.height + ")");
         receiver.line(String.format("Borders={top: %d, right: %d, bottom: %d, left: %d}", border.top, border.right, border.bottom, border.left));
         receiver.line("Enabled=" + this.isEnabled());
+    }
+
+    @Override
+    public void renderHighlight() {
+        Inspections.renderBorderedHighlight(
+                getOuterAbsoluteX(), getOuterAbsoluteY(),
+                getAbsoluteX(), getAbsoluteY(),
+                getWidth(), getHeight(),
+                getFullWidth(), getFullHeight());
     }
 
     @Override

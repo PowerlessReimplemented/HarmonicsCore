@@ -1,7 +1,6 @@
 package powerlessri.harmonics.gui.widget;
 
 import net.minecraft.client.resources.I18n;
-import powerlessri.harmonics.gui.IWidget;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;

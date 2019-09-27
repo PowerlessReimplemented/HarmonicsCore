@@ -5,6 +5,7 @@ import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
+import powerlessri.harmonics.gui.window.IWindow;
 
 import javax.annotation.Nullable;
 import java.awt.*;

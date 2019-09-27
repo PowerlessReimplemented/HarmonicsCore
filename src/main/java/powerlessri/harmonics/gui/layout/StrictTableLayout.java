@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.layout;
 
 import com.google.common.base.Preconditions;
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
 
 import java.awt.*;

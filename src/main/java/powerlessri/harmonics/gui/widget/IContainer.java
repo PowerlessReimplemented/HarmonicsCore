@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui;
+package powerlessri.harmonics.gui.widget;
 
 import java.util.Collection;
 import java.util.Iterator;

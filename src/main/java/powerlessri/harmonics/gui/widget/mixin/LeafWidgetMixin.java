@@ -1,6 +1,6 @@
 package powerlessri.harmonics.gui.widget.mixin;
 
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 
 public interface LeafWidgetMixin extends IWidget {
 

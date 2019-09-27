@@ -1,7 +1,6 @@
 package powerlessri.harmonics.gui.widget.button;
 
-import powerlessri.harmonics.gui.IWidget;
-import powerlessri.harmonics.gui.widget.button.RadioController;
+import powerlessri.harmonics.gui.widget.IWidget;
 
 public interface IRadioButton extends IButton, IWidget {
 

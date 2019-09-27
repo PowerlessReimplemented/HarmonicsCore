@@ -2,7 +2,7 @@ package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.StringTextComponent;
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.contextmenu.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;

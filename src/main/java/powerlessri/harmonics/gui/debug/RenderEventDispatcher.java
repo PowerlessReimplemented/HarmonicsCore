@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.debug;
 
-import powerlessri.harmonics.gui.IWidget;
-import powerlessri.harmonics.gui.IWindow;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.window.IWindow;
 
 import java.util.HashMap;
 import java.util.Map;

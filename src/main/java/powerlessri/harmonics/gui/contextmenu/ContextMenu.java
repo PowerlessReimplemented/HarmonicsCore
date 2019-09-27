@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHelper;
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;

@@ -12,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;

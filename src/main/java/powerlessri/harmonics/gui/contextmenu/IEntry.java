@@ -2,7 +2,7 @@ package powerlessri.harmonics.gui.contextmenu;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 
 import javax.annotation.Nullable;

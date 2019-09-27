@@ -1,10 +1,10 @@
-package powerlessri.harmonics.gui;
+package powerlessri.harmonics.gui.widget;
 
 import net.minecraft.client.gui.IRenderable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import powerlessri.harmonics.gui.window.IWindow;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 
 @OnlyIn(Dist.CLIENT)

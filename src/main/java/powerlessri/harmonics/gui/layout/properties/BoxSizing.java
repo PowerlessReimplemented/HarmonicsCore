@@ -1,6 +1,6 @@
 package powerlessri.harmonics.gui.layout.properties;
 
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
 
 public enum BoxSizing {

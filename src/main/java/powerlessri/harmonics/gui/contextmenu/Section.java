@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.contextmenu;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import powerlessri.harmonics.gui.IWindow;
+import powerlessri.harmonics.gui.window.IWindow;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 

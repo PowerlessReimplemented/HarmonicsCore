@@ -10,6 +10,7 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.INamedElement;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.TextField;
 import powerlessri.harmonics.gui.widget.box.FilteredList;
 import powerlessri.harmonics.gui.widget.box.WrappingList;

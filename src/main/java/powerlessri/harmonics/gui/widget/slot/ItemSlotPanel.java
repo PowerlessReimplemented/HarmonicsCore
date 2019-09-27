@@ -2,7 +2,7 @@ package powerlessri.harmonics.gui.widget.slot;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 
 import javax.annotation.Nonnull;

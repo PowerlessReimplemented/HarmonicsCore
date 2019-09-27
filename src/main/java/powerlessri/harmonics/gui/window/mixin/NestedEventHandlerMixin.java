@@ -1,6 +1,8 @@
 package powerlessri.harmonics.gui.window.mixin;
 
-import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.widget.IContainer;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.window.IWindow;
 
 public interface NestedEventHandlerMixin extends IWindow {
 

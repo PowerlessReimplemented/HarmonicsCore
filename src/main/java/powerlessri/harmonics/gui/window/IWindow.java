@@ -1,6 +1,7 @@
-package powerlessri.harmonics.gui;
+package powerlessri.harmonics.gui.window;
 
 import net.minecraft.client.gui.IRenderable;
+import powerlessri.harmonics.gui.widget.IWidget;
 
 import javax.annotation.Nullable;
 import java.awt.*;

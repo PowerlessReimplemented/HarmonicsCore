@@ -8,7 +8,7 @@ import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.collections.CompositeUnmodifiableList;
-import powerlessri.harmonics.gui.IWindow;
+import powerlessri.harmonics.gui.window.IWindow;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
@@ -16,7 +16,6 @@ import powerlessri.harmonics.gui.window.IPopupWindow;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Consumer;
 
 public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 

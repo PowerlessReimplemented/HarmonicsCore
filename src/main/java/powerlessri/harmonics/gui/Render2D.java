@@ -25,6 +25,17 @@ public final class Render2D {
         return Tessellator.getInstance().getBuffer();
     }
 
+    public static void quad(BufferBuilder buffer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int color) {
+        int alpha = (color >> 24) & 255;
+        int red = (color >> 16) & 255;
+        int green = (color >> 8) & 255;
+        int blue = color & 255;
+        buffer.pos(x1, y1, 0D).color(red, green, blue, alpha).endVertex();
+        buffer.pos(x2, y2, 0D).color(red, green, blue, alpha).endVertex();
+        buffer.pos(x3, y3, 0D).color(red, green, blue, alpha).endVertex();
+        buffer.pos(x4, y4, 0D).color(red, green, blue, alpha).endVertex();
+    }
+
     public static void coloredRect(int x1, int y1, int x2, int y2, float z, int color) {
         int alpha = (color >> 24) & 255;
         int red = (color >> 16) & 255;

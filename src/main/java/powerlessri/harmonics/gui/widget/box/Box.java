@@ -1,6 +1,6 @@
 package powerlessri.harmonics.gui.widget.box;
 
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;

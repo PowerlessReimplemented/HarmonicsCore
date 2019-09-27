@@ -1,6 +1,6 @@
 package powerlessri.harmonics.gui.layout;
 
-import powerlessri.harmonics.gui.IWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
 import powerlessri.harmonics.gui.Render2D;
