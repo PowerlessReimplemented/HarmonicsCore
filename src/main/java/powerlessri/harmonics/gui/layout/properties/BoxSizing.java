@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.layout.properties;
 
 import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
+import powerlessri.harmonics.gui.layout.ISizedBox;
 
 public enum BoxSizing {
 
@@ -17,8 +17,8 @@ public enum BoxSizing {
     }
 
     public static boolean shouldIncludeWidget(IWidget widget) {
-        if (widget instanceof ILayoutDataProvider) {
-            return ((ILayoutDataProvider) widget).getBoxSizing().flow;
+        if (widget instanceof ISizedBox) {
+            return ((ISizedBox) widget).getBoxSizing().flow;
         }
         return false;
     }

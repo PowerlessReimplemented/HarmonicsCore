@@ -6,7 +6,7 @@ import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.Inspections;
-import powerlessri.harmonics.gui.layout.ILayoutDataProvider;
+import powerlessri.harmonics.gui.layout.ISizedBox;
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
 import powerlessri.harmonics.gui.layout.properties.Side;
@@ -17,7 +17,7 @@ import powerlessri.harmonics.gui.window.IWindow;
 import javax.annotation.Nullable;
 import java.awt.*;
 
-public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, Inspections.IHighlightRenderer, ILayoutDataProvider, ResizableWidgetMixin {
+public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, Inspections.IHighlightRenderer, ISizedBox, ResizableWidgetMixin {
 
     public static boolean isInside(int x, int y, int mx, int my) {
         return isInside(x, y, 0, 0, mx, my);
