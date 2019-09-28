@@ -11,19 +11,22 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.*;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.testmod.gui.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Mod(HarmonicsCoreTest.MODID)
 public class HarmonicsCoreTest {
@@ -53,10 +56,9 @@ public class HarmonicsCoreTest {
         guiTests.put("dialog", DialogTest::new);
         guiTests.put("searchable_list", SearchableListTest::new);
         guiTests.put("radio_button", RadioButtonTest::new);
+        guiTests.put("gradient_text_button", GradientButtonTest::new);
 
-        DeferredWorkQueue.runLater(() -> {
-            registerPackets();
-        });
+        registerPackets();
     }
 
     private void serverStarting(FMLServerStartingEvent event) {

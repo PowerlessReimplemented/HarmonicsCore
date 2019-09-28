@@ -1,10 +1,10 @@
 package powerlessri.harmonics.gui.widget.button;
 
+import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-import powerlessri.harmonics.gui.Render2D;
 
 public class GradientTextButton extends AbstractWidget implements IButton, LeafWidgetMixin {
 
@@ -12,23 +12,23 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
 
     public static final int TOP_LEFT_COLOR = 0xffeeeeee;
     public static final int BOTTOM_RIGHT_COLOR = 0xff777777;
-    public static final int GRADIENT_START_COLOR = 0xffb1b1b1;
-    public static final int GRADIENT_END_COLOR = 0xffe1e1e1;
+    public static final int GRADIENT_START_COLOR = 0xffe1e1e1;
+    public static final int GRADIENT_END_COLOR = 0xffb1b1b1;
 
     public static final int DISABLED_TOP_LEFT_COLOR = 0xffeeeeee;
     public static final int DISABLED_BOTTOM_RIGHT_COLOR = 0xff777777;
-    public static final int DISABLED_GRADIENT_START_COLOR = 0xffb1b1b1;
-    public static final int DISABLED_GRADIENT_END_COLOR = 0xffe1e1e1;
+    public static final int DISABLED_GRADIENT_START_COLOR = 0xffe1e1e1;
+    public static final int DISABLED_GRADIENT_END_COLOR = 0xffb1b1b1;
 
     public static final int CLICKED_TOP_LEFT_COLOR = 0xff5c669d;
     public static final int CLICKED_BOTTOM_RIGHT_COLOR = 0xffbcc5ff;
-    public static final int CLICKED_GRADIENT_START_COLOR = 0xff6a74aa;
-    public static final int CLICKED_GRADIENT_END_COLOR = 0xff949ed4;
+    public static final int CLICKED_GRADIENT_START_COLOR = 0xff949ed4;
+    public static final int CLICKED_GRADIENT_END_COLOR = 0xff6a74aa;
 
     public static final int HOVERING_TOP_LEFT_COLOR = 0xffa5aac5;
     public static final int HOVERING_BOTTOM_RIGHT_COLOR = 0xff999ebb;
-    public static final int HOVERING_GRADIENT_START_COLOR = 0xff8d92ad;
-    public static final int HOVERING_GRADIENT_END_COLOR = 0xffbabfda;
+    public static final int HOVERING_GRADIENT_START_COLOR = 0xffbabfda;
+    public static final int HOVERING_GRADIENT_END_COLOR = 0xff8d92ad;
 
     public static final int TEXT_COLOR = 0xff303030;
     public static final int DISABLED_TEXT_COLOR = 0xff0a0a0;
@@ -102,7 +102,7 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
         int x2 = getAbsoluteXRight();
         int y2 = getAbsoluteYBottom();
         RenderingHelper.drawRect(x, y, x2, y2, getBottomRightColor());
-        RenderingHelper.drawRect(x, y, x2 - 1, y2 - 2, getTopLeftColor());
+        RenderingHelper.drawRect(x, y, x2 - 1, y2 - 1, getTopLeftColor());
         RenderingHelper.drawVerticalGradientRect(x + 1, y + 1, x2 - 1, y2 - 1, getGradientStartColor(), getGradientEndColor());
 
         Render2D.renderCenteredText(text, y, y2, x, x2, getTextColor());

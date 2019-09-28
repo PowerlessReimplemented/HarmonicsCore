@@ -16,36 +16,36 @@ import java.util.function.IntConsumer;
 
 import static powerlessri.harmonics.gui.RenderingHelper.*;
 
-public class SimpleTextButton extends AbstractWidget implements IButton, INamedElement, LeafWidgetMixin {
+public class ColoredTextButton extends AbstractWidget implements IButton, INamedElement, LeafWidgetMixin {
 
     public static final IntConsumer DUMMY = i -> {
     };
 
-    public static SimpleTextButton of(String key) {
+    public static ColoredTextButton of(String key) {
         return ofText(I18n.format(key));
     }
 
-    public static SimpleTextButton of(String key, IntConsumer action) {
+    public static ColoredTextButton of(String key, IntConsumer action) {
         return ofText(I18n.format(key), action);
     }
 
-    public static SimpleTextButton of(String key, Object... args) {
+    public static ColoredTextButton of(String key, Object... args) {
         return ofText(I18n.format(key, args));
     }
 
-    public static SimpleTextButton of(String key, IntConsumer action, Object... args) {
+    public static ColoredTextButton of(String key, IntConsumer action, Object... args) {
         return ofText(I18n.format(key, args), action);
     }
 
-    public static SimpleTextButton ofText(String text) {
-        SimpleTextButton button = new SimpleTextButton();
+    public static ColoredTextButton ofText(String text) {
+        ColoredTextButton button = new ColoredTextButton();
         button.setText(text);
         button.expandToTextWidth();
         return button;
     }
 
-    public static SimpleTextButton ofText(String text, IntConsumer action) {
-        SimpleTextButton button = new SimpleTextButton();
+    public static ColoredTextButton ofText(String text, IntConsumer action) {
+        ColoredTextButton button = new ColoredTextButton();
         button.setText(text);
         button.expandToTextWidth();
         button.onClick = action;

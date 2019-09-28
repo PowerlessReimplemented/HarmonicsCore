@@ -1,66 +1,114 @@
 package powerlessri.harmonics.gui.widget;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
+
+import java.util.Collections;
+import java.util.List;
 
 import static powerlessri.harmonics.gui.RenderingHelper.fontHeight;
 
-// WIP
 public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
 
-    public static Paragraph of() {
-        return of("", 0xffffff);
-    }
+    private List<String> texts;
+    private List<String> textView;
+    private boolean fitContents = false;
 
-    public static Paragraph of(int color) {
-        return of("", color);
-    }
+    private int fontHeight = fontHeight();
+    private float scaleFactor = (float) fontHeight / fontHeight();
 
-    public static Paragraph of(String text) {
-        return of(text, 0xffffff);
-    }
-
-    public static Paragraph of(String text, int color) {
-        return new Paragraph(text, color);
-    }
-
-    private String text;
-    private int color;
-
-    public Paragraph(String text, int color) {
-        setText(text);
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-        setDimensions(fontRenderer().getStringWidth(text), fontHeight());
-    }
-
-    public void translate(String translationKey) {
-        setText(I18n.format(translationKey));
-    }
-
-    public void translate(String translationKey, Object... args) {
-        setText(I18n.format(translationKey, args));
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
+    public Paragraph(int width, int height, List<String> texts) {
+        super(0, 0, width, height);
+        this.texts = texts;
+        this.textView = Collections.unmodifiableList(texts);
     }
 
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
-        fontRenderer().drawString(text, getAbsoluteX(), getAbsoluteY(), color);
+        RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+        int x = getAbsoluteX() + 1;
+        int y = getAbsoluteY() + 1;
+        GlStateManager.enableTexture();
+        GlStateManager.pushMatrix();
+        GlStateManager.translatef(x, y, 0F);
+        GlStateManager.scalef(scaleFactor, scaleFactor, 1F);
+        for (String text : texts) {
+            fontRenderer().drawString(text, 0, 0, 0x000000);
+            GlStateManager.translatef(0F, fontHeight, 0F);
+        }
+        GlStateManager.popMatrix();
+        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
-    // TODO interaction support
-    // TODO wrapping support
+    public boolean doesFitContents() {
+        return fitContents;
+    }
+
+    public void setFitContents(boolean fitContents) {
+        this.fitContents = fitContents;
+    }
+
+    public List<String> getTexts() {
+        return textView;
+    }
+
+    public String getLine(int line) {
+        return texts.get(line);
+    }
+
+    public void addLine(String newLine) {
+        texts.add(newLine);
+        tryExpand(newLine);
+    }
+
+    public void addTranslatedLine(String translationKey) {
+        addLine(I18n.format(translationKey));
+    }
+
+    public void addTranslatedLine(String translationKey, Object... args) {
+        addLine(I18n.format(translationKey, args));
+    }
+
+    public void addLineSplit(String text) {
+        addLineSplit(getWidth(), text);
+    }
+
+    public void addLineSplit(int maxWidth, String text) {
+        int end = fontRenderer().sizeStringToWidth(text, maxWidth);
+        if (end >= text.length()) {
+            addLine(text);
+        } else {
+            String trimmed = text.substring(0, end);
+            String after = text.substring(end).trim();
+            addLine(trimmed);
+            addLineSplit(maxWidth, after);
+        }
+    }
+
+    public void addTranslatedLineSplit(int maxWidth, String translationKey) {
+        addLineSplit(maxWidth, I18n.format(translationKey));
+    }
+
+    public void addTranslatedLineSplit(int maxWidth, String translationKey, Object... args) {
+        addLineSplit(maxWidth, I18n.format(translationKey, args));
+    }
+
+    private void tryExpand(String line) {
+        if (fitContents) {
+            int w = (int) (minecraft().fontRenderer.getStringWidth(line) * scaleFactor);
+            setWidth(Math.max(getWidth(), 1 + w + 1));
+            setHeight(1 + (fontHeight + 2) * texts.size() + 1);
+        }
+    }
+
+    public int getFontHeight() {
+        return fontHeight;
+    }
+
+    public void setFontHeight(int fontHeight) {
+        this.fontHeight = fontHeight;
+        this.scaleFactor = (float) fontHeight / fontHeight();
+    }
 }

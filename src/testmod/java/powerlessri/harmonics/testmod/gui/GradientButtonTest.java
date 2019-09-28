@@ -1,21 +1,20 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.StringTextComponent;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
-import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.layout.FlowLayout;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.button.GradientTextButton;
 import powerlessri.harmonics.gui.window.AbstractWindow;
-import powerlessri.harmonics.gui.window.Dialog;
 
 import java.util.List;
 
-public class DialogTest extends WidgetScreen {
+public class GradientButtonTest extends WidgetScreen {
 
-    public DialogTest() {
+    public GradientButtonTest() {
         super(new StringTextComponent("Test"));
     }
 
@@ -27,20 +26,21 @@ public class DialogTest extends WidgetScreen {
 
     public static class Window extends AbstractWindow {
 
-        private final List<IWidget> children;
+        private final List<GradientTextButton> children;
 
         public Window() {
-            setContents(100, 80);
+            setContents(120, 80);
             centralize();
 
-            ColoredTextButton dialog =
-                    ColoredTextButton.ofText("Dialog", b -> Dialog.createPrompt("Enter some text:",
-                            (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You have entered: " + t),
-                            (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You clicked cancel")).tryAddSelfToActiveGUI());
-            dialog.attachWindow(this);
-
-            this.children = ImmutableList.of(dialog);
-            this.updatePosition();
+            GradientTextButton btn1 = new GradientTextButton("test1");
+            GradientTextButton btn2 = new GradientTextButton("test2");
+            GradientTextButton btn3 = new GradientTextButton("Long name button");
+            GradientTextButton btn4 = new GradientTextButton(".");
+            children = ImmutableList.of(btn1, btn2, btn3, btn4);
+            for (GradientTextButton child : children) {
+                child.attachWindow(this);
+            }
+            FlowLayout.reflow(children);
         }
 
         @Override
@@ -49,7 +49,7 @@ public class DialogTest extends WidgetScreen {
         }
 
         @Override
-        public List<? extends IWidget> getChildren() {
+        public List<GradientTextButton> getChildren() {
             return children;
         }
 

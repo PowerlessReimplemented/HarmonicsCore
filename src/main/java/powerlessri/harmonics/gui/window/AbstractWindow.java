@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.window;
 
-import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 

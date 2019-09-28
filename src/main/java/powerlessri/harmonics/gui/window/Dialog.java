@@ -10,7 +10,7 @@ import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.TextField;
 import powerlessri.harmonics.gui.widget.*;
 import powerlessri.harmonics.gui.widget.box.Box;
-import powerlessri.harmonics.gui.widget.button.SimpleTextButton;
+import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 
@@ -49,9 +49,9 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         dialog.insertBeforeButtons(inputBox);
         dialog.onPostReflow = inputBox::expandHorizontally;
 
-        dialog.buttons.addChildren(SimpleTextButton.of(confirm, b -> onConfirm.accept(b, inputBox.getText())));
+        dialog.buttons.addChildren(ColoredTextButton.of(confirm, b -> onConfirm.accept(b, inputBox.getText())));
         dialog.bindRemoveSelf2LastButton();
-        dialog.buttons.addChildren(SimpleTextButton.of(cancel, b -> onCancel.accept(b, inputBox.getText())));
+        dialog.buttons.addChildren(ColoredTextButton.of(cancel, b -> onCancel.accept(b, inputBox.getText())));
         dialog.bindRemoveSelf2LastButton();
 
         dialog.reflow();
@@ -61,7 +61,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createBiSelectionDialog(String message, IntConsumer onConfirm) {
-        return createBiSelectionDialog(message, onConfirm, SimpleTextButton.DUMMY);
+        return createBiSelectionDialog(message, onConfirm, ColoredTextButton.DUMMY);
     }
 
     public static Dialog createBiSelectionDialog(String message, IntConsumer onConfirm, IntConsumer onCancel) {
@@ -71,9 +71,9 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     public static Dialog createBiSelectionDialog(String message, String confirm, String cancel, IntConsumer onConfirm, IntConsumer onCancel) {
         Dialog dialog = dialog(message);
 
-        dialog.buttons.addChildren(SimpleTextButton.of(confirm, onConfirm));
+        dialog.buttons.addChildren(ColoredTextButton.of(confirm, onConfirm));
         dialog.bindRemoveSelf2LastButton();
-        dialog.buttons.addChildren(SimpleTextButton.of(cancel, onCancel));
+        dialog.buttons.addChildren(ColoredTextButton.of(cancel, onCancel));
         dialog.bindRemoveSelf2LastButton();
 
         dialog.reflow();
@@ -82,7 +82,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public static Dialog createDialog(String message) {
-        return createDialog(message, SimpleTextButton.DUMMY);
+        return createDialog(message, ColoredTextButton.DUMMY);
     }
 
     public static Dialog createDialog(String message, IntConsumer onConfirm) {
@@ -92,7 +92,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     public static Dialog createDialog(String message, String ok, IntConsumer onConfirm) {
         Dialog dialog = dialog(message);
 
-        dialog.buttons.addChildren(SimpleTextButton.of(ok, onConfirm));
+        dialog.buttons.addChildren(ColoredTextButton.of(ok, onConfirm));
         dialog.bindRemoveSelf2LastButton();
 
         dialog.reflow();
@@ -124,8 +124,8 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     private Consumer<Dialog> backgroundRenderer;
     private int borderSize;
 
-    private TextList messageBox;
-    private Box<SimpleTextButton> buttons;
+    private Paragraph messageBox;
+    private Box<ColoredTextButton> buttons;
     private List<AbstractWidget> children;
 
     public Runnable onPreReflow = () -> {};
@@ -141,12 +141,12 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         this.position = new Point();
         this.contents = new Dimension();
         this.border = new Dimension();
-        this.messageBox = new TextList(10, 10, new ArrayList<>());
+        this.messageBox = new Paragraph(10, 10, new ArrayList<>());
         this.messageBox.setFitContents(true);
-        this.buttons = new Box<SimpleTextButton>(0, 0, 10, 10)
+        this.buttons = new Box<ColoredTextButton>(0, 0, 10, 10)
                 .setLayout(b -> {
                     int x = 0;
-                    for (SimpleTextButton button : b) {
+                    for (ColoredTextButton button : b) {
                         button.setLocation(x, 0);
                         x += button.getFullWidth() + 2;
                     }
@@ -225,11 +225,11 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         }
     }
 
-    public TextList getMessageBox() {
+    public Paragraph getMessageBox() {
         return messageBox;
     }
 
-    public Box<SimpleTextButton> getButtons() {
+    public Box<ColoredTextButton> getButtons() {
         return buttons;
     }
 
@@ -346,7 +346,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     }
 
     public void bindRemoveSelf(int buttonID) {
-        SimpleTextButton button = buttons.getChildren().get(buttonID);
+        ColoredTextButton button = buttons.getChildren().get(buttonID);
         if (button.hasClickAction()) {
             IntConsumer oldAction = button.onClick;
             button.onClick = b -> {
