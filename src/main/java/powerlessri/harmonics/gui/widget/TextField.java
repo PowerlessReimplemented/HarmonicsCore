@@ -8,7 +8,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
+import powerlessri.harmonics.gui.ITextRenderer;
 import powerlessri.harmonics.gui.RenderingHelper;
+import powerlessri.harmonics.gui.TextRenderer;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
@@ -94,6 +96,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     private IBackgroundRenderer backgroundStyle = BackgroundStyle.THICK_BEVELED;
+    private ITextRenderer textRenderer = TextRenderer.vanilla();
 
     private String text = "";
     private int cursor = 0;
@@ -424,7 +427,6 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
         ensureVisible();
-
         int x = getAbsoluteX();
         int y = getAbsoluteY();
         int x2 = getAbsoluteXRight();
@@ -432,38 +434,36 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
         backgroundStyle.render(x, y, x2, y2, isInside(mouseX, mouseY), isFocused());
 
-        String renderedText = fontRenderer().trimStringToWidth(this.text.substring(startOffset), getDimensions().width - 10);
+        String renderedText = textRenderer.trimToWidth(text.substring(startOffset), getWidth() - 4);
         int textX = x + 5;
         int textY = y + calculateVerticalOffset();
         GlStateManager.enableTexture();
         if (isEnabled()) {
-            if (isEditable()) {
-                fontRenderer().drawString(renderedText, textX, textY, textColor);
-            } else {
-                fontRenderer().drawString(renderedText, textX, textY, textColorUneditable);
-            }
+            textRenderer.setTextColor(isEditable() ? textColor : textColorUneditable);
+            textRenderer.renderText(renderedText, textX, textY);
 
             if (isRegionSelected()) {
                 int selectionStart = getSelectionStart();
                 int selectionEnd = getSelectionEnd();
-
                 int renderedStart = MathHelper.clamp(selectionStart - startOffset, 0, renderedText.length());
                 int renderedEnd = MathHelper.clamp(selectionEnd - startOffset, 0, renderedText.length());
 
                 String renderedSelection = renderedText.substring(renderedStart, renderedEnd);
                 String renderedPreSelection = renderedText.substring(0, renderedStart);
-                int selectionX = textX + fontRenderer().getStringWidth(renderedPreSelection);
-                int selectionWidth = fontRenderer().getStringWidth(renderedSelection);
-                RenderingHelper.drawColorLogic(selectionX, textY, selectionWidth, fontRenderer().FONT_HEIGHT, 60, 147, 242, GlStateManager.LogicOp.OR_REVERSE);
+                int selectionX = textX + textRenderer.calculateWidth(renderedPreSelection);
+                int selectionWidth = textRenderer.calculateWidth(renderedSelection);
+                RenderingHelper.drawColorLogic(selectionX, textY, selectionWidth, (int) textRenderer.getFontHeight(), 60, 147, 242, GlStateManager.LogicOp.OR_REVERSE);
             }
         } else {
-            fontRenderer().drawString(renderedText, textX, textY, 0xffa0a0a0);
+            textRenderer.setTextColor(0xffa0a0a0);
+            textRenderer.renderText(renderedText, textX, textY);
         }
 
         if (isFocused()) {
-            int w = fontRenderer().getStringWidth(text.substring(startOffset, cursor));
-            int cx = x + 5 + w;
+            int w = textRenderer.calculateWidth(text.substring(startOffset, cursor));
+            int cx = x + 2 + w;
             RenderingHelper.drawRect(cx, y + 2, cx + 1, y2 - 3, 0xff000000);
+            GlStateManager.enableTexture();
         }
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
@@ -512,6 +512,16 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     public TextField setBackgroundStyle(BackgroundStyle backgroundStyle) {
         this.backgroundStyle = backgroundStyle;
         this.setTextColor(backgroundStyle.textColor, backgroundStyle.textColorUneditable);
+        return this;
+    }
+
+    public ITextRenderer getTextRenderer() {
+        return textRenderer;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public TextField setTextRenderer(ITextRenderer textRenderer) {
+        this.textRenderer = textRenderer;
         return this;
     }
 

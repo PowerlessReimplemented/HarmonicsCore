@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public final class SessionManager {
 
+    public static final SessionManager INSTANCE = new SessionManager();
+
     private int nextSessionID = 0;
 
     public int nextSessionID() {
@@ -13,5 +15,7 @@ public final class SessionManager {
 
     private final Int2ObjectMap<ISessionHandler> openSessions = new Int2ObjectOpenHashMap<>();
 
-//    public void openSession()
+    private SessionManager() {
+        
+    }
 }

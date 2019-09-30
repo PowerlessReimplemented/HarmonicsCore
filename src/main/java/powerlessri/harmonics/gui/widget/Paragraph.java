@@ -2,6 +2,8 @@ package powerlessri.harmonics.gui.widget;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import powerlessri.harmonics.gui.ITextRenderer;
+import powerlessri.harmonics.gui.TextRenderer;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
@@ -16,8 +18,7 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     private List<String> textView;
     private boolean fitContents = false;
 
-    private int fontHeight = fontHeight();
-    private float scaleFactor = (float) fontHeight / fontHeight();
+    private ITextRenderer textRenderer = TextRenderer.vanilla();
 
     public Paragraph(int width, int height, List<String> texts) {
         super(0, 0, width, height);
@@ -31,14 +32,8 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
         int x = getAbsoluteX() + 1;
         int y = getAbsoluteY() + 1;
         GlStateManager.enableTexture();
-        GlStateManager.pushMatrix();
-        GlStateManager.translatef(x, y, 0F);
-        GlStateManager.scalef(scaleFactor, scaleFactor, 1F);
-        for (String text : texts) {
-            fontRenderer().drawString(text, 0, 0, 0x000000);
-            GlStateManager.translatef(0F, fontHeight, 0F);
-        }
-        GlStateManager.popMatrix();
+        textRenderer.setTextColor(0x000000);
+        textRenderer.renderLines(textView, x, y);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
@@ -97,18 +92,19 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
 
     private void tryExpand(String line) {
         if (fitContents) {
-            int w = (int) (minecraft().fontRenderer.getStringWidth(line) * scaleFactor);
+            int w = textRenderer.calculateWidth(line);
             setWidth(Math.max(getWidth(), 1 + w + 1));
-            setHeight(1 + (fontHeight + 2) * texts.size() + 1);
+            setHeight((int) (1 + (textRenderer.getFontHeight() + 2) * texts.size() + 1));
         }
     }
 
-    public int getFontHeight() {
-        return fontHeight;
+    public ITextRenderer getTextRenderer() {
+        return textRenderer;
     }
 
-    public void setFontHeight(int fontHeight) {
-        this.fontHeight = fontHeight;
-        this.scaleFactor = (float) fontHeight / fontHeight();
+    @SuppressWarnings("UnusedReturnValue")
+    public Paragraph setTextRenderer(ITextRenderer textRenderer) {
+        this.textRenderer = textRenderer;
+        return this;
     }
 }

@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.widget;
 
 import net.minecraft.util.math.MathHelper;
+import powerlessri.harmonics.gui.ITextRenderer;
 import powerlessri.harmonics.gui.widget.ValueField.ExceptionBasedValueField;
 
 import java.util.function.Function;
@@ -134,6 +135,12 @@ public class NumberField<V extends Number> extends ExceptionBasedValueField<V> {
     @Override
     public NumberField<V> setBackgroundStyle(BackgroundStyle backgroundStyle) {
         super.setBackgroundStyle(backgroundStyle);
+        return this;
+    }
+
+    @Override
+    public NumberField<V> setTextRenderer(ITextRenderer textRenderer) {
+        super.setTextRenderer(textRenderer);
         return this;
     }
 
