@@ -6,9 +6,9 @@ import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.Inspections;
-import powerlessri.harmonics.gui.layout.ISizedBox;
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
+import powerlessri.harmonics.gui.layout.properties.ISizedBox;
 import powerlessri.harmonics.gui.layout.properties.Side;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
@@ -51,14 +51,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     private int absX;
     private int absY;
 
-    public AbstractWidget(IWindow window) {
-        this(0, 0, window.getContents().width, window.getContents().height);
-        this.window = window;
-    }
-
-    public AbstractWidget() {
-        this(0, 0, 0, 0);
-    }
+    public AbstractWidget(int width, int height) {this(0, 0, width, height);}
 
     public AbstractWidget(int x, int y, int width, int height) {
         this.location = new Point(x, y);

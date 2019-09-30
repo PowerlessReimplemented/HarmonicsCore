@@ -107,14 +107,14 @@ public class ColoredTextButton extends AbstractWidget implements IButton, INamed
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         clicked = true;
         onClick.accept(button);
         return true;
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean onMouseReleased(double mouseX, double mouseY, int button) {
         clicked = false;
         return true;
     }

@@ -33,7 +33,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     private final List<T> elements;
 
     public LinearList(int width, int height) {
-        super(0, 0, width, height);
+        super(width, height);
         this.elements = new ArrayList<>();
         this.setBorders(4);
     }
@@ -209,12 +209,16 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     @Override
     public LinearList<T> addChildren(T widget) {
         elements.add(widget);
+        widget.attach(this);
         return this;
     }
 
     @Override
     public LinearList<T> addChildren(Collection<T> widgets) {
         elements.addAll(widgets);
+        for (T widget : widgets) {
+            widget.attach(this);
+        }
         return this;
     }
 

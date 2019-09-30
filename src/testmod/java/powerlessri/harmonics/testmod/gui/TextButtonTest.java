@@ -6,15 +6,16 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.AbstractWidget;
+import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.widget.button.GradientTextButton;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
 import java.util.List;
 
-public class GradientButtonTest extends WidgetScreen {
+public class TextButtonTest extends WidgetScreen {
 
-    public GradientButtonTest() {
+    public TextButtonTest() {
         super(new StringTextComponent("Test"));
     }
 
@@ -26,21 +27,25 @@ public class GradientButtonTest extends WidgetScreen {
 
     public static class Window extends AbstractWindow {
 
-        private final List<GradientTextButton> children;
+        private final List<AbstractWidget> children;
 
         public Window() {
-            setContents(120, 80);
+            setContents(120, 160);
             centralize();
 
             GradientTextButton btn1 = new GradientTextButton("test1");
             GradientTextButton btn2 = new GradientTextButton("test2");
             GradientTextButton btn3 = new GradientTextButton("Long name button");
             GradientTextButton btn4 = new GradientTextButton(".");
-            children = ImmutableList.of(btn1, btn2, btn3, btn4);
-            for (GradientTextButton child : children) {
+            ColoredTextButton cbtn1 = ColoredTextButton.ofText("colored");
+            ColoredTextButton cbtn2 = ColoredTextButton.ofText(".");
+            ColoredTextButton cbtn3 = ColoredTextButton.ofText("COLORED 2");
+            ColoredTextButton cbtn4 = ColoredTextButton.ofText("Longer name for colored");
+            children = ImmutableList.of(btn1, btn2, btn3, btn4, cbtn1, cbtn2, cbtn3, cbtn4);
+            for (AbstractWidget child : children) {
                 child.attachWindow(this);
             }
-            FlowLayout.reflow(children);
+            FlowLayout.vertical(children);
         }
 
         @Override
@@ -49,7 +54,7 @@ public class GradientButtonTest extends WidgetScreen {
         }
 
         @Override
-        public List<GradientTextButton> getChildren() {
+        public List<AbstractWidget> getChildren() {
             return children;
         }
 

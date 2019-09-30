@@ -5,7 +5,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.ITexture;
+import powerlessri.harmonics.gui.Texture;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
@@ -85,8 +86,8 @@ public class SearchableListTest extends WidgetScreen {
 
     private static class IconBtn extends AbstractIconButton implements INamedElement {
 
-        private static final TextureWrapper NORMAL = new TextureWrapper(new ResourceLocation(HarmonicsCoreTest.MODID, "textures/gui/icons.png"), 256, 256, 0, 0, 16, 16);
-        private static final TextureWrapper HOVERED = NORMAL.right(16);
+        private static final ITexture NORMAL = Texture.portion(new ResourceLocation(HarmonicsCoreTest.MODID, "textures/gui/icons.png"), 256, 256, 0, 0, 16, 16);
+        private static final ITexture HOVERED = NORMAL.moveRight(1);
 
         private final String name;
 
@@ -96,12 +97,12 @@ public class SearchableListTest extends WidgetScreen {
         }
 
         @Override
-        public TextureWrapper getTextureNormal() {
+        public ITexture getTextureNormal() {
             return NORMAL;
         }
 
         @Override
-        public TextureWrapper getTextureHovered() {
+        public ITexture getTextureHovered() {
             return HOVERED;
         }
 

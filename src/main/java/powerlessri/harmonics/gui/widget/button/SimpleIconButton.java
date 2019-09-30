@@ -1,8 +1,7 @@
 package powerlessri.harmonics.gui.widget.button;
 
 import com.google.common.base.Preconditions;
-import powerlessri.harmonics.gui.TextureWrapper;
-import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.ITexture;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 
 import java.util.function.IntConsumer;
@@ -12,38 +11,38 @@ import java.util.function.IntConsumer;
  */
 public class SimpleIconButton extends AbstractIconButton implements ResizableWidgetMixin {
 
-    private TextureWrapper textureNormal;
-    private TextureWrapper textureHovering;
+    private ITexture textureNormal;
+    private ITexture textureHovering;
     private IntConsumer onClick;
 
-    public SimpleIconButton(int x, int y, TextureWrapper textureNormal, TextureWrapper textureHovering) {
+    public SimpleIconButton(int x, int y, ITexture textureNormal, ITexture textureHovering) {
         super(x, y, 0, 0);
         this.setTextures(textureNormal, textureHovering);
     }
 
     @Override
-    public TextureWrapper getTextureNormal() {
+    public ITexture getTextureNormal() {
         return textureNormal;
     }
 
     @Override
-    public TextureWrapper getTextureHovered() {
+    public ITexture getTextureHovered() {
         return textureHovering;
     }
 
-    public void setTextureNormal(TextureWrapper textureNormal) {
+    public void setTextureNormal(ITexture textureNormal) {
         checkArguments(textureNormal, textureHovering);
         this.textureNormal = textureNormal;
         this.setDimensions(textureNormal.getPortionWidth(), textureNormal.getPortionHeight());
     }
 
-    public void setTextureHovering(TextureWrapper textureHovering) {
+    public void setTextureHovering(ITexture textureHovering) {
         checkArguments(textureNormal, textureHovering);
         this.textureHovering = textureHovering;
         this.setDimensions(textureHovering.getPortionWidth(), textureHovering.getPortionHeight());
     }
 
-    public void setTextures(TextureWrapper textureNormal, TextureWrapper textureHovering) {
+    public void setTextures(ITexture textureNormal, ITexture textureHovering) {
         checkArguments(textureNormal, textureHovering);
         this.textureNormal = textureNormal;
         this.textureHovering = textureHovering;
@@ -51,19 +50,13 @@ public class SimpleIconButton extends AbstractIconButton implements ResizableWid
         this.setDimensions(textureNormal.getPortionWidth(), textureNormal.getPortionHeight());
     }
 
-    private static void checkArguments(TextureWrapper textureNormal, TextureWrapper textureHovering) {
-        Preconditions.checkArgument(textureNormal.getBounds().equals(textureHovering.getBounds()));
+    private static void checkArguments(ITexture textureNormal, ITexture textureHovering) {
+        Preconditions.checkArgument(textureNormal.getPortionWidth() == textureHovering.getPortionWidth());
+        Preconditions.checkArgument(textureNormal.getPortionHeight() == textureHovering.getPortionHeight());
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
-        RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        super.render(mouseX, mouseY, particleTicks);
-        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         onClick.accept(button);
         return true;
     }

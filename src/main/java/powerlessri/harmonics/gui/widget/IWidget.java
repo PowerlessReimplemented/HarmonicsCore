@@ -7,7 +7,6 @@ import powerlessri.harmonics.gui.window.IWindow;
 
 import java.awt.*;
 
-@OnlyIn(Dist.CLIENT)
 public interface IWidget extends IRenderable {
 
     /**
@@ -105,6 +104,8 @@ public interface IWidget extends IRenderable {
     }
 
     /**
+     * Attach and validate this widget.
+     *
      * @implSpec Calling this method should update the value returned by {@link #getParentWidget()} and trigger {@link
      * #onParentPositionChanged()}.
      */

@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.layout;
+package powerlessri.harmonics.gui.layout.properties;
 
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
 

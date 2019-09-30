@@ -8,17 +8,17 @@ import java.util.*;
 
 public class CompositeCollection<E> extends AbstractCollection<E> {
 
-    private Collection<E>[] windows;
+    private Collection<E>[] collections;
 
     @SafeVarargs
-    public CompositeCollection(Collection<E>... windows) {
-        this.windows = windows;
+    public CompositeCollection(Collection<E>... collections) {
+        this.collections = collections;
     }
 
     @Nonnull
     @Override
     public Iterator<E> iterator() {
-        if (windows.length == 0) {
+        if (collections.length == 0) {
             return Collections.emptyIterator();
         }
         return new It();
@@ -27,7 +27,7 @@ public class CompositeCollection<E> extends AbstractCollection<E> {
     @Override
     public int size() {
         int s = 0;
-        for (Collection<E> window : windows) {
+        for (Collection<E> window : collections) {
             s += window.size();
         }
         return s;
@@ -40,7 +40,7 @@ public class CompositeCollection<E> extends AbstractCollection<E> {
 
         public It() {
             currentIndex = 0;
-            currentIterator = windows[currentIndex].iterator();
+            currentIterator = collections[currentIndex].iterator();
         }
 
         @Override
@@ -49,11 +49,11 @@ public class CompositeCollection<E> extends AbstractCollection<E> {
                 if (!currentIterator.hasNext()) {
                     currentIndex++;
                     // Running out of collections to iterate with
-                    if (currentIndex >= windows.length) {
+                    if (currentIndex >= collections.length) {
                         return endOfData();
                     }
                     // Replace the target with next collection in the line
-                    currentIterator = windows[currentIndex].iterator();
+                    currentIterator = collections[currentIndex].iterator();
                     // Retry this function; can be replaced with returning a self call
                     continue;
                 }

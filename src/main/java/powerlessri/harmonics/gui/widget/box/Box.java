@@ -16,18 +16,12 @@ import java.util.function.Consumer;
 public class Box<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
 
     private List<T> children = new ArrayList<>();
-    private List<T> childrenView = Collections.unmodifiableList(children);
 
-    private Consumer<List<T>> layout = l -> {
-    };
+    private Consumer<List<T>> layout = l -> {};
     private boolean paused = false;
 
     public Box(int width, int height) {
         this(0, 0, width, height);
-    }
-
-    public Box() {
-        this(0, 0, 0, 0);
     }
 
     public Box(int x, int y, int width, int height) {
@@ -35,20 +29,8 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     }
 
     @Override
-    public void onParentPositionChanged() {
-        int oldAbsX = getAbsoluteX();
-        int oldAbsY = getAbsoluteY();
-        super.onParentPositionChanged();
-        if (getAbsoluteX() != oldAbsX || getAbsoluteY() != oldAbsY) {
-            for (T child : children) {
-                child.onParentPositionChanged();
-            }
-        }
-    }
-
-    @Override
     public List<T> getChildren() {
-        return childrenView;
+        return children;
     }
 
     @Override
@@ -62,7 +44,9 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     @Override
     public Box<T> addChildren(Collection<T> widgets) {
         children.addAll(widgets);
-        widgets.forEach(widget -> widget.attach(this));
+        for (T widget : widgets) {
+            widget.attach(this);
+        }
         reflow();
         return this;
     }
@@ -76,22 +60,6 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     @Override
     public Box<T> addChildren(Iterator<T> widgets) {
         super.addChildren(widgets);
-        return this;
-    }
-
-    // In most cases these are not necessary because widget's position rely on the layout
-
-    @SuppressWarnings("UnusedReturnValue")
-    public Box<T> updateChildLocation(T child, Point point) {
-        child.setLocation(point);
-        reflow();
-        return this;
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public Box<T> updateChildLocation(T child, int x, int y) {
-        child.setLocation(x, y);
-        reflow();
         return this;
     }
 

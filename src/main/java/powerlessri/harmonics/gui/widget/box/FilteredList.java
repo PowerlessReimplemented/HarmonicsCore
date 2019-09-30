@@ -31,12 +31,12 @@ public class FilteredList<T extends IWidget & INamedElement> extends AbstractLis
         FilteredList<T> filteredList = new FilteredList<>(list);
         TextField textField = new TextField(0, 0, 64, 12) {
             @Override
-            public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
                 if (keyCode == GLFW.GLFW_KEY_ENTER) {
                     filteredList.updateSearch(getText());
                     return true;
                 }
-                return super.keyPressed(keyCode, scanCode, modifiers);
+                return super.onKeyPressed(keyCode, scanCode, modifiers);
             }
 
             @Override

@@ -19,7 +19,7 @@ public class ItemSlot extends AbstractItemSlot {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         action.accept(button);
         return true;
     }

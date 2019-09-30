@@ -1,15 +1,15 @@
 package powerlessri.harmonics.gui.widget;
 
-import powerlessri.harmonics.gui.TextureWrapper;
+import powerlessri.harmonics.gui.ITexture;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
 public class Icon extends AbstractWidget implements INamedElement, LeafWidgetMixin {
 
-    private TextureWrapper texture;
+    private ITexture texture;
 
-    public Icon(int x, int y, TextureWrapper texture) {
+    public Icon(int x, int y, ITexture texture) {
         super(x, y, texture.getPortionWidth(), texture.getPortionHeight());
         this.texture = texture;
     }
@@ -18,17 +18,18 @@ public class Icon extends AbstractWidget implements INamedElement, LeafWidgetMix
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         if (isEnabled()) {
-            texture.draw(getAbsoluteX(), getAbsoluteY());
+            texture.render(getAbsoluteX(), getAbsoluteY());
         }
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
-    public TextureWrapper getTexture() {
+    public ITexture getTexture() {
         return texture;
     }
 
-    public void setTexture(TextureWrapper texture) {
+    public void setTexture(ITexture texture) {
         this.texture = texture;
+        this.setDimensions(texture.getPortionWidth(), texture.getPortionHeight());
     }
 
     @Override

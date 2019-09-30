@@ -71,12 +71,16 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
     @Override
     public ItemSlotPanel addChildren(AbstractItemSlot widget) {
         children.add(widget);
+        widget.attach(this);
         return this;
     }
 
     @Override
     public ItemSlotPanel addChildren(Collection<AbstractItemSlot> widgets) {
         children.addAll(widgets);
+        for (AbstractItemSlot widget : widgets) {
+            widget.attach(this);
+        }
         return this;
     }
 

@@ -23,8 +23,8 @@ public final class BlockHighlight {
 
     private static List<BlockHighlight> highlights = new ArrayList<>();
 
-    public static void createHighlight(BlockPos pos, int expire) {
-        long expireTime = Minecraft.getInstance().world.getGameTime() + expire;
+    public static void createHighlight(BlockPos pos, int lifespan) {
+        long expireTime = Minecraft.getInstance().world.getGameTime() + lifespan;
         highlights.add(new BlockHighlight(pos, expireTime));
     }
 

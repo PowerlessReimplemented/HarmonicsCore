@@ -39,7 +39,7 @@ public class RadioButton extends AbstractWidget implements IButton, IRadioButton
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         if (!checked) {
             check(true);
         }

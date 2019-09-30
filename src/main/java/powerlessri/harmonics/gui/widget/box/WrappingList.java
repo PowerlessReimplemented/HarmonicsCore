@@ -28,8 +28,10 @@ public class WrappingList extends AbstractContainer<IWidget> {
     private List<IWidget> contents = new ArrayList<>();
     private List<IWidget> children;
 
-    public WrappingList() {
-        super(0, 0, 80, 80);
+    public WrappingList() {this(80, 80);}
+
+    public WrappingList(int width, int height) {
+        super(width, height);
 
         this.scrollUpArrow = ScrollArrow.up(0, 0);
         this.scrollUpArrow.attach(this);

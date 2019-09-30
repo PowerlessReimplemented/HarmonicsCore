@@ -29,12 +29,12 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
         }
 
         @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
             return false;
         }
 
         @Override
-        public boolean charTyped(char typedChar, int keyCode) {
+        public boolean onCharTyped(char typedChar, int keyCode) {
             return false;
         }
 
@@ -139,7 +139,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         if (isEnabled() && editable) {
             setFocused(true);
             if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
@@ -151,7 +151,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
         if (Screen.hasControlDown() && !Screen.hasShiftDown() && !Screen.hasAltDown()) {
             switch (keyCode) {
                 case GLFW_KEY_C: {
@@ -245,7 +245,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public boolean charTyped(char typedChar, int keyCode) {
+    public boolean onCharTyped(char typedChar, int keyCode) {
         // e.g. F1~12, insert
         // Char code of 0 will appear to be nothing
         if ((int) typedChar != 0) {

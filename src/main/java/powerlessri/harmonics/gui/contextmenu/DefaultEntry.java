@@ -21,7 +21,7 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
     private final String translationKey;
 
     public DefaultEntry(@Nullable ResourceLocation icon, String translationKey) {
-        super();
+        super(0, 0);
         this.icon = icon;
         this.translationKey = translationKey;
         Dimension bounds = getDimensions();
@@ -82,7 +82,7 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         getContextMenu().discard();
         return true;
     }

@@ -183,7 +183,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         buttons.reflow();
         buttons.adjustMinContent();
 
-        FlowLayout.reflow(children);
+        FlowLayout.vertical(children);
 
         updateDimensions();
         notifyChildren();

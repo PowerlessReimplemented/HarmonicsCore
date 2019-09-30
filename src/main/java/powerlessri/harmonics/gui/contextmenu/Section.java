@@ -19,6 +19,10 @@ public class Section extends AbstractContainer<IEntry> {
 
     private List<IEntry> entries = new ArrayList<>();
 
+    public Section() {
+        super(0, 0);
+    }
+
     // Relative position is (0,0) by default
 
     @Override

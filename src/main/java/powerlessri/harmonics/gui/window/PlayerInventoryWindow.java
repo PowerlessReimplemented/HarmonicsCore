@@ -4,19 +4,23 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.ITexture;
+import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.Texture;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.SimpleIconButton;
-import powerlessri.harmonics.gui.widget.slot.*;
+import powerlessri.harmonics.gui.widget.slot.AbstractItemSlot;
+import powerlessri.harmonics.gui.widget.slot.ItemSlot;
+import powerlessri.harmonics.gui.widget.slot.ItemSlotPanel;
 
 import java.util.List;
 import java.util.function.Function;
 
 public class PlayerInventoryWindow extends AbstractPopupWindow {
 
-    private static final TextureWrapper CLOSE = new TextureWrapper(Render2D.CLOSE, 16, 16, 0, 0, 16, 16);
+    private static final ITexture CLOSE = Texture.portion(Render2D.CLOSE, 16, 16, 0, 0, 16, 16);
 
     private final List<IWidget> children;
 

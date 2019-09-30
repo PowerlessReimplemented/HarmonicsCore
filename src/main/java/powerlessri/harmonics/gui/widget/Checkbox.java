@@ -57,7 +57,7 @@ public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         setFocused(true);
         toggle();
         return true;

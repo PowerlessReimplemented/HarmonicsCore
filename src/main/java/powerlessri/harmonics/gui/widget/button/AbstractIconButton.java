@@ -1,7 +1,8 @@
 package powerlessri.harmonics.gui.widget.button;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import powerlessri.harmonics.gui.TextureWrapper;
+import powerlessri.harmonics.gui.ITexture;
+import powerlessri.harmonics.gui.Texture;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
@@ -21,11 +22,11 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
         preRenderEvent(mouseX, mouseY);
         GlStateManager.enableTexture();
         GlStateManager.color3f(1F, 1F, 1F);
-        TextureWrapper tex = isDisabled() ? getTextureDisabled()
+        ITexture tex = isDisabled() ? getTextureDisabled()
                 : isClicked() ? getTextureClicked()
                 : isHovered() ? getTextureHovered()
                 : getTextureNormal();
-        tex.draw(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom());
+        tex.render(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom());
         postRenderEvent(mouseX, mouseY);
     }
 
@@ -41,17 +42,17 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
         }
     }
 
-    public abstract TextureWrapper getTextureNormal();
+    public abstract ITexture getTextureNormal();
 
-    public abstract TextureWrapper getTextureHovered();
+    public abstract ITexture getTextureHovered();
 
     // Optional
-    public TextureWrapper getTextureClicked() {
+    public ITexture getTextureClicked() {
         return getTextureHovered();
     }
 
-    public TextureWrapper getTextureDisabled() {
-        return TextureWrapper.NONE;
+    public ITexture getTextureDisabled() {
+        return Texture.NONE;
     }
 
     @Override
@@ -69,13 +70,13 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         clicked = true;
         return true;
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean onMouseReleased(double mouseX, double mouseY, int button) {
         clicked = false;
         return true;
     }
