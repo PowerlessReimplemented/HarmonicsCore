@@ -5,12 +5,12 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
+import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.INamedElement;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
-import powerlessri.harmonics.gui.Render2D;
 
 import java.util.function.IntConsumer;
 
@@ -58,11 +58,14 @@ public class ColoredTextButton extends AbstractWidget implements IButton, INamed
     private static final int HOVERED_BORDER_COLOR = 0xc9c9c9;
 
     public IntConsumer onClick = DUMMY;
-
     private String text;
 
     private boolean hovered = false;
     private boolean clicked = false;
+
+    public ColoredTextButton() {
+        super(0, 0);
+    }
 
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {

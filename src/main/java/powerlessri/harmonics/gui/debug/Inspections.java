@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
-import powerlessri.harmonics.ClientConfig;
+import powerlessri.harmonics.Config;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.IWindow;
@@ -88,7 +88,7 @@ public abstract class Inspections implements IRenderEventListener {
 
     @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWidget widget, int mx, int my) {
-        if (!ClientConfig.INSPECTIONS.boxHighlighting.get()) {
+        if (!Config.CLIENT.boxHighlighting.get()) {
             return false;
         }
         if (widget.isInside(mx, my) && shouldRender(widget, mx, my)) {
@@ -103,7 +103,7 @@ public abstract class Inspections implements IRenderEventListener {
 
     @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWindow window, int mx, int my) {
-        if (!ClientConfig.INSPECTIONS.boxHighlighting.get()) {
+        if (!Config.CLIENT.boxHighlighting.get()) {
             return false;
         }
         if (window.isInside(mx, my) && shouldRender(window, mx, my)) {

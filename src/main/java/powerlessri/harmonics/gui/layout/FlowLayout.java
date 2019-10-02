@@ -1,9 +1,7 @@
 package powerlessri.harmonics.gui.layout;
 
 import powerlessri.harmonics.gui.Render2D;
-import powerlessri.harmonics.gui.layout.properties.BoxSizing;
-import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
-import powerlessri.harmonics.gui.layout.properties.VerticalAlignment;
+import powerlessri.harmonics.gui.layout.properties.*;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.utils.Utils;
 
@@ -54,7 +52,9 @@ public class FlowLayout {
         return widgets;
     }
 
-    public static <T extends IWidget> Collection<T> horizontal(Collection<T> widgets) {return horizontal(widgets, 0, 0);}
+    public static <T extends IWidget> Collection<T> horizontal(Collection<T> widgets) {
+        return horizontal(widgets, 0, 0);
+    }
 
     public static <T extends IWidget> Collection<T> horizontal(Collection<T> widgets, int x, int y) {
         for (T widget : widgets) {

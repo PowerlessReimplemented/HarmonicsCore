@@ -22,6 +22,7 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
     }
 
     public ItemSlotPanel(int width, int height, Supplier<AbstractItemSlot> factory) {
+        super(0, 0);
         this.width = width;
         this.height = height;
 
@@ -39,6 +40,7 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
     }
 
     public ItemSlotPanel(int width, int height, List<ItemStack> stacks, Function<ItemStack, AbstractItemSlot> factory) {
+        super(0, 0);
         int size = width * height;
         Preconditions.checkArgument(size == stacks.size());
 

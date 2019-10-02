@@ -2,14 +2,13 @@ package powerlessri.harmonics.gui.window;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
-import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.TextField;
 import powerlessri.harmonics.gui.widget.*;
-import powerlessri.harmonics.gui.widget.box.Box;
+import powerlessri.harmonics.gui.widget.box.Panel;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
@@ -125,7 +124,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
     private int borderSize;
 
     private Paragraph messageBox;
-    private Box<ColoredTextButton> buttons;
+    private Panel<ColoredTextButton> buttons;
     private List<AbstractWidget> children;
 
     public Runnable onPreReflow = () -> {};
@@ -143,7 +142,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         this.border = new Dimension();
         this.messageBox = new Paragraph(10, 10, new ArrayList<>());
         this.messageBox.setFitContents(true);
-        this.buttons = new Box<ColoredTextButton>(0, 0, 10, 10)
+        this.buttons = new Panel<ColoredTextButton>(10, 10)
                 .setLayout(b -> {
                     int x = 0;
                     for (ColoredTextButton button : b) {
@@ -229,7 +228,7 @@ public class Dialog implements IPopupWindow, NestedEventHandlerMixin, WindowOver
         return messageBox;
     }
 
-    public Box<ColoredTextButton> getButtons() {
+    public Panel<ColoredTextButton> getButtons() {
         return buttons;
     }
 

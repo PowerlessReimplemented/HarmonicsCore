@@ -5,20 +5,20 @@ import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 import net.minecraftforge.fml.config.ModConfig;
 
-public final class ClientConfig {
+public final class Config {
 
-    private ClientConfig() {
+    private Config() {
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // General
     ///////////////////////////////////////////////////////////////////////////
 
-    public static final GeneralCategory GENERAL;
+    public static final CommonCategory COMMON;
 
-    public static final class GeneralCategory {
+    public static final class CommonCategory {
 
-        private GeneralCategory(Builder builder) {
+        private CommonCategory(Builder builder) {
         }
     }
 
@@ -26,14 +26,14 @@ public final class ClientConfig {
     // GUI Inspections
     ///////////////////////////////////////////////////////////////////////////
 
-    public static final InspectionsCategory INSPECTIONS;
+    public static final ClientCategory CLIENT;
 
-    public static final class InspectionsCategory {
+    public static final class ClientCategory {
 
         public final BooleanValue boxHighlighting;
 
-        private InspectionsCategory(Builder builder) {
-            builder.comment("GUI Inspections Config").push("inspections");
+        private ClientCategory(Builder builder) {
+            builder.comment("GUI Inspections Config").push("client");
 
             boxHighlighting = builder
                     .comment("Enables box highlight when mouse over widgets")
@@ -48,15 +48,22 @@ public final class ClientConfig {
     // Construction
     ///////////////////////////////////////////////////////////////////////////
 
-    static final ForgeConfigSpec CONFIG_SPEC;
+    static final ForgeConfigSpec CLIENT_SPEC;
+    static final ForgeConfigSpec COMMON_SPEC;
+
     static {
         Builder builder = new Builder();
-        GENERAL = new GeneralCategory(builder);
-        INSPECTIONS = new InspectionsCategory(builder);
-        CONFIG_SPEC = builder.build();
+        COMMON = new CommonCategory(builder);
+        COMMON_SPEC = builder.build();
+    }
+
+    static {
+        Builder builder = new Builder();
+        CLIENT = new ClientCategory(builder);
+        CLIENT_SPEC = builder.build();
     }
 
     static void onLoad(ModConfig.Loading event) {
-        HarmonicsCore.logger.debug("Loaded {} client config file {}", HarmonicsCore.MODID, event.getConfig().getFileName());
+        HarmonicsCore.logger.debug("Loaded {} config file {}", HarmonicsCore.MODID, event.getConfig().getFileName());
     }
 }

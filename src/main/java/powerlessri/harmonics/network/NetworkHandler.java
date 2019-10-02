@@ -25,18 +25,7 @@ public final class NetworkHandler {
             .simpleChannel();
 
     public static void register() {
-        registerServer();
-        registerClient();
-        registerBoth();
-    }
-
-    private static void registerServer() {
-    }
-
-    private static void registerClient() {
-    }
-
-    private static void registerBoth() {
+        registerMessage(PacketMessage.class, PacketMessage::encode, PacketMessage::decode, PacketMessage::handle);
     }
 
     public static void sendTo(ServerPlayerEntity player, Object msg) {

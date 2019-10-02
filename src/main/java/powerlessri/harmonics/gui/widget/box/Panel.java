@@ -1,30 +1,32 @@
 package powerlessri.harmonics.gui.widget.box;
 
-import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 
-import java.awt.*;
-import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
 
 /**
  * A ready-to-use box widget for grouping widgets.
  */
-public class Box<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
+public class Panel<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
 
     private List<T> children = new ArrayList<>();
 
     private Consumer<List<T>> layout = l -> {};
     private boolean paused = false;
 
-    public Box(int width, int height) {
-        this(0, 0, width, height);
+    public Panel() {
+        this(0, 0, 0, 0);
     }
 
-    public Box(int x, int y, int width, int height) {
+    public Panel(int width, int height) {
+        super(width, height);
+    }
+
+    public Panel(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 
@@ -34,7 +36,7 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     }
 
     @Override
-    public Box<T> addChildren(T widget) {
+    public Panel<T> addChildren(T widget) {
         children.add(widget);
         widget.attach(this);
         reflow();
@@ -42,7 +44,7 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     }
 
     @Override
-    public Box<T> addChildren(Collection<T> widgets) {
+    public Panel<T> addChildren(Collection<T> widgets) {
         children.addAll(widgets);
         for (T widget : widgets) {
             widget.attach(this);
@@ -52,13 +54,13 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     }
 
     @Override
-    public Box<T> addChildren(Iterable<T> widgets) {
+    public Panel<T> addChildren(Iterable<T> widgets) {
         super.addChildren(widgets);
         return this;
     }
 
     @Override
-    public Box<T> addChildren(Iterator<T> widgets) {
+    public Panel<T> addChildren(Iterator<T> widgets) {
         super.addChildren(widgets);
         return this;
     }
@@ -79,13 +81,13 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
      * updates) when changing widget properties in batch.
      */
     @SuppressWarnings("UnusedReturnValue")
-    public Box<T> pause() {
+    public Panel<T> pause() {
         paused = true;
         return this;
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public Box<T> unpause() {
+    public Panel<T> unpause() {
         paused = false;
         reflow();
         return this;
@@ -96,7 +98,7 @@ public class Box<T extends IWidget> extends AbstractContainer<T> implements Resi
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public Box<T> setLayout(Consumer<List<T>> layout) {
+    public Panel<T> setLayout(Consumer<List<T>> layout) {
         this.layout = layout;
         return this;
     }
