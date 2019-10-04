@@ -1,15 +1,5 @@
 package powerlessri.harmonics.gui.layout;
 
-import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import powerlessri.harmonics.gui.layout.properties.*;
-import powerlessri.harmonics.gui.widget.*;
-import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
-
-import java.awt.*;
-import java.util.List;
-
 /**
  * Layout widgets on a non-fixed dimension grid, where each row and column have their individual size. The widgets are layed on the grid so
  * that they cover a rectangle of cells.

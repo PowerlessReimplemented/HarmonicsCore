@@ -8,6 +8,8 @@ import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.Label;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
+import java.util.function.IntConsumer;
+
 public class RadioButton extends AbstractWidget implements IButton, IRadioButton, LeafWidgetMixin {
 
     private static final ITexture UNCHECKED = Texture.portion(Render2D.COMPONENTS, 256, 256, 0, 12, 8, 8);
@@ -18,6 +20,7 @@ public class RadioButton extends AbstractWidget implements IButton, IRadioButton
     private final RadioController controller;
     private final int index;
 
+    private IntConsumer onClick = DUMMY;
     private boolean hovered;
     private boolean checked;
 
@@ -34,7 +37,7 @@ public class RadioButton extends AbstractWidget implements IButton, IRadioButton
         ITexture texture = hovered
                 ? (checked ? HOVERED_CHECKED : HOVERED_UNCHECKED)
                 : (checked ? CHECKED : UNCHECKED);
-        texture.render(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom());
+        texture.render(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom(), getZLevel());
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
@@ -58,6 +61,21 @@ public class RadioButton extends AbstractWidget implements IButton, IRadioButton
     }
 
     protected void onUncheck() {
+    }
+
+    @Override
+    public boolean hasClickAction() {
+        return onClick != DUMMY;
+    }
+
+    @Override
+    public IntConsumer getClickAction() {
+        return onClick;
+    }
+
+    @Override
+    public void setClickAction(IntConsumer action) {
+        onClick = action;
     }
 
     @Override

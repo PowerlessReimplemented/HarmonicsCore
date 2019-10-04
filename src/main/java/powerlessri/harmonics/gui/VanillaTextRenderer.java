@@ -12,18 +12,18 @@ class VanillaTextRenderer implements ITextRenderer {
     private int textColor = 0xffffff;
 
     @Override
-    public void renderText(String text, int x, int y) {
+    public void renderText(String text, int x, int y, float z) {
         GlStateManager.pushMatrix();
-        GlStateManager.translated(x, y, 0F);
+        GlStateManager.translated(x, y, z + 0.1F);
         GlStateManager.scaled(scaleFactor, scaleFactor, 1F);
         Minecraft.getInstance().fontRenderer.drawString(text, 0, 0, textColor);
         GlStateManager.popMatrix();
     }
 
     @Override
-    public void renderLines(List<String> text, int x, int y) {
+    public void renderLines(List<String> text, int x, int y, float z) {
         GlStateManager.pushMatrix();
-        GlStateManager.translatef(x, y, 0F);
+        GlStateManager.translatef(x, y, z + 0.1F);
         GlStateManager.scalef(scaleFactor, scaleFactor, 1F);
         for (String line : text) {
             Minecraft.getInstance().fontRenderer.drawString(line, 0, 0, textColor);

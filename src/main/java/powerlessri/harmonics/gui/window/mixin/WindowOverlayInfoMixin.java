@@ -13,7 +13,8 @@ public interface WindowOverlayInfoMixin extends IWindow, Inspections.IInfoProvid
         receiver.line("Dimensions=(" + getBorder().width + ", " + getBorder().width + ")");
         receiver.line("ContentPosition=(" + getContentX() + ", " + getContentY() + ")");
         receiver.line("ContentDimensions=(" + getContentWidth() + ", " + getContentHeight() + ")");
-        receiver.line("BorderSize=" + this.getBorderSize());
+        receiver.line("BorderSize=" + getBorderSize());
+        receiver.line("Z=" + getZLevel());
     }
 
     @Override

@@ -1,13 +1,10 @@
 package powerlessri.harmonics.gui.widget;
 
-import net.minecraft.client.gui.IRenderable;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import powerlessri.harmonics.gui.window.IWindow;
 
 import java.awt.*;
 
-public interface IWidget extends IRenderable {
+public interface IWidget {
 
     /**
      * Local coordinate relative to the parent component
@@ -84,13 +81,28 @@ public interface IWidget extends IRenderable {
 
     int getFullHeight();
 
-    @Override
+    /**
+     * Render the widget. Implementations may assume tessellator finished drawing, and the following GL states are in the given mode.
+     * <ul>
+     * <li>depthTest: enabled
+     * <li>alphaTest: enabled
+     * <li>texture: enabled
+     * </ul>
+     */
     void render(int mouseX, int mouseY, float particleTicks);
 
-    IWidget getParentWidget();
+    float getZLevel();
+
+    IWidget getParent();
 
     IWindow getWindow();
 
+    /**
+     * Get whether this widget is enabled or not.
+     * <p>
+     * An enabled widgets means it will render and interact with user inputs. On the other hand, a disabled widgets always means it does not
+     * interact with user inputs (i.e. all event methods return {@code false}) but whether to render or not is up to the implementation.
+     */
     boolean isEnabled();
 
     void setEnabled(boolean enabled);
@@ -106,7 +118,7 @@ public interface IWidget extends IRenderable {
     /**
      * Attach and validate this widget.
      *
-     * @implSpec Calling this method should update the value returned by {@link #getParentWidget()} and trigger {@link
+     * @implSpec Calling this method should update the value returned by {@link #getParent()} and trigger {@link
      * #onParentPositionChanged()}.
      */
     void attach(IWidget newParent);

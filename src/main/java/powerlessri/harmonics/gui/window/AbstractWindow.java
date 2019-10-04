@@ -1,5 +1,8 @@
 package powerlessri.harmonics.gui.window;
 
+import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
+import powerlessri.harmonics.gui.screen.DisplayListCaches;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
@@ -9,14 +12,15 @@ import javax.annotation.Nullable;
 import java.awt.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
-import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledHeight;
-import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledWidth;
+import static powerlessri.harmonics.gui.Render2D.scaledHeight;
+import static powerlessri.harmonics.gui.Render2D.scaledWidth;
 
 public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
 
     private final Point position;
     private final Dimension contents;
     private final Dimension border;
+    private final float z = Render2D.REGULAR_WINDOW_Z;
 
     private IWidget focusedWidget;
 
@@ -24,6 +28,11 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         this.position = new Point();
         this.contents = new Dimension();
         this.border = new Dimension();
+    }
+
+    @Override
+    public float getZLevel() {
+        return z;
     }
 
     @Override
@@ -67,11 +76,20 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
     public void centralize() {
         position.x = scaledWidth() / 2 - getWidth() / 2;
         position.y = scaledHeight() / 2 - getHeight() / 2;
+        updatePosition();
+    }
+
+    @Override
+    public void setPosition(int x, int y) {
+        NestedEventHandlerMixin.super.setPosition(x, y);
+        updatePosition();
     }
 
     protected final void updatePosition() {
-        for (IWidget child : getChildren()) {
-            child.onParentPositionChanged();
+        if (getChildren() != null) {
+            for (IWidget child : getChildren()) {
+                child.onParentPositionChanged();
+            }
         }
     }
 
@@ -79,6 +97,18 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         for (IWidget child : getChildren()) {
             child.render(mouseX, mouseY, particleTicks);
         }
+    }
+
+    public void drawVanillaStyleBackground() {
+        BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), getZLevel());
+    }
+
+    public int createVanillaStyleDL() {
+        return DisplayListCaches.createVanillaStyleBackground(getX(), getY(), getWidth(), getHeight(), getZLevel());
+    }
+
+    public void drawFlatStyleBackground() {
+        BackgroundRenderers.drawFlatStyle(getX(), getY(), getWidth(), getHeight(), getZLevel());
     }
 
     @Override

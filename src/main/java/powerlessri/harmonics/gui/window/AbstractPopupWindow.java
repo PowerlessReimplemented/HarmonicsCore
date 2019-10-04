@@ -1,5 +1,7 @@
 package powerlessri.harmonics.gui.window;
 
+import powerlessri.harmonics.gui.Render2D;
+
 public abstract class AbstractPopupWindow extends AbstractWindow implements IPopupWindow {
 
     private int initialDragLocalX, initialDragLocalY;
@@ -57,5 +59,10 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
     @Override
     public boolean shouldDiscard() {
         return !alive;
+    }
+
+    @Override
+    public float getZLevel() {
+        return Render2D.POPUP_WINDOW_Z;
     }
 }

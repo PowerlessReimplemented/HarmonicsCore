@@ -24,8 +24,12 @@ public interface ITexture {
         render(x1, y1, x2, y2, 0F);
     }
 
+    default void render(int x, int y, float z) {
+        render(x, y, x + getPortionWidth(), y + getPortionHeight(), z);
+    }
+
     default void render(int x, int y) {
-        render(x, y, x + getPortionWidth(), y + getPortionHeight(), 0F);
+        render(x, y, 0F);
     }
 
     void vertices(int x1, int y1, int x2, int y2, float z);
@@ -34,8 +38,12 @@ public interface ITexture {
         vertices(x1, y1, x2, y2, 0F);
     }
 
+    default void vertices(int x, int y, float z) {
+        vertices(x, y, x + getPortionWidth(), y + getPortionHeight(), z);
+    }
+
     default void vertices(int x, int y) {
-        vertices(x, y, x + getPortionWidth(), y + getPortionHeight(), 0F);
+        vertices(x, y, 0F);
     }
 
     boolean isComplete();

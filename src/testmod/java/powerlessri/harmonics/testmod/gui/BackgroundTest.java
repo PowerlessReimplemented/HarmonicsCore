@@ -1,12 +1,10 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.util.text.StringTextComponent;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
-import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
@@ -65,11 +63,10 @@ public class BackgroundTest extends WidgetScreen {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             switch (style) {
                 case VANILLA:
-                    BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+                    drawVanillaStyleBackground();
                     break;
                 case FLAT:
-                    GlStateManager.disableAlphaTest();
-                    BackgroundRenderers.drawFlatStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+                    drawFlatStyleBackground();
                     break;
             }
             renderChildren(mouseX, mouseY, particleTicks);

@@ -2,15 +2,12 @@ package powerlessri.harmonics.gui.widget;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import powerlessri.harmonics.gui.ITextRenderer;
-import powerlessri.harmonics.gui.TextRenderer;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
 import java.util.Collections;
 import java.util.List;
-
-import static powerlessri.harmonics.gui.RenderingHelper.fontHeight;
 
 public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
 
@@ -33,7 +30,7 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
         int y = getAbsoluteY() + 1;
         GlStateManager.enableTexture();
         textRenderer.setTextColor(0x000000);
-        textRenderer.renderLines(textView, x, y);
+        textRenderer.renderLines(textView, x, y, getZLevel());
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
@@ -71,7 +68,7 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     }
 
     public void addLineSplit(int maxWidth, String text) {
-        int end = fontRenderer().sizeStringToWidth(text, maxWidth);
+        int end = Render2D.fontRenderer().sizeStringToWidth(text, maxWidth);
         if (end >= text.length()) {
             addLine(text);
         } else {

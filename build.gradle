@@ -13,7 +13,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = "${mod_version}"
-group = "${group}"
+group = "powerlessri.harmonics"
 archivesBaseName = "${mod_name}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -34,7 +34,7 @@ sourceSets {
 
 minecraft {
     mappings channel: 'snapshot', version: "${mcp_mappings}"
-    accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/resources/main/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -97,11 +97,11 @@ configurations {
 }
 
 processResources {
-    inputs.property "version", version
+    inputs.property "version", project.version
 
     from(sourceSets.main.resources.srcDirs) {
         include "META_INF/mods.toml"
-        expand "version": version
+        expand "version": project.version
     }
     from(sourceSets.testmod.resources.srcDirs) {
         include "META_INF/mods.toml"
@@ -109,6 +109,9 @@ processResources {
 }
 
 jar {
+    from sourceSets.main.output.classesDirs
+    from sourceSets.main.output.resourcesDir
+
     manifest {
         attributes([
                 "Specification-Title"     : "harmonicscore",

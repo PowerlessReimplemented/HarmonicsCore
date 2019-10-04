@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ITextRenderer {
 
-    void renderText(String text, int x, int y);
+    void renderText(String text, int x, int y, float z);
 
-    void renderLines(List<String> text, int x, int y);
+    void renderLines(List<String> text, int x, int y, float z);
 
     int calculateWidth(String text);
 

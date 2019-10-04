@@ -2,8 +2,8 @@ package powerlessri.harmonics.gui.widget.slot;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
-import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
+import powerlessri.harmonics.gui.widget.IWidget;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -123,8 +123,8 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
 
         @Nonnull
         @Override
-        public ItemSlotPanel getParentWidget() {
-            return (ItemSlotPanel) Objects.requireNonNull(super.getParentWidget());
+        public ItemSlotPanel getParent() {
+            return (ItemSlotPanel) Objects.requireNonNull(super.getParent());
         }
     }
 }

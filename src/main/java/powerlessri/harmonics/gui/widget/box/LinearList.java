@@ -11,19 +11,21 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
-import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.RenderingHelper;
+import powerlessri.harmonics.ClientConfig;
+import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.ScissorTest;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
-import powerlessri.harmonics.gui.ScissorTest;
 import powerlessri.harmonics.utils.Utils;
 
 import java.util.*;
 
-import static powerlessri.harmonics.gui.RenderingHelper.*;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static powerlessri.harmonics.gui.Render2D.coloredRect;
+import static powerlessri.harmonics.gui.Render2D.draw;
 
 public class LinearList<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
 
@@ -131,10 +133,10 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
 
             GlStateManager.disableDepthTest();
             GlStateManager.disableTexture();
-            renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-            rectVertices(barLeftX, top, barRightX, bottom, getShadowColor());
-            rectVertices(barLeftX, barTopY, barRightX, barBottomY, getBarBorderColor());
-            rectVertices(barLeftX, barTopY, barRightX - 1, barBottomY - 1, getBarBodyColor());
+            renderer.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+            coloredRect(barLeftX, top, barRightX, bottom, getShadowColor());
+            coloredRect(barLeftX, barTopY, barRightX, barBottomY, getBarBorderColor());
+            coloredRect(barLeftX, barTopY, barRightX - 1, barBottomY - 1, getBarBodyColor());
             tess.draw();
             GlStateManager.enableTexture();
         }
@@ -169,22 +171,22 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
         int top = getAbsoluteY();
         int right = getAbsoluteXRight();
         int bottom = getAbsoluteYBottom();
-        if (minecraft().world != null) {
+        if (Render2D.minecraft().world != null) {
             GuiUtils.drawGradientRect(0, left, top, right, bottom, 0xc0101010, 0xd0101010);
         } else {
             // Draw dark dirt background
             GlStateManager.disableLighting();
             GlStateManager.disableFog();
-            minecraft().getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
+            Render2D.bindTexture(AbstractGui.BACKGROUND_LOCATION);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             float texScale = 32.0F;
-            BufferBuilder renderer = RenderingHelper.getRenderer();
-            renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+            BufferBuilder renderer = Tessellator.getInstance().getBuffer();
+            renderer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             renderer.pos(left, bottom, 0.0D).tex(left / texScale, (bottom + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
             renderer.pos(right, bottom, 0.0D).tex(right / texScale, (bottom + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
             renderer.pos(right, top, 0.0D).tex(right / texScale, (top + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
             renderer.pos(left, top, 0.0D).tex(left / texScale, (top + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-            Tessellator.getInstance().draw();
+            draw();
         }
     }
 
@@ -236,7 +238,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     public int getScrollAmount() {
-        return 20;
+        return ClientConfig.CLIENT.scrollSpeed.get();
     }
 
     public int getMarginMiddle() {

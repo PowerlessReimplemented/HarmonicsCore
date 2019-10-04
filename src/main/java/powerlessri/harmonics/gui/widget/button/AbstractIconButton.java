@@ -8,6 +8,8 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
+import java.util.function.IntConsumer;
+
 public abstract class AbstractIconButton extends AbstractWidget implements IButton, LeafWidgetMixin {
 
     private boolean hovered = false;
@@ -20,13 +22,12 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         preRenderEvent(mouseX, mouseY);
-        GlStateManager.enableTexture();
         GlStateManager.color3f(1F, 1F, 1F);
         ITexture tex = isDisabled() ? getTextureDisabled()
                 : isClicked() ? getTextureClicked()
                 : isHovered() ? getTextureHovered()
                 : getTextureNormal();
-        tex.render(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom());
+        tex.render(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom(), getZLevel());
         postRenderEvent(mouseX, mouseY);
     }
 
@@ -53,6 +54,20 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
 
     public ITexture getTextureDisabled() {
         return Texture.NONE;
+    }
+
+    @Override
+    public boolean hasClickAction() {
+        return false;
+    }
+
+    @Override
+    public IntConsumer getClickAction() {
+        return DUMMY;
+    }
+
+    @Override
+    public void setClickAction(IntConsumer action) {
     }
 
     @Override

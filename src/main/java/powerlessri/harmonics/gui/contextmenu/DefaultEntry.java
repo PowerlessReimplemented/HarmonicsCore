@@ -1,7 +1,8 @@
 package powerlessri.harmonics.gui.contextmenu;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
@@ -9,6 +10,8 @@ import powerlessri.harmonics.gui.window.IWindow;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMixin {
 
@@ -38,18 +41,23 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
         int y2 = getAbsoluteYBottom();
         if (isInside(mouseX, mouseY)) {
             IWindow parent = getWindow();
-            RenderingHelper.drawRect(x, y, parent.getContentX() + parent.getWidth() - parent.getBorderSize() * 2, y2, 59, 134, 255, 255);
+            GlStateManager.disableTexture();
+            beginColoredQuad();
+            coloredRect(x, y, parent.getContentX() + parent.getWidth() - parent.getBorderSize() * 2, y2, getZLevel(), 0xff3b86ff);
+            draw();
+            GlStateManager.enableTexture();
         }
 
         ResourceLocation icon = getIcon();
         if (icon != null) {
             int iconX = x + MARGIN_SIDES;
             int iconY = y + MARGIN_SIDES;
-            RenderingHelper.drawCompleteTexture(iconX, iconY, iconX + RENDERED_ICON_WIDTH, iconY + RENDERED_ICON_HEIGHT, icon);
+
+            completeTexture(iconX, iconY, iconX + RENDERED_ICON_WIDTH, iconY + RENDERED_ICON_HEIGHT, icon);
         }
 
         int textX = x + MARGIN_SIDES + RENDERED_ICON_WIDTH + 2;
-        Render2D.renderVerticallyCenteredText(getText(), textX, y, y2, 0xffffffff);
+        Render2D.renderVerticallyCenteredText(getText(), textX, y, y2, getZLevel(), 0xffffffff);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
@@ -74,7 +82,7 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
     }
 
     private int computeWidth() {
-        return MARGIN_SIDES + RENDERED_ICON_WIDTH + 2 + fontRenderer().getStringWidth(getText()) + MARGIN_SIDES;
+        return MARGIN_SIDES + RENDERED_ICON_WIDTH + 2 + Render2D.fontRenderer().getStringWidth(getText()) + MARGIN_SIDES;
     }
 
     private int computeHeight() {

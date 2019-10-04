@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.screen;
 
 import com.google.common.base.Preconditions;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
@@ -8,10 +9,10 @@ import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.collections.CompositeUnmodifiableList;
-import powerlessri.harmonics.gui.window.IWindow;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
+import powerlessri.harmonics.gui.window.IWindow;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,14 +40,6 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     public static Optional<WidgetScreen> active() {
         Screen screen = Minecraft.getInstance().currentScreen;
         return Optional.ofNullable(screen instanceof WidgetScreen ? (WidgetScreen) screen : null);
-    }
-
-    public static int scaledWidth() {
-        return Minecraft.getInstance().mainWindow.getScaledWidth();
-    }
-
-    public static int scaledHeight() {
-        return Minecraft.getInstance().mainWindow.getScaledHeight();
     }
 
     private IWindow primaryWindow;
@@ -104,10 +97,13 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         renderBackground();
 
         inspectionHandler.startCycle();
+        GlStateManager.enableDepthTest();
+        GlStateManager.enableAlphaTest();
         primaryWindow.render(mouseX, mouseY, particleTicks);
         for (IWindow window : windows) {
             window.render(mouseX, mouseY, particleTicks);
         }
+        GlStateManager.disableDepthTest();
         inspectionHandler.endCycle();
 
         // This should do nothing because we are not adding vanilla buttons

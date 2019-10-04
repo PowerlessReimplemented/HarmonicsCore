@@ -1,10 +1,6 @@
 package powerlessri.harmonics.gui.widget.button;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -14,12 +10,9 @@ import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
 import java.util.function.IntConsumer;
 
-import static powerlessri.harmonics.gui.RenderingHelper.*;
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class ColoredTextButton extends AbstractWidget implements IButton, INamedElement, LeafWidgetMixin {
-
-    public static final IntConsumer DUMMY = i -> {
-    };
 
     public static ColoredTextButton of(String key) {
         return ofText(I18n.format(key));
@@ -52,12 +45,12 @@ public class ColoredTextButton extends AbstractWidget implements IButton, INamed
         return button;
     }
 
-    private static final int NORMAL_BACKGROUND_COLOR = 0x8c8c8c;
-    private static final int HOVERED_BACKGROUND_COLOR = 0x8c8c8c;
-    private static final int NORMAL_BORDER_COLOR = 0x737373;
-    private static final int HOVERED_BORDER_COLOR = 0xc9c9c9;
+    private static final int NORMAL_BACKGROUND_COLOR = 0xff8c8c8c;
+    private static final int HOVERED_BACKGROUND_COLOR = 0xff8c8c8c;
+    private static final int NORMAL_BORDER_COLOR = 0xff737373;
+    private static final int HOVERED_BORDER_COLOR = 0xcff9c9c9;
 
-    public IntConsumer onClick = DUMMY;
+    private IntConsumer onClick = DUMMY;
     private String text;
 
     private boolean hovered = false;
@@ -71,18 +64,18 @@ public class ColoredTextButton extends AbstractWidget implements IButton, INamed
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
-        GlStateManager.disableAlphaTest();
-        usePlainColorGLStates();
-        Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         int x1 = getAbsoluteX();
         int y1 = getAbsoluteY();
         int x2 = getAbsoluteXRight();
         int y2 = getAbsoluteYBottom();
         boolean hovered = isInside(mouseX, mouseY);
-        rectVertices(x1, y1, x2, y2, hovered ? getHoveredBorderColor() : getNormalBorderColor());
-        rectVertices(x1 + 1, y1 + 1, x2 - 1, y2 - 1, hovered ? getHoveredBackgroundColor() : getNormalBackgroundColor());
-        Tessellator.getInstance().draw();
-        GlStateManager.enableAlphaTest();
+
+        usePlainColorGLStates();
+        beginColoredQuad();
+        coloredRect(x1, y1, x2, y2, getZLevel(), hovered ? getHoveredBorderColor() : getNormalBorderColor());
+        coloredRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, getZLevel(), hovered ? getHoveredBackgroundColor() : getNormalBackgroundColor());
+        draw();
+        useTextureGLStates();
 
         renderText();
 
@@ -106,7 +99,7 @@ public class ColoredTextButton extends AbstractWidget implements IButton, INamed
     }
 
     protected void renderText() {
-        Render2D.renderCenteredText(getText(), getAbsoluteY(), getAbsoluteYBottom(), getAbsoluteX(), getAbsoluteXRight(), 0xffffff);
+        Render2D.renderCenteredText(getText(), getAbsoluteY(), getAbsoluteYBottom(), getAbsoluteX(), getAbsoluteXRight(), getZLevel(), 0xffffff);
     }
 
     @Override
@@ -163,8 +156,19 @@ public class ColoredTextButton extends AbstractWidget implements IButton, INamed
         setTextRaw(I18n.format(translationKey, args));
     }
 
+    @Override
     public boolean hasClickAction() {
         return onClick != DUMMY;
+    }
+
+    @Override
+    public IntConsumer getClickAction() {
+        return onClick;
+    }
+
+    @Override
+    public void setClickAction(IntConsumer action) {
+        onClick = action;
     }
 
     @Override

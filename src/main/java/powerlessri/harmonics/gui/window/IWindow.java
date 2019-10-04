@@ -35,6 +35,8 @@ public interface IWindow extends IRenderable {
 
     Point getPosition();
 
+    float getZLevel();
+
     default void setPosition(int x, int y) {
         getPosition().x = x;
         getPosition().y = y;

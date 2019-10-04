@@ -5,12 +5,12 @@
 package powerlessri.harmonics.gui.widget.box;
 
 import com.google.common.base.Preconditions;
-import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.ScissorTest;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
-import powerlessri.harmonics.gui.widget.AbstractWidget;
-import powerlessri.harmonics.gui.ScissorTest;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.utils.Utils;
 
 import java.util.*;
@@ -28,7 +28,9 @@ public class WrappingList extends AbstractContainer<IWidget> {
     private List<IWidget> contents = new ArrayList<>();
     private List<IWidget> children;
 
-    public WrappingList() {this(80, 80);}
+    public WrappingList() {
+        this(80, 80);
+    }
 
     public WrappingList(int width, int height) {
         super(width, height);
@@ -68,7 +70,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
         int y1 = getAbsoluteY();
         int x2 = x1 + getFullWidth();
         int y2 = y1 + getFullHeight();
-        if (!AbstractWidget.isInside((int) mouseX, (int) mouseY, x1, y1, x2, y2)) {
+        if (!Render2D.isInside((int) mouseX, (int) mouseY, x1, y1, x2, y2)) {
             return false;
         }
         // "Windows style scrolling": scroll wheel is controlling the page
@@ -85,11 +87,11 @@ public class WrappingList extends AbstractContainer<IWidget> {
 
         ScissorTest test = ScissorTest.scaled(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
 
-        int rTop = 0;
-        int rBottom = getHeight();
+        int sTop = 0;
+        int sBottom = getHeight();
         for (IWidget child : contents) {
-            int y = child.getY();
-            if (y >= rTop && y < rBottom) {
+            int cy = child.getY();
+            if (cy + child.getHeight() > sTop && cy < sBottom) {
                 child.render(mouseX, mouseY, particleTicks);
             }
         }

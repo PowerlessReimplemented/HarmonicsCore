@@ -3,9 +3,7 @@ package powerlessri.harmonics.gui.widget.box;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.glfw.GLFW;
-import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.widget.INamedElement;
-import powerlessri.harmonics.gui.widget.TextField;
+import powerlessri.harmonics.gui.widget.*;
 
 import java.util.*;
 import java.util.function.Consumer;

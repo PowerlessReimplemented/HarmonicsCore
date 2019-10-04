@@ -3,7 +3,7 @@ loaderVersion="[28,)"
 
 [[mods]]
 modId="harmonics"
-version="${version}"
+version="${file.jarVersion}"
 displayURL="https://github.com/PowerlessReimplemented/HarmonicsCore/"
 issueTrackerURL="https://github.com/PowerlessReimplemented/HarmonicsCore/issues"
 authors="hnOsmium0001"

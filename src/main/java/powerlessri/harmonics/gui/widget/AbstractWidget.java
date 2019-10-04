@@ -1,16 +1,10 @@
 package powerlessri.harmonics.gui.widget;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.Inspections;
-import powerlessri.harmonics.gui.layout.properties.BoxSizing;
-import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
-import powerlessri.harmonics.gui.layout.properties.ISizedBox;
-import powerlessri.harmonics.gui.layout.properties.Side;
-import powerlessri.harmonics.gui.screen.WidgetScreen;
+import powerlessri.harmonics.gui.layout.properties.*;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import powerlessri.harmonics.gui.window.IWindow;
 
@@ -19,39 +13,22 @@ import java.awt.*;
 
 public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, Inspections.IHighlightRenderer, ISizedBox, ResizableWidgetMixin {
 
-    public static boolean isInside(int x, int y, int mx, int my) {
-        return isInside(x, y, 0, 0, mx, my);
-    }
-
-    public static boolean isInside(int x, int y, int bx1, int by1, int bx2, int by2) {
-        return x >= bx1 &&
-                x < bx2 &&
-                y >= by1 &&
-                y < by2;
-    }
-
-    public static Minecraft minecraft() {
-        return Minecraft.getInstance();
-    }
-
-    public static FontRenderer fontRenderer() {
-        return Minecraft.getInstance().fontRenderer;
-    }
-
     private Point location;
     private Dimension dimensions;
     private Insets border = new Insets(0, 0, 0, 0);
+    private float z = 0F;
 
     private boolean enabled = true;
     private IWindow window;
-
     private IWidget parent;
 
     // Cached because this might reach all the up to the root node by recursion on getAbsoluteX/Y
     private int absX;
     private int absY;
 
-    public AbstractWidget(int width, int height) {this(0, 0, width, height);}
+    public AbstractWidget(int width, int height) {
+        this(0, 0, width, height);
+    }
 
     public AbstractWidget(int x, int y, int width, int height) {
         this.location = new Point(x, y);
@@ -68,6 +45,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         if (oldParent == null) {
             onInitialAttach();
         }
+        z = newParent.getZLevel() + 1F;
     }
 
     public void onAttach(@Nullable IWidget oldParent, IWidget newParent) {
@@ -89,6 +67,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     public void attachWindow(IWindow window) {
         this.window = window;
+        this.z = window.getZLevel() + 1F;
         onParentPositionChanged();
     }
 
@@ -172,7 +151,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public void alignTo(IWidget other, Side side, HorizontalAlignment alignment) {
-        if (this.getParentWidget() != other.getParentWidget()) {
+        if (this.getParent() != other.getParent()) {
             return;
         }
 
@@ -251,6 +230,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     public void alignBottom(int bottom) {
         setY(Render2D.computeBottomY(bottom, getFullHeight()));
+    }
+
+    @Override
+    public float getZLevel() {
+        return z;
     }
 
     @Override
@@ -375,7 +359,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     @Nullable
     @Override
-    public IWidget getParentWidget() {
+    public IWidget getParent() {
         return parent;
     }
 
@@ -411,11 +395,12 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     public void provideInformation(ITextReceiver receiver) {
         receiver.line(this.toString());
         receiver.line("Position=(" + location.x + ", " + location.y + ")");
-        receiver.line("AbsX=" + this.getAbsoluteX());
-        receiver.line("AbsY=" + this.getAbsoluteY());
         receiver.line("Dimensions=(" + dimensions.width + ", " + dimensions.height + ")");
         receiver.line(String.format("Borders={top: %d, right: %d, bottom: %d, left: %d}", border.top, border.right, border.bottom, border.left));
-        receiver.line("Enabled=" + this.isEnabled());
+        receiver.line("Enabled=" + isEnabled());
+        receiver.line("Z=" + z);
+        receiver.line("AbsX=" + getAbsoluteX());
+        receiver.line("AbsY=" + getAbsoluteY());
     }
 
     @Override
@@ -495,7 +480,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     public final void createContextMenu(double x, double y) {
         ContextMenuBuilder builder = new ContextMenuBuilder();
         buildContextMenu(builder);
-        WidgetScreen.assertActive().addPopupWindow(builder.build());
+        builder.buildAndAdd();
     }
 
     protected void buildContextMenu(ContextMenuBuilder builder) {

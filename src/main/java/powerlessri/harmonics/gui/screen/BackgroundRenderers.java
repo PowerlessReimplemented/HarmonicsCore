@@ -2,15 +2,16 @@ package powerlessri.harmonics.gui.screen;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.HarmonicsCore;
+import powerlessri.harmonics.gui.Render2D;
 
-import static powerlessri.harmonics.gui.RenderingHelper.*;
+import static powerlessri.harmonics.gui.Render2D.*;
 
 @OnlyIn(Dist.CLIENT)
 public final class BackgroundRenderers {
@@ -47,15 +48,14 @@ public final class BackgroundRenderers {
         int x2 = x + width;
         int y2 = y + height;
 
-        drawRect(x, y, x2, y2, BACKGROUND_COLOR);
         usePlainColorGLStates();
-        getRenderer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        beginColoredQuad();
 
-        rectVertices(x, y, x2, y2, DARK_BORDER_COLOR);
-        rectVertices(x, y, x2 - 2, y2 - 2, LIGHT_BORDER_COLOR);
-        rectVertices(x + 2, y + 2, x2 - 2, y2 - 2, BACKGROUND_COLOR);
+        coloredRect(x, y, x2, y2, z, DARK_BORDER_COLOR);
+        coloredRect(x, y, x2 - 2, y2 - 2, z, LIGHT_BORDER_COLOR);
+        coloredRect(x + 2, y + 2, x2 - 2, y2 - 2, z, BACKGROUND_COLOR);
 
-        Tessellator.getInstance().draw();
+        draw();
         GlStateManager.enableTexture();
     }
 
@@ -90,7 +90,7 @@ public final class BackgroundRenderers {
         useTextureGLStates();
         zLevel = z;
 
-        getRenderer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        beginTexturedQuad();
         bindTexture(TEXTURE);
 
         int cornerXRight = x + width - UNIT_LENGTH;
@@ -114,10 +114,13 @@ public final class BackgroundRenderers {
             EdgePiece.drawRight(bodyX + bodyWidth, bodyY, bodyHeight);
         }
 
-        Tessellator.getInstance().draw();
+        draw();
 
         if (bodyWidth > 0 && bodyHeight > 0) {
-            drawRect(bodyX, bodyY, bodyX + bodyWidth, bodyY + bodyHeight, 198, 198, 198, 255);
+            GlStateManager.disableTexture();
+            beginColoredQuad();
+            coloredRect(bodyX, bodyY, bodyX + bodyWidth, bodyY + bodyHeight, z, 0xffc6c6c6);
+            draw();
             GlStateManager.enableTexture();
         }
     }
@@ -194,9 +197,10 @@ public final class BackgroundRenderers {
         float v2 = ty2 * UV_MULTIPLIER;
 
         // Bottom Left -> Top Left -> Top Right -> Bottom Right
-        getRenderer().pos(x2, y1, zLevel).tex(u2, v1).endVertex();
-        getRenderer().pos(x1, y1, zLevel).tex(u1, v1).endVertex();
-        getRenderer().pos(x1, y2, zLevel).tex(u1, v2).endVertex();
-        getRenderer().pos(x2, y2, zLevel).tex(u2, v2).endVertex();
+        BufferBuilder renderer = Tessellator.getInstance().getBuffer();
+        renderer.pos(x2, y1, zLevel).tex(u2, v1).endVertex();
+        renderer.pos(x1, y1, zLevel).tex(u1, v1).endVertex();
+        renderer.pos(x1, y2, zLevel).tex(u1, v2).endVertex();
+        renderer.pos(x2, y2, zLevel).tex(u2, v2).endVertex();
     }
 }

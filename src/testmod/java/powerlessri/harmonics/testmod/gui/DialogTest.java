@@ -3,10 +3,9 @@ package powerlessri.harmonics.testmod.gui;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.StringTextComponent;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
-import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 import powerlessri.harmonics.gui.window.Dialog;
@@ -56,7 +55,7 @@ public class DialogTest extends WidgetScreen {
         @Override
         public void render(int mouseX, int mouseY, float particleTicks) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-            BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+            drawVanillaStyleBackground();
             renderChildren(mouseX, mouseY, particleTicks);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }

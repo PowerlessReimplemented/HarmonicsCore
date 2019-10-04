@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.StringTextComponent;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
@@ -30,7 +29,7 @@ public class TextButtonTest extends WidgetScreen {
         private final List<AbstractWidget> children;
 
         public Window() {
-            setContents(120, 160);
+            setContents(160, 160);
             centralize();
 
             GradientTextButton btn1 = new GradientTextButton("test1");
@@ -61,7 +60,7 @@ public class TextButtonTest extends WidgetScreen {
         @Override
         public void render(int mouseX, int mouseY, float particleTicks) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-            BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+            drawVanillaStyleBackground();
             renderChildren(mouseX, mouseY, particleTicks);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }

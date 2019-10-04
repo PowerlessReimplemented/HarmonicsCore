@@ -4,16 +4,12 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import powerlessri.harmonics.gui.ITexture;
-import powerlessri.harmonics.gui.Render2D;
-import powerlessri.harmonics.gui.Texture;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.SimpleIconButton;
-import powerlessri.harmonics.gui.widget.slot.AbstractItemSlot;
-import powerlessri.harmonics.gui.widget.slot.ItemSlot;
-import powerlessri.harmonics.gui.widget.slot.ItemSlotPanel;
+import powerlessri.harmonics.gui.widget.slot.*;
 
 import java.util.List;
 import java.util.function.Function;
@@ -40,7 +36,7 @@ public class PlayerInventoryWindow extends AbstractPopupWindow {
         hotbar.setLocation(0, inventory.getYBottom());
         SimpleIconButton close = new SimpleIconButton(inventory.getWidth() - 8, 0, CLOSE, CLOSE);
         close.setDimensions(8, 8);
-        close.onClick(b -> discard());
+        close.setClickAction(b -> discard());
         children = ImmutableList.of(close, inventory, hotbar);
 
         setContents(inventory.getWidth(), inventory.getFullHeight() + hotbar.getFullHeight());
@@ -59,7 +55,7 @@ public class PlayerInventoryWindow extends AbstractPopupWindow {
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+        drawVanillaStyleBackground();
         renderChildren(mouseX, mouseY, particleTicks);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }

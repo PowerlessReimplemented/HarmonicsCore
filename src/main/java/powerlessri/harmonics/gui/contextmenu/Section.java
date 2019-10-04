@@ -1,9 +1,9 @@
 package powerlessri.harmonics.gui.contextmenu;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import powerlessri.harmonics.gui.window.IWindow;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
+import powerlessri.harmonics.gui.window.IWindow;
 
 import java.awt.*;
 import java.util.List;
@@ -43,8 +43,8 @@ public class Section extends AbstractContainer<IEntry> {
         GlStateManager.color3f(LINE_COLOR, LINE_COLOR, LINE_COLOR);
         glLineWidth(1F);
         glBegin(GL_LINES);
-        glVertex2f(bx, by);
-        glVertex2f(bx2, by);
+        glVertex3f(bx, by, getZLevel());
+        glVertex3f(bx2, by, getZLevel());
         glEnd();
         GlStateManager.enableTexture();
     }

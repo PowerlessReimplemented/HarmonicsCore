@@ -1,9 +1,9 @@
 package powerlessri.harmonics.gui.screen;
 
 import net.minecraft.client.gui.screen.Screen;
+import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.IWindow;
-import powerlessri.harmonics.gui.debug.Inspections;
 
 class WidgetTreeInspections extends Inspections {
 

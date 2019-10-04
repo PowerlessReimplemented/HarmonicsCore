@@ -2,16 +2,11 @@ package powerlessri.harmonics.gui.widget;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
-import static powerlessri.harmonics.gui.RenderingHelper.getRenderer;
-import static powerlessri.harmonics.gui.RenderingHelper.rectVertices;
-
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
 
@@ -49,10 +44,10 @@ public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
 
         GlStateManager.disableAlphaTest();
         GlStateManager.disableTexture();
-        getRenderer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        rectVertices(x1, y1, x2, y2, borderColor);
-        rectVertices(x1 + 1, y1 + 1, x2 - 1, y2 - 1, contentColor);
-        Tessellator.getInstance().draw();
+        beginColoredQuad();
+        coloredRect(x1, y1, x2, y2, getZLevel(), borderColor);
+        coloredRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, getZLevel(), contentColor);
+        draw();
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

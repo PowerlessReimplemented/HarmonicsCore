@@ -3,12 +3,11 @@ package powerlessri.harmonics.gui;
 import com.google.common.base.MoreObjects;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Objects;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static powerlessri.harmonics.gui.Render2D.*;
 
 class PartialTexture implements ITexture {
 
@@ -67,13 +66,10 @@ class PartialTexture implements ITexture {
 
     @Override
     public void render(int x1, int y1, int x2, int y2, float z) {
-        RenderingHelper.bindTexture(texture);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-
-        buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bindTexture(texture);
+        beginTexturedQuad();
         vertices(x1, y1, x2, y2, z);
-        tessellator.draw();
+        draw();
     }
 
     @Override

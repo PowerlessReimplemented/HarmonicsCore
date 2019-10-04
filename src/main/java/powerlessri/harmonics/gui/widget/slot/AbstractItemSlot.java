@@ -9,6 +9,8 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
+import static powerlessri.harmonics.gui.Render2D.*;
+
 public abstract class AbstractItemSlot extends AbstractWidget implements LeafWidgetMixin {
 
     public static final ITexture BASE = Texture.complete(Render2D.ITEM_SLOT, 18, 18);
@@ -43,9 +45,11 @@ public abstract class AbstractItemSlot extends AbstractWidget implements LeafWid
     }
 
     public void renderHoveredOverlay() {
-        RenderingHelper.useBlendingGLStates();
-        RenderingHelper.drawRect(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom(), 0xaac4c4c4);
-        RenderingHelper.useTextureGLStates();
+        useBlendingGLStates();
+        beginColoredQuad();
+        coloredRect(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom(), 0xaac4c4c4);
+        draw();
+        useTextureGLStates();
     }
 
     public abstract ItemStack getRenderedStack();

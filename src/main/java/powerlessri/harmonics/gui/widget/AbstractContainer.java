@@ -9,7 +9,9 @@ import java.util.Collection;
 
 public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T>, RelocatableContainerMixin<T> {
 
-    public AbstractContainer(int width, int height) {this(0, 0, width, height);}
+    public AbstractContainer(int width, int height) {
+        this(0, 0, width, height);
+    }
 
     public AbstractContainer(int x, int y, int width, int height) {
         super(x, y, width, height);

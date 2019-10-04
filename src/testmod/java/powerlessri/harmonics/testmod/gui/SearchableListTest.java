@@ -3,16 +3,11 @@ package powerlessri.harmonics.testmod.gui;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import powerlessri.harmonics.gui.ITexture;
-import powerlessri.harmonics.gui.Texture;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.INamedElement;
-import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.widget.TextField;
+import powerlessri.harmonics.gui.widget.*;
 import powerlessri.harmonics.gui.widget.box.FilteredList;
 import powerlessri.harmonics.gui.widget.box.WrappingList;
 import powerlessri.harmonics.gui.widget.button.AbstractIconButton;
@@ -78,7 +73,7 @@ public class SearchableListTest extends WidgetScreen {
         @Override
         public void render(int mouseX, int mouseY, float particleTicks) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-            BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), 0F);
+            drawVanillaStyleBackground();
             renderChildren(mouseX, mouseY, particleTicks);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
@@ -111,7 +106,7 @@ public class SearchableListTest extends WidgetScreen {
             super.render(mouseX, mouseY, particleTicks);
             if (isInside(mouseX, mouseY)) {
                 glDisable(GL_SCISSOR_TEST);
-                GuiUtils.drawHoveringText(ImmutableList.of(name), mouseX, mouseY, scaledWidth(), scaledHeight(), Integer.MAX_VALUE, fontRenderer());
+                Render2D.drawHoveringText(ImmutableList.of(name), mouseX, mouseY);
                 glEnable(GL_SCISSOR_TEST);
             }
         }

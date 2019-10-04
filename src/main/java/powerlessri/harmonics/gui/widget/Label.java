@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.widget;
 
 import net.minecraft.client.resources.I18n;
+import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.properties.HorizontalAlignment;
@@ -19,7 +20,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     public Label(IWidget target) {
         super(0, 0);
         this.target = target;
-        IWidget parent = target.getParentWidget();
+        IWidget parent = target.getParent();
         if (parent != null) {
             this.attach(parent);
         } else {
@@ -36,8 +37,8 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     @SuppressWarnings("UnusedReturnValue")
     public Label text(String text) {
         this.text = text;
-        int width = fontRenderer().getStringWidth(text);
-        int height = fontRenderer().FONT_HEIGHT;
+        int width = Render2D.fontRenderer().getStringWidth(text);
+        int height = Render2D.fontRenderer().FONT_HEIGHT;
         setDimensions(width, height);
         updatePosition();
         return this;
@@ -57,6 +58,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
         return color;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Label setColor(int color) {
         this.color = color;
         return this;
@@ -91,7 +93,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        fontRenderer().drawString(text, getAbsoluteX(), getAbsoluteY(), color);
+        Render2D.fontRenderer().drawString(text, getAbsoluteX(), getAbsoluteY(), color);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

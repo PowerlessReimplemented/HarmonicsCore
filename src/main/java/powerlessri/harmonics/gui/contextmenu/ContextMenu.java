@@ -1,13 +1,13 @@
 package powerlessri.harmonics.gui.contextmenu;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHelper;
-import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.RenderingHelper;
+import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.IPopupWindow;
 import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
 import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
@@ -15,6 +15,8 @@ import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
+
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
 
@@ -60,8 +62,6 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
     }
 
     public ContextMenu(Point position, List<? extends Section> sections) {
-        Preconditions.checkArgument(!sections.isEmpty());
-
         this.position = position;
         this.sections = sections;
         this.contents = new Dimension();
@@ -96,8 +96,18 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        RenderingHelper.drawRect(position, border, 75, 75, 75, 255);
-        RenderingHelper.drawRect(getContentX(), getContentY(), contents, 61, 61, 61, 255);
+
+        GlStateManager.disableTexture();
+        beginColoredQuad();
+        int x = getX();
+        int y = getY();
+        coloredRect(x, y, x + getWidth(), y + getHeight(), getZLevel(), 0xff4b4b4b);
+        int cx = getContentX();
+        int cy = getContentY();
+        coloredRect(cx, cy, cx + getContentWidth(), cy + getContentHeight(), getZLevel(), 0xff3d3d3d);
+        draw();
+        GlStateManager.enableTexture();
+
         for (Section section : sections) {
             section.render(mouseX, mouseY, particleTicks);
         }
@@ -154,6 +164,11 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
     @Override
     public Point getPosition() {
         return position;
+    }
+
+    @Override
+    public float getZLevel() {
+        return Render2D.CONTEXT_MENU_Z;
     }
 
     @Override

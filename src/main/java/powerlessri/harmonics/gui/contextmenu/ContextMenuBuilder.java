@@ -1,8 +1,11 @@
 package powerlessri.harmonics.gui.contextmenu;
 
 import com.google.common.collect.Lists;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public final class ContextMenuBuilder {
 
@@ -22,7 +25,18 @@ public final class ContextMenuBuilder {
         return newSection;
     }
 
+    @Nullable
     public ContextMenu build() {
+        if (sections.isEmpty()) {
+            return null;
+        }
         return ContextMenu.withSections(Lists.newArrayList(sections.values()));
+    }
+
+    public void buildAndAdd() {
+        ContextMenu menu = build();
+        if (menu != null) {
+            WidgetScreen.assertActive().addPopupWindow(menu);
+        }
     }
 }

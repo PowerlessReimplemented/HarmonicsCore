@@ -5,14 +5,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
-import powerlessri.harmonics.Config;
+import powerlessri.harmonics.ClientConfig;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.IWindow;
 
-import static powerlessri.harmonics.gui.RenderingHelper.*;
-import static powerlessri.harmonics.gui.screen.WidgetScreen.scaledHeight;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public abstract class Inspections implements IRenderEventListener {
 
@@ -77,7 +76,7 @@ public abstract class Inspections implements IRenderEventListener {
         @Override
         public void nextLine() {
             x = STARTING_X;
-            y += fontHeight() + 2;
+            y += Render2D.fontHeight() + 2;
         }
     };
 
@@ -88,7 +87,7 @@ public abstract class Inspections implements IRenderEventListener {
 
     @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWidget widget, int mx, int my) {
-        if (!Config.CLIENT.boxHighlighting.get()) {
+        if (!ClientConfig.CLIENT.inspectionsHighlighting.get()) {
             return false;
         }
         if (widget.isInside(mx, my) && shouldRender(widget, mx, my)) {
@@ -103,7 +102,7 @@ public abstract class Inspections implements IRenderEventListener {
 
     @SuppressWarnings("UnusedReturnValue")
     public final boolean tryRender(IWindow window, int mx, int my) {
-        if (!Config.CLIENT.boxHighlighting.get()) {
+        if (!ClientConfig.CLIENT.inspectionsHighlighting.get()) {
             return false;
         }
         if (window.isInside(mx, my) && shouldRender(window, mx, my)) {
@@ -128,7 +127,7 @@ public abstract class Inspections implements IRenderEventListener {
         if (widget instanceof IHighlightRenderer) {
             ((IHighlightRenderer) widget).renderHighlight();
         } else {
-            fontRenderer().drawStringWithShadow("(Widget does not support highlight)", 0, scaledHeight() - fontHeight(), 0xffffff);
+            fontRenderer().drawStringWithShadow("(Widget does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
         }
     }
 
@@ -136,7 +135,7 @@ public abstract class Inspections implements IRenderEventListener {
         if (window instanceof IHighlightRenderer) {
             ((IHighlightRenderer) window).renderHighlight();
         } else {
-            fontRenderer().drawStringWithShadow("(Window does not support highlight)", 0, scaledHeight() - fontHeight(), 0xffffff);
+            fontRenderer().drawStringWithShadow("(Window does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
         }
     }
 
@@ -166,7 +165,9 @@ public abstract class Inspections implements IRenderEventListener {
 
     public static void renderHighlight(int x, int y, int width, int height) {
         useBlendingGLStates();
-        drawRect(x, y, x + width, y + height, CONTENTS);
+        beginColoredQuad();
+        coloredRect(x, y, x + width, y + height, CONTENTS);
+        draw();
         useTextureGLStates();
     }
 
@@ -179,18 +180,18 @@ public abstract class Inspections implements IRenderEventListener {
         useBlendingGLStates();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
         // Can't just do two rectangles because they are transparent
 
         // 1------4
         // |      |
         // 2------3
-        Render2D.quad(buffer, x1, y1, ix1, iy1, ix2, iy1, x2, y1, BORDER); // Top border
-        Render2D.quad(buffer, ix2, iy1, ix2, iy2, x2, y2, x2, y1, BORDER); // Right border
-        Render2D.quad(buffer, ix1, iy2, x1, y2, x2, y2, ix2, iy2, BORDER); // Bottom border
-        Render2D.quad(buffer, x1, y1, x1, y2, ix1, iy2, ix1, iy1, BORDER); // Left border
-        rectVertices(ix1, iy1, ix2, iy2, CONTENTS);
+        quad(buffer, x1, y1, ix1, iy1, ix2, iy1, x2, y1, BORDER); // Top border
+        quad(buffer, ix2, iy1, ix2, iy2, x2, y2, x2, y1, BORDER); // Right border
+        quad(buffer, ix1, iy2, x1, y2, x2, y2, ix2, iy2, BORDER); // Bottom border
+        quad(buffer, x1, y1, x1, y2, ix1, iy2, ix1, iy1, BORDER); // Left border
+        coloredRect(ix1, iy1, ix2, iy2, CONTENTS);
 
         tessellator.draw();
         useTextureGLStates();

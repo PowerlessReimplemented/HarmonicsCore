@@ -1,9 +1,6 @@
 package powerlessri.harmonics.gui.widget.box;
 
-import powerlessri.harmonics.gui.ITexture;
-import powerlessri.harmonics.gui.Render2D;
-import powerlessri.harmonics.gui.Texture;
-import powerlessri.harmonics.gui.debug.ITextReceiver;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.widget.button.AbstractIconButton;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
@@ -87,7 +84,7 @@ public abstract class ScrollArrow extends AbstractIconButton implements LeafWidg
     @Override
     public void update(float particleTicks) {
         if (isClicked()) {
-            WrappingList parent = getParentWidget();
+            WrappingList parent = getParent();
             parent.scroll(parent.getScrollSpeed() * getScrollDirectionMask());
         }
     }
@@ -102,8 +99,8 @@ public abstract class ScrollArrow extends AbstractIconButton implements LeafWidg
 
     @Nonnull
     @Override
-    public WrappingList getParentWidget() {
-        return Objects.requireNonNull((WrappingList) super.getParentWidget());
+    public WrappingList getParent() {
+        return Objects.requireNonNull((WrappingList) super.getParent());
     }
 
     protected abstract int getScrollDirectionMask();

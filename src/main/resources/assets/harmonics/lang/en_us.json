@@ -3,7 +3,6 @@
   "gui.harmonics.ContextMenu.Cut": "Cut",
   "gui.harmonics.ContextMenu.Copy": "Copy",
   "gui.harmonics.ContextMenu.Paste": "Paste",
-
   "gui.harmonics.Dialog.OK": "OK",
   "gui.harmonics.Dialog.Cancel": "Cancel",
   "gui.harmonics.Dialog.Yes": "Yes",
@@ -17,5 +16,7 @@
   "message.harmonics.Ticks": "ticks",
   "message.harmonics.Milliseconds": "milliseconds",
 
-  "config.harmonics.client.inspections.BoxHighlighting": "Box highlighting"
+  "config.harmonics.client.inspections.BoxHighlighting": "Box highlighting",
+  "config.harmonics.client.scrollSpeed": "List scroll speed",
+  "config.harmonics.client.dialogMsgMaxWidth": "Max width for dialog message"
 }

@@ -1,10 +1,13 @@
 package powerlessri.harmonics.gui.widget.button;
 
 import powerlessri.harmonics.gui.Render2D;
-import powerlessri.harmonics.gui.RenderingHelper;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
+
+import java.util.function.IntConsumer;
+
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class GradientTextButton extends AbstractWidget implements IButton, LeafWidgetMixin {
 
@@ -33,6 +36,7 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
     public static final int TEXT_COLOR = 0xff303030;
     public static final int DISABLED_TEXT_COLOR = 0xff0a0a0;
 
+    private IntConsumer onClick = DUMMY;
     private String text;
 
     private boolean hovered;
@@ -101,13 +105,37 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
         int y = getAbsoluteY();
         int x2 = getAbsoluteXRight();
         int y2 = getAbsoluteYBottom();
-        RenderingHelper.drawRect(x, y, x2, y2, getBottomRightColor());
-        RenderingHelper.drawRect(x, y, x2 - 1, y2 - 1, getTopLeftColor());
-        RenderingHelper.drawVerticalGradientRect(x + 1, y + 1, x2 - 1, y2 - 1, getGradientStartColor(), getGradientEndColor());
 
-        Render2D.renderCenteredText(text, y, y2, x, x2, getTextColor());
+        usePlainColorGLStates();
+        beginColoredQuad();
+        coloredRect(x, y, x2, y2, getZLevel(), getBottomRightColor());
+        coloredRect(x, y, x2 - 1, y2 - 1, getZLevel(), getTopLeftColor());
+        draw();
+
+        useGradientGLStates();
+        beginColoredQuad();
+        verticalGradientRect(x + 1, y + 1, x2 - 1, y2 - 1, getZLevel(), getGradientStartColor(), getGradientEndColor());
+        draw();
+        useTextureGLStates();
+
+        Render2D.renderCenteredText(text, y, y2, x, x2, getZLevel(), getTextColor());
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+
+    @Override
+    public boolean hasClickAction() {
+        return onClick != DUMMY;
+    }
+
+    @Override
+    public IntConsumer getClickAction() {
+        return onClick;
+    }
+
+    @Override
+    public void setClickAction(IntConsumer action) {
+        onClick = action;
     }
 
     @Override

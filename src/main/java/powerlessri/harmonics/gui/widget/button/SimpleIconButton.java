@@ -13,7 +13,7 @@ public class SimpleIconButton extends AbstractIconButton implements ResizableWid
 
     private ITexture textureNormal;
     private ITexture textureHovering;
-    private IntConsumer onClick;
+    private IntConsumer onClick = DUMMY;
 
     public SimpleIconButton(int x, int y, ITexture textureNormal, ITexture textureHovering) {
         super(x, y, 0, 0);
@@ -56,12 +56,23 @@ public class SimpleIconButton extends AbstractIconButton implements ResizableWid
     }
 
     @Override
+    public boolean hasClickAction() {
+        return onClick != DUMMY;
+    }
+
+    @Override
+    public IntConsumer getClickAction() {
+        return onClick;
+    }
+
+    @Override
+    public void setClickAction(IntConsumer action) {
+        onClick = action;
+    }
+
+    @Override
     public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         onClick.accept(button);
         return true;
-    }
-
-    public void onClick(IntConsumer onClick) {
-        this.onClick = onClick;
     }
 }

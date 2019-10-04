@@ -7,7 +7,7 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import java.awt.*;
 import java.util.List;
 
-import static powerlessri.harmonics.gui.widget.AbstractWidget.isInside;
+import static powerlessri.harmonics.gui.Render2D.isInside;
 
 public class StrictTableLayout {
 
@@ -64,8 +64,8 @@ public class StrictTableLayout {
     }
 
     /**
-     * Test whether the given rectangle is completely inside the region from {@code (0,0)} to {@code (mx,my)}.
-     * Completely inside means all four vertices are inside the given region.
+     * Test whether the given rectangle is completely inside the region from {@code (0,0)} to {@code (mx,my)}. Completely inside means all
+     * four vertices are inside the given region.
      */
     private static boolean isCompletelyInside(int x, int y, int width, int height, int mx, int my) {
         return isInside(x, y, mx, my) &&

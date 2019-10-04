@@ -5,84 +5,55 @@
 package powerlessri.harmonics.gui.widget;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager.LogicOp;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
-import powerlessri.harmonics.gui.ITextRenderer;
-import powerlessri.harmonics.gui.RenderingHelper;
-import powerlessri.harmonics.gui.TextRenderer;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static powerlessri.harmonics.gui.Render2D.beginColoredQuad;
+import static powerlessri.harmonics.gui.Render2D.draw;
 
 public class TextField extends AbstractWidget implements LeafWidgetMixin {
-
-    public static TextField DUMMY = new TextField(0, 0, 0, 0) {
-        @Override
-        public boolean isEditable() {
-            return false;
-        }
-
-        @Override
-        public void render(int mouseX, int mouseY, float particleTicks) {
-        }
-
-        @Override
-        public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
-            return false;
-        }
-
-        @Override
-        public boolean onCharTyped(char typedChar, int keyCode) {
-            return false;
-        }
-
-        @Override
-        public void setX(int x) {
-        }
-
-        @Override
-        public void setY(int y) {
-        }
-
-        @Override
-        public void onParentPositionChanged() {
-        }
-
-        @Override
-        public boolean isFocused() {
-            return false;
-        }
-    };
 
     public enum BackgroundStyle implements IBackgroundRenderer {
         NONE(0xff000000, 0xff333333) {
             @Override
-            public void render(int x1, int y1, int x2, int y2, boolean hovered, boolean focused) {
+            public void render(int x1, int y1, int x2, int y2, float z, boolean hovered, boolean focused) {
             }
         },
         THICK_BEVELED(0xff000000, 0xff333333) {
             @Override
-            public void render(int x1, int y1, int x2, int y2, boolean hovered, boolean focused) {
+            public void render(int x1, int y1, int x2, int y2, float z, boolean hovered, boolean focused) {
                 int color = focused ? 0xffeeeeee
                         : hovered ? 0xffdadada
                         : 0xffc6c6c6;
-                RenderingHelper.drawThickBeveledBox(x1, y1, x2 - 1, y2 - 1, 1, 0xff2b2b2b, 0xffffffff, color);
+                GlStateManager.disableTexture();
+                beginColoredQuad();
+                Render2D.thickBeveledBox(x1, y1, x2, y2, z, 1, 0xff2b2b2b, 0xffffffff, color);
+                draw();
+                GlStateManager.enableTexture();
             }
         },
         RED_OUTLINE(0xffffffff, 0xffcccccc) {
             @Override
-            public void render(int x1, int y1, int x2, int y2, boolean hovered, boolean focused) {
+            public void render(int x1, int y1, int x2, int y2, float z, boolean hovered, boolean focused) {
+                GlStateManager.disableTexture();
+                beginColoredQuad();
                 if (focused) {
-                    RenderingHelper.drawRect(x1, y1, x2, y2, 0xffcf191f);
-                    RenderingHelper.drawVerticalGradientRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff191919, 0xff313131);
+                    Render2D.coloredRect(x1, y1, x2, y2, z, 0xffcf191f);
+                    Render2D.verticalGradientRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, z, 0xff191919, 0xff313131);
                 } else {
-                    RenderingHelper.drawRect(x1, y1, x2, y2, 0xff6d0b0e);
-                    RenderingHelper.drawRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 0xff1c1c1c);
+                    Render2D.coloredRect(x1, y1, x2, y2, z, 0xff6d0b0e);
+                    Render2D.coloredRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, z, 0xff1c1c1c);
                 }
+                draw();
+                GlStateManager.enableTexture();
             }
         };
 
@@ -105,7 +76,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
      */
     private int startOffset = 0;
     /**
-     * One end of the selected region. If nothing is selected, is should be -1.
+     * One end of the selected region. If nothing is selected, this should be -1.
      */
     private int selection = -1;
     private boolean editable = true;
@@ -155,7 +126,12 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     @Override
     public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
-        if (Screen.hasControlDown() && !Screen.hasShiftDown() && !Screen.hasAltDown()) {
+        boolean ctrl = Screen.hasControlDown();
+        boolean alt = Screen.hasAltDown();
+        if (alt) {
+            return false;
+        }
+        if (ctrl) {
             switch (keyCode) {
                 case GLFW_KEY_C: {
                     copyText();
@@ -310,12 +286,12 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     private void copyText() {
         if (isRegionSelected()) {
-            minecraft().keyboardListener.setClipboardString(getSelectedText());
+            Render2D.minecraft().keyboardListener.setClipboardString(getSelectedText());
         }
     }
 
     private void pasteText() {
-        String text = minecraft().keyboardListener.getClipboardString();
+        String text = Render2D.minecraft().keyboardListener.getClipboardString();
         if (isRegionSelected()) {
             replaceSelectedRegion(text);
         } else {
@@ -325,7 +301,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     private void cutText() {
         if (isRegionSelected()) {
-            minecraft().keyboardListener.setClipboardString(getSelectedText());
+            Render2D.minecraft().keyboardListener.setClipboardString(getSelectedText());
             replaceSelectedRegion("");
         }
     }
@@ -407,17 +383,17 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     private int calculateVerticalOffset() {
-        return (getDimensions().height - fontRenderer().FONT_HEIGHT) / 2;
+        return (getDimensions().height - Render2D.fontRenderer().FONT_HEIGHT) / 2;
     }
 
     private void ensureVisible() {
         if (cursor < startOffset) {
             startOffset = cursor;
         } else {
-            int w = fontRenderer().getStringWidth(text.substring(startOffset, cursor));
+            int w = textRenderer.calculateWidth(text.substring(startOffset, cursor));
             while (w > getDimensions().width - 12) {
                 startOffset++;
-                w = fontRenderer().getStringWidth(text.substring(startOffset, cursor));
+                w = textRenderer.calculateWidth(text.substring(startOffset, cursor));
             }
         }
     }
@@ -432,15 +408,14 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
         int x2 = getAbsoluteXRight();
         int y2 = getAbsoluteYBottom();
 
-        backgroundStyle.render(x, y, x2, y2, isInside(mouseX, mouseY), isFocused());
+        backgroundStyle.render(x, y, x2, y2, getZLevel(), isInside(mouseX, mouseY), isFocused());
 
         String renderedText = textRenderer.trimToWidth(text.substring(startOffset), getWidth() - 4);
-        int textX = x + 5;
+        int textX = x + 2;
         int textY = y + calculateVerticalOffset();
-        GlStateManager.enableTexture();
         if (isEnabled()) {
             textRenderer.setTextColor(isEditable() ? textColor : textColorUneditable);
-            textRenderer.renderText(renderedText, textX, textY);
+            textRenderer.renderText(renderedText, textX, textY, getZLevel());
 
             if (isRegionSelected()) {
                 int selectionStart = getSelectionStart();
@@ -452,17 +427,26 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
                 String renderedPreSelection = renderedText.substring(0, renderedStart);
                 int selectionX = textX + textRenderer.calculateWidth(renderedPreSelection);
                 int selectionWidth = textRenderer.calculateWidth(renderedSelection);
-                RenderingHelper.drawColorLogic(selectionX, textY, selectionWidth, (int) textRenderer.getFontHeight(), 60, 147, 242, GlStateManager.LogicOp.OR_REVERSE);
+
+                GlStateManager.disableTexture();
+                GlStateManager.logicOp(LogicOp.OR_REVERSE);
+                beginColoredQuad();
+                Render2D.coloredRect(selectionX, textY, selectionX + selectionWidth, textY + (int) textRenderer.getFontHeight(), getZLevel(), 0xff3c93f2);
+                draw();
+                GlStateManager.enableTexture();
             }
         } else {
             textRenderer.setTextColor(0xffa0a0a0);
-            textRenderer.renderText(renderedText, textX, textY);
+            textRenderer.renderText(renderedText, textX, textY, getZLevel());
         }
 
         if (isFocused()) {
             int w = textRenderer.calculateWidth(text.substring(startOffset, cursor));
             int cx = x + 2 + w;
-            RenderingHelper.drawRect(cx, y + 2, cx + 1, y2 - 3, 0xff000000);
+            GlStateManager.disableTexture();
+            beginColoredQuad();
+            Render2D.coloredRect(cx, y + 2, cx + 1, y2 - 3, getZLevel(), 0xff000000);
+            draw();
             GlStateManager.enableTexture();
         }
 
