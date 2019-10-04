@@ -1,5 +1,18 @@
 package powerlessri.harmonics.gui.layout;
 
+import com.google.common.base.Preconditions;
+import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+import powerlessri.harmonics.gui.layout.properties.BoxSizing;
+import powerlessri.harmonics.gui.layout.properties.IFractionalLengthHandler;
+import powerlessri.harmonics.gui.layout.properties.Length;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Layout widgets on a non-fixed dimension grid, where each row and column have their individual size. The widgets are layed on the grid so
  * that they cover a rectangle of cells.
@@ -8,203 +21,202 @@ package powerlessri.harmonics.gui.layout;
  */
 public class GridLayout {
 
-//    public class Resolver implements IFractionalLengthHandler {
-//
-//        private Resolver() {
-//        }
-//
-//        private int denominator;
-//
-//        @Override
-//        public int getDenominator() {
-//            return denominator;
-//        }
-//    }
-//
-//    private IContainer<?> bondWidget;
-//    private Length<?> gridGap;
-//    private Length<Resolver>[] rowHeights;
-//    private Length<Resolver>[] columnWidths;
-//
-//    private Resolver widthResolver = new Resolver();
-//    private Resolver heightResolver = new Resolver();
-//
-//    /**
-//     * A map of where the child widgets should occupy. See CSS Grid's {@code grid-template-areas}. Each element is the ID (index) of the
-//     * child widget. Note that this array should be setup in [y][x], not [x][y].
-//     */
-//    private int[][] areas;
-//
-//    public GridLayout(IContainer<?> bondWidget) {
-//        this.bondWidget = bondWidget;
-//    }
-//
-//    @SuppressWarnings("UnusedReturnValue")
-//    public GridLayout gridGap(Length<?> gridGap) {
-//        setGridGap(gridGap);
-//        return this;
-//    }
-//
-//    @SuppressWarnings("UnusedReturnValue")
-//    public GridLayout rows(Length<Resolver> rows) {
-//        setRows(rows);
-//        return this;
-//    }
-//
-//    @SuppressWarnings("UnusedReturnValue")
-//    public GridLayout columns(Length<Resolver> columns) {
-//        setColumns(columns);
-//        return this;
-//    }
-//
-//    /**
-//     * The width of each column will be {@code n/s} pixels of the width of the bond widget minus the gaps, where {@code n} is the array
-//     * element, {@code s} is the <i>sum</i> of all elements in the array.
-//     */
-//    @SuppressWarnings("UnusedReturnValue")
-//    public GridLayout widths(int... widthFactors) {
-//        setColumnWidths(widthFactors);
-//        return this;
-//    }
-//
-//    /**
-//     * The width of each row will be {@code n/s} pixels of the height of the bond widget minus the gaps, where {@code n} is the array
-//     * element, {@code s} is the <i>sum</i> of all elements in the array.
-//     */
-//    @SuppressWarnings("UnusedReturnValue")
-//    public GridLayout heights(int... heightFactors) {
-//        setRowHeights(heightFactors);
-//        return this;
-//    }
-//
-//    @SuppressWarnings("UnusedReturnValue")
-//    public GridLayout areas(int... areas) {
-//        this.setAreas(areas);
-//        return this;
-//    }
-//
-//    /**
-//     * A special version of the regular reflow mechanism, where areas can be named. The names should come from the widgets; if some names
-//     * are not defined, it will use the first widget in the list by default.
-//     */
-//    public <T extends IWidget & INamedElement & ResizableWidgetMixin> void reflow(List<T> widgets, String[] template) {
-//        int[][] areas = new int[rows][columns];
-//        Object2IntMap<String> m = new Object2IntOpenHashMap<>();
-//        for (int i = 0; i < widgets.size(); i++) {
-//            T widget = widgets.get(i);
-//            m.put(widget.getName(), i);
-//        }
-//        // Check for no repeating names
-//        Preconditions.checkArgument(m.size() == widgets.size());
-//
-//        for (int y = 0; y < rows; y++) {
-//            for (int x = 0; x < columns; x++) {
-//                areas[y][x] = m.getInt(template[y * columns + x]);
-//            }
-//        }
-//        reflow(widgets, areas);
-//    }
-//
-//    public <T extends IWidget & ResizableWidgetMixin> void reflow(List<T> widgets) {
-//        reflow(widgets, this.areas);
-//    }
-//
-//    // px/py stands for "Pixel-position x/y"
-//    // gx/gy stands for "Grid x/y"
-//    public <T extends IWidget & ResizableWidgetMixin> void reflow(List<T> widgets, int[][] areas) {
-//        for (int gy = 0; gy < areas.length; gy++) {
-//            int[] row = areas[gy];
-//            for (int gx = 0; gx < row.length; gx++) {
-//                int cell = row[gx];
-//                // Discard nonexistent indexes
-//                if (cell > widgets.size()) {
-//                    continue;
-//                }
-//
-//                T widget = widgets.get(cell);
-//                if (!BoxSizing.shouldIncludeWidget(widget)) {
-//                    continue;
-//                }
-//
-//                int px = getPxAt(gx);
-//                int py = getPyAt(gy);
-//                // Expand the first vertex towards top left
-//                if (!widget.isInside(px, py)) {
-//                    widget.setLocation(Math.min(widget.getX(), py), Math.min(widget.getY(), py));
-//                }
-//
-//                int px2 = getPx2At(gx);
-//                int py2 = getPy2At(gy);
-//                // Expand the second vertex towards bottom right
-//                if (!widget.isInside(px2, py2)) {
-//                    widget.setDimensions(Math.max(widget.getFullWidth(), px2 - px), Math.max(widget.getFullHeight(), py2 - py));
-//                }
-//            }
-//        }
-//    }
-//
-//    private int getPxAt(int gx) {
-//        int result = 0;
-//        for (int i = 0; i < gx; i++) {
-//            result += columnWidths[i] + gridGap;
-//        }
-//        return result;
-//    }
-//
-//    private int getPyAt(int gy) {
-//        int result = 0;
-//        for (int i = 0; i < gy; i++) {
-//            result += rowHeights[i] + gridGap;
-//        }
-//        return result;
-//    }
-//
-//    private int getPx2At(int gx) {
-//        return getPxAt(gx) + columnWidths[gx];
-//    }
-//
-//    private int getPy2At(int gy) {
-//        return getPyAt(gy) + rowHeights[gy];
-//    }
-//
-//    public IContainer<?> getBondWidget() {
-//        return bondWidget;
-//    }
-//
-//    public Dimension getDimensions() {
-//        return bondWidget.getDimensions();
-//    }
-//
-//    public int getGridGap() {
-//        return gridGap.getInt();
-//    }
-//
-//    private int getHorizontalSumGaps() {
-//        return (columnWidths.length - 1) * gridGap.getInt();
-//    }
-//
-//    private int getVerticalSumGaps() {
-//        return (rowHeights.length - 1) * gridGap.getInt();
-//    }
-//
-//    public void setGridGap(Length<?> gridGap) {
-//        Preconditions.checkArgument(gridGap.getInt() >= 0);
-//        this.gridGap = gridGap;
-//    }
-//
-//    public void setRows(Length<Resolver>... rows) {
-//        this.rowHeights = rows;
-//    }
-//
-//    public void setColumns(Length<Resolver>... columns) {
-//        this.columnWidths = columns;
-//    }
-//
-//    public void setAreas(int[] areas) {
-//        Preconditions.checkArgument(areas.length == rows * columns);
-//        this.areas = new int[rows][columns];
-//        for (int y = 0; y < rows; y++) {
-//            System.arraycopy(areas, y * columns, this.areas[y], 0, rows);
-//        }
-//    }
+    private static class Resolver implements IFractionalLengthHandler {
+
+        private int length;
+        private int denominator;
+
+        @Override
+        public int getDenominator() {
+            return denominator;
+        }
+
+        @Override
+        public int getTotalLength() {
+            return length;
+        }
+    }
+
+    private Resolver widthResolver = new Resolver();
+    private Resolver heightResolver = new Resolver();
+    private Length<?> gridGap;
+    private Length<Resolver>[] columns;
+    private Length<Resolver>[] rows;
+
+    private int[] xPx;
+    private int[] yPx;
+
+    /**
+     * A map of where the child widgets should occupy. See CSS Grid's {@code grid-template-areas}. Each element is the ID (index) of the
+     * child widget. Note that this array should be setup in [y][x], not [x][y].
+     */
+    private String[][] areas;
+
+    @SuppressWarnings("UnusedReturnValue")
+    public GridLayout gridGap(Length<?> gridGap) {
+        setGridGap(gridGap);
+        return this;
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("UnusedReturnValue")
+    public final GridLayout rows(Length<Resolver>... rows) {
+        setRows(rows);
+        return this;
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("UnusedReturnValue")
+    public final GridLayout columns(Length<Resolver>... columns) {
+        setColumns(columns);
+        return this;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public GridLayout areas(String... areas) {
+        this.setAreas(areas);
+        return this;
+    }
+
+    /**
+     * CSS-style template areas, where each line is a single string.
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public GridLayout templateAreas(String... areas) {
+        Preconditions.checkState(areas.length == rows.length);
+        this.areas = new String[areas.length][];
+        for (int i = 0; i < areas.length; i++) {
+            this.areas[i] = StringUtils.split(areas[i], ' ');
+        }
+        return this;
+    }
+
+    // px/py stands for "Pixel-position x/y"
+    // gx/gy stands for "Grid x/y"
+    public <T extends IWidget & ResizableWidgetMixin> void reflow(IWidget parent, Map<String, T> widgets) {
+        Set<T> initializationStats = new HashSet<>();
+        reresolveLengths(parent);
+        for (int gy = 0; gy < areas.length; gy++) {
+            for (int gx = 0; gx < areas[gy].length; gx++) {
+                String cell = areas[gy][gx];
+                T widget = widgets.get(cell);
+                // This handles null check
+                if (!BoxSizing.shouldIncludeWidget(widget)) {
+                    continue;
+                }
+                if (!initializationStats.contains(widget)) {
+                    widget.setLocation(getPxAt(gx), getPyAt(gy));
+                    widget.setDimensions(getWidth(gx), getHeight(gy));
+                    initializationStats.add(widget);
+                    continue;
+                }
+
+                int px = getPxAt(gx);
+                int py = getPyAt(gy);
+                // Expand the first vertex towards top left
+                if (!widget.isInside(px, py)) {
+                    widget.setLocation(Math.min(widget.getX(), px), Math.min(widget.getY(), py));
+                }
+
+                int px2 = getPx2At(gx);
+                int py2 = getPy2At(gy);
+                // Expand the second vertex towards bottom right
+                if (!widget.isInside(px2, py2)) {
+                    widget.setDimensions(
+                            Math.max(widget.getFullWidth(), px2 - widget.getX()),
+                            Math.max(widget.getFullHeight(), py2 - widget.getY()));
+                }
+            }
+        }
+    }
+
+    private int getPxAt(int gx) {
+        return xPx[gx];
+    }
+
+    private int getPyAt(int gy) {
+        return yPx[gy];
+    }
+
+    private int getWidth(int gx) {
+        return columns[gx].getInt();
+    }
+
+    private int getHeight(int gy) {
+        return rows[gy].getInt();
+    }
+
+    private int getPx2At(int gx) {
+        return xPx[gx] + columns[gx].getInt();
+    }
+
+    private int getPy2At(int gy) {
+        return yPx[gy] + columns[gy].getInt();
+    }
+
+    public int getGridGap() {
+        return gridGap.getInt();
+    }
+
+    private int getHorizontalSumGaps() {
+        return (columns.length - 1) * gridGap.getInt();
+    }
+
+    private int getVerticalSumGaps() {
+        return (rows.length - 1) * gridGap.getInt();
+    }
+
+    public final void setGridGap(Length<?> gridGap) {
+        Preconditions.checkArgument(gridGap.getInt() >= 0);
+        this.gridGap = gridGap;
+    }
+
+    @SafeVarargs
+    public final void setColumns(Length<Resolver>... columns) {
+        this.columns = columns;
+        updateDenominator(widthResolver, columns);
+        xPx = new int[columns.length];
+    }
+
+    @SafeVarargs
+    public final void setRows(Length<Resolver>... rows) {
+        this.rows = rows;
+        updateDenominator(heightResolver, rows);
+        yPx = new int[rows.length];
+    }
+
+    @SafeVarargs
+    private final void updateDenominator(Resolver resolver, Length<Resolver>... lengths) {
+        for (Length<Resolver> length : lengths) {
+            if (length instanceof Length.Fr) {
+                resolver.denominator += ((Length.Fr<Resolver>) length).getNumerator();
+            }
+        }
+    }
+
+    private void reresolveLengths(IWidget widget) {
+        widthResolver.length = widget.getWidth();
+        heightResolver.length = widget.getHeight();
+        buildPrefixSum(xPx, widthResolver, rows);
+        buildPrefixSum(yPx, heightResolver, columns);
+    }
+
+    @SafeVarargs
+    private final void buildPrefixSum(int[] px, Resolver resolver, Length<Resolver>... lengths) {
+        int len = 0;
+        for (int i = 0; i < lengths.length; i++) {
+            Length<Resolver> length = lengths[i];
+            length.resolve(resolver);
+            px[i] = len;
+            len += length.getInt() + gridGap.getInt();
+        }
+    }
+
+    public void setAreas(String[] areas) {
+        Preconditions.checkArgument(areas.length == rows.length * columns.length);
+        this.areas = new String[rows.length][columns.length];
+        for (int y = 0; y < rows.length; y++) {
+            System.arraycopy(areas, y * columns.length, this.areas[y], 0, rows.length);
+        }
+    }
 }

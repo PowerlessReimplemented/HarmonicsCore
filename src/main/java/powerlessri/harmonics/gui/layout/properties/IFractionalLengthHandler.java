@@ -2,14 +2,9 @@ package powerlessri.harmonics.gui.layout.properties;
 
 import java.util.function.IntSupplier;
 
-@FunctionalInterface
-public interface IFractionalLengthHandler extends IntSupplier {
+public interface IFractionalLengthHandler {
 
     int getDenominator();
 
-    @Deprecated
-    @Override
-    default int getAsInt() {
-        return getDenominator();
-    }
+    int getTotalLength();
 }
