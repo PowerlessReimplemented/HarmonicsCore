@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.client.config.GuiUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.collections.CompositeUnmodifiableList;
@@ -17,6 +19,8 @@ import powerlessri.harmonics.gui.window.IWindow;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
@@ -48,6 +52,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     private Collection<IWindow> windows;
 
     private final WidgetTreeInspections inspectionHandler = new WidgetTreeInspections();
+    private final Queue<Triple<List<String>, Integer, Integer>> tooltipRenderQueue = new ArrayDeque<>();
 
     protected WidgetScreen(ITextComponent title) {
         super(title);
@@ -108,6 +113,11 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
         // This should do nothing because we are not adding vanilla buttons
         super.render(mouseX, mouseY, particleTicks);
+
+        while (!tooltipRenderQueue.isEmpty()) {
+            Triple<List<String>, Integer, Integer> entry = tooltipRenderQueue.remove();
+            GuiUtils.drawHoveringText(entry.getLeft(), entry.getMiddle(), entry.getRight(), scaledWidth(), scaledHeight(), Integer.MAX_VALUE, fontRenderer());
+        }
     }
 
     public void addWindow(IWindow window) {
@@ -220,5 +230,10 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     public void removePopupWindow(IPopupWindow popup) {
         popupWindows.remove(popup);
         popup.onRemoved();
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
+    public void scheduleTooltip(List<String> lines, int x, int y) {
+        tooltipRenderQueue.add(Triple.of(lines, x, y));
     }
 }

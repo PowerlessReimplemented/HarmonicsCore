@@ -1,6 +1,8 @@
 package powerlessri.harmonics.gui.widget.button;
 
+import powerlessri.harmonics.gui.ITextRenderer;
 import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.TextRenderer;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
@@ -42,6 +44,8 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
     private boolean hovered;
     private boolean clicked;
 
+    private ITextRenderer textRenderer = TextRenderer.newVanilla();
+
     public GradientTextButton(String text) {
         this(0, 0, 0, 14, text);
         fitTextWidth();
@@ -69,7 +73,7 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
 
     @SuppressWarnings("UnusedReturnValue")
     public GradientTextButton fitTextWidth(int sideMargin) {
-        int textWidth = fontRenderer().getStringWidth(text);
+        int textWidth = textRenderer.calculateWidth(text);
         setWidth(textWidth + sideMargin * 2);
         return this;
     }
@@ -118,7 +122,8 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
         draw();
         useTextureGLStates();
 
-        Render2D.renderCenteredText(text, y, y2, x, x2, getZLevel(), getTextColor());
+        textRenderer.setTextColor(getTextColor());
+        Render2D.renderCenteredText(textRenderer, text, y, y2, x, x2, getZLevel());
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
@@ -182,5 +187,9 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
 
     public int getTextColor() {
         return isEnabled() ? TEXT_COLOR : DISABLED_TEXT_COLOR;
+    }
+
+    public ITextRenderer getTextRenderer() {
+        return textRenderer;
     }
 }

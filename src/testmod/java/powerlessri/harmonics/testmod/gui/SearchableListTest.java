@@ -105,9 +105,7 @@ public class SearchableListTest extends WidgetScreen {
         public void render(int mouseX, int mouseY, float particleTicks) {
             super.render(mouseX, mouseY, particleTicks);
             if (isInside(mouseX, mouseY)) {
-                glDisable(GL_SCISSOR_TEST);
                 Render2D.drawHoveringText(ImmutableList.of(name), mouseX, mouseY);
-                glEnable(GL_SCISSOR_TEST);
             }
         }
 

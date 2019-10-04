@@ -67,7 +67,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     private IBackgroundRenderer backgroundStyle = BackgroundStyle.THICK_BEVELED;
-    private ITextRenderer textRenderer = TextRenderer.vanilla();
+    private ITextRenderer textRenderer = TextRenderer.newVanilla();
 
     private String text = "";
     private int cursor = 0;

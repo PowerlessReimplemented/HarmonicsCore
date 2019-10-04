@@ -9,14 +9,13 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import powerlessri.harmonics.HarmonicsCore;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
 
 import java.awt.*;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_SMOOTH;
+import static org.lwjgl.opengl.GL11.*;
 
 public final class Render2D {
 
@@ -198,12 +197,20 @@ public final class Render2D {
     }
 
     public static int getXForHorizontallyCenteredText(String text, int left, int right) {
-        int textWidth = fontRenderer().getStringWidth(text);
+        return getXForHorizontallyCenteredText(TextRenderer.vanilla(), text, left, right);
+    }
+
+    public static int getXForHorizontallyCenteredText(ITextRenderer textRenderer, String text, int left, int right) {
+        int textWidth = textRenderer.calculateWidth(text);
         return computeCenterX(left, right, textWidth);
     }
 
     public static int getYForVerticallyCenteredText(int top, int bottom) {
-        return computeCenterY(top, bottom, fontHeight());
+        return getYForVerticallyCenteredText(TextRenderer.vanilla(), top, bottom);
+    }
+
+    public static int getYForVerticallyCenteredText(ITextRenderer textRenderer, int top, int bottom) {
+        return computeCenterY(top, bottom, (int) textRenderer.getFontHeight());
     }
 
     public static void renderVerticallyCenteredText(String text, int leftX, int top, int bottom, float z, int color) {
@@ -214,12 +221,22 @@ public final class Render2D {
         GlStateManager.popMatrix();
     }
 
+    public static void renderVerticallyCenteredText(ITextRenderer textRenderer, String text, int leftX, int top, int bottom, float z) {
+        int y = getYForVerticallyCenteredText(textRenderer, top, bottom);
+        textRenderer.renderText(text, leftX, y, z);
+    }
+
     public static void renderHorizontallyCenteredText(String text, int left, int right, int topY, float z, int color) {
         int x = getXForHorizontallyCenteredText(text, left, right);
         GlStateManager.pushMatrix();
         GlStateManager.translatef(0F, 0F, z + 0.1F);
         fontRenderer().drawString(text, x, topY, color);
         GlStateManager.popMatrix();
+    }
+
+    public static void renderHorizontallyCenteredText(ITextRenderer textRenderer, String text, int left, int right, int topY, float z) {
+        int x = getXForHorizontallyCenteredText(textRenderer, text, left, right);
+        textRenderer.renderText(text, x, topY, z);
     }
 
     public static void renderCenteredText(String text, int top, int bottom, int left, int right, float z, int color) {
@@ -229,6 +246,12 @@ public final class Render2D {
         GlStateManager.translatef(0F, 0F, z + 0.1F);
         fontRenderer().drawString(text, x, y, color);
         GlStateManager.popMatrix();
+    }
+
+    public static void renderCenteredText(ITextRenderer textRenderer, String text, int top, int bottom, int left, int right, float z) {
+        int x = getXForHorizontallyCenteredText(textRenderer, text, left, right);
+        int y = getYForVerticallyCenteredText(textRenderer, top, bottom);
+        textRenderer.renderText(text, x, y, z);
     }
 
     public static void useGradientGLStates() {
@@ -258,14 +281,6 @@ public final class Render2D {
     }
 
     public static void drawHoveringText(List<String> textLines, int mouseX, int mouseY) {
-        drawHoveringText(textLines, mouseX, mouseY, Integer.MAX_VALUE);
-    }
-
-    // TODO fix hovering text not using depth test
-    public static void drawHoveringText(List<String> textLines, int mouseX, int mouseY, int maxTextWidth) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translatef(0F, 0F, HOVERING_TEXT_Z);
-        GuiUtils.drawHoveringText(textLines, mouseX, mouseY, scaledWidth(), scaledHeight(), maxTextWidth, fontRenderer());
-        GlStateManager.popMatrix();
+        WidgetScreen.assertActive().scheduleTooltip(textLines, mouseX, mouseY);
     }
 }

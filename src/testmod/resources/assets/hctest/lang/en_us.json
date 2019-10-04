@@ -1,3 +1,5 @@
 {
+  "item.hctest.test_item": "Test Item",
+  "block.hctest.test_block": "Test Block",
   "test.hctest": "Test"
 }

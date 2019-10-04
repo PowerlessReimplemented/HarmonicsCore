@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "up": "block/stone",
+    "down": "block/cobblestone",
+    "north": "block/oak_log",
+    "south": "block/birch_log",
+    "east": "block/spruce_log",
+    "west": "block/jungle_log"
+  }
+}

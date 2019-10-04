@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer1": "item/bowl",
+    "layer0": "item/stick"
+  }
+}

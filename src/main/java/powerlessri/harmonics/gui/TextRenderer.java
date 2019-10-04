@@ -10,4 +10,8 @@ public abstract class TextRenderer {
     public static VanillaTextRenderer vanilla() {
         return VANILLA_TEXT_RENDERER;
     }
+
+    public static VanillaTextRenderer newVanilla() {
+        return new VanillaTextRenderer();
+    }
 }
