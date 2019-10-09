@@ -18,7 +18,6 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     private int color;
 
     public Label(IWidget target) {
-        super(0, 0);
         this.target = target;
         IWidget parent = target.getParent();
         if (parent != null) {

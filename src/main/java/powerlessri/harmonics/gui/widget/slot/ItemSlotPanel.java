@@ -3,7 +3,6 @@ package powerlessri.harmonics.gui.widget.slot;
 import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
-import powerlessri.harmonics.gui.widget.IWidget;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -22,7 +21,6 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
     }
 
     public ItemSlotPanel(int width, int height, Supplier<AbstractItemSlot> factory) {
-        super(0, 0);
         this.width = width;
         this.height = height;
 
@@ -31,7 +29,7 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
         for (int i = 0; i < size; i++) {
             addChildren(factory.get());
         }
-        updateDimensions();
+        adjustMinContent();
         reflow();
     }
 
@@ -40,7 +38,6 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
     }
 
     public ItemSlotPanel(int width, int height, List<ItemStack> stacks, Function<ItemStack, AbstractItemSlot> factory) {
-        super(0, 0);
         int size = width * height;
         Preconditions.checkArgument(size == stacks.size());
 
@@ -51,18 +48,8 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
         for (int i = 0; i < size; i++) {
             addChildren(factory.apply(stacks.get(i)));
         }
-        updateDimensions();
+        adjustMinContent();
         reflow();
-    }
-
-    private void updateDimensions() {
-        int pw = children.stream()
-                .mapToInt(IWidget::getWidth)
-                .sum();
-        int ph = children.stream()
-                .mapToInt(IWidget::getWidth)
-                .sum();
-        setDimensions(pw, ph);
     }
 
     @Override
@@ -72,6 +59,7 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
 
     @Override
     public ItemSlotPanel addChildren(AbstractItemSlot widget) {
+        Preconditions.checkState(isValid());
         children.add(widget);
         widget.attach(this);
         return this;
@@ -79,6 +67,7 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
 
     @Override
     public ItemSlotPanel addChildren(Collection<AbstractItemSlot> widgets) {
+        Preconditions.checkState(isValid());
         children.addAll(widgets);
         for (AbstractItemSlot widget : widgets) {
             widget.attach(this);

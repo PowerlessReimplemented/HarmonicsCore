@@ -103,7 +103,7 @@ public abstract class ValueField<V> extends TextField {
     protected V number;
 
     protected ValueField(int x, int y, int width, int height) {
-        super(x, y, width, height);
+        super(width, height);
     }
 
     @SuppressWarnings("UnusedReturnValue")

@@ -25,7 +25,7 @@ public class RadioButton extends AbstractWidget implements IButton, IRadioButton
     private boolean checked;
 
     public RadioButton(RadioController controller) {
-        super(8, 8);
+        this.setDimensions(8, 8);
         this.controller = controller;
         this.index = controller.add(this);
     }

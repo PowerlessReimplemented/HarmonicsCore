@@ -16,7 +16,7 @@ public abstract class AbstractItemSlot extends AbstractWidget implements LeafWid
     public static final ITexture BASE = Texture.complete(Render2D.ITEM_SLOT, 18, 18);
 
     public AbstractItemSlot() {
-        super(0, 0, 18, 18);
+        this.setDimensions(18, 18);
     }
 
     @Override

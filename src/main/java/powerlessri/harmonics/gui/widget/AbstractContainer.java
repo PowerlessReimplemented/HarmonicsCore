@@ -2,26 +2,12 @@ package powerlessri.harmonics.gui.widget;
 
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
-import powerlessri.harmonics.gui.widget.mixin.RelocatableContainerMixin;
 import powerlessri.harmonics.gui.window.IWindow;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
-public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T>, RelocatableContainerMixin<T> {
-
-    public AbstractContainer(int width, int height) {
-        this(0, 0, width, height);
-    }
-
-    public AbstractContainer(int x, int y, int width, int height) {
-        super(x, y, width, height);
-    }
-
-    @Override
-    public void attach(IWidget newParent) {
-        super.attach(newParent);
-        ContainerWidgetMixin.super.attach(newParent);
-    }
+public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T> {
 
     @Override
     public IContainer<T> addChildren(T widget) {
@@ -34,11 +20,13 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     @Override
-    public void attachWindow(IWindow window) {
-        super.attachWindow(window);
-        for (T child : getChildren()) {
-            // This will also inherit window reference from this widget
-            child.attach(this);
+    public void onAttach(@Nullable IWidget oldParent, IWidget newParent) {
+        // Reattaching
+        if (oldParent != null) {
+            // Inherit the (possible) new window reference
+            for (T child : getChildren()) {
+                child.attach(this);
+            }
         }
     }
 
@@ -51,6 +39,33 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     @Override
     public void onRelativePositionChanged() {
         super.onRelativePositionChanged();
+        notifyChildrenForPositionChange();
+    }
+
+    public void notifyChildrenForPositionChange() {
+        // Prevent NPE when containers setting coordinates before child widgets get initialized
+        if (getChildren() != null) {
+            for (T child : getChildren()) {
+                child.onParentPositionChanged();
+            }
+        }
+    }
+
+    @Override
+    public void setLocation(int x, int y) {
+        ContainerWidgetMixin.super.setLocation(x, y);
+        notifyChildrenForPositionChange();
+    }
+
+    @Override
+    public void setX(int x) {
+        ContainerWidgetMixin.super.setX(x);
+        notifyChildrenForPositionChange();
+    }
+
+    @Override
+    public void setY(int y) {
+        ContainerWidgetMixin.super.setY(y);
         notifyChildrenForPositionChange();
     }
 

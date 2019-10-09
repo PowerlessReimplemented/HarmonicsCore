@@ -66,7 +66,7 @@ public class ContextMenuTest extends WidgetScreen {
         @Override
         public void render(int mouseX, int mouseY, float particleTicks) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-            drawVanillaStyleBackground();
+            renderVanillaStyleBackground();
             renderChildren(mouseX, mouseY, particleTicks);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }

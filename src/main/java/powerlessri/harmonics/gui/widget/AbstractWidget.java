@@ -1,5 +1,6 @@
 package powerlessri.harmonics.gui.widget;
 
+import com.google.common.base.Preconditions;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
@@ -26,13 +27,9 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     private int absX;
     private int absY;
 
-    public AbstractWidget(int width, int height) {
-        this(0, 0, width, height);
-    }
-
-    public AbstractWidget(int x, int y, int width, int height) {
-        this.location = new Point(x, y);
-        this.dimensions = new Dimension(width, height);
+    public AbstractWidget() {
+        this.location = new Point();
+        this.dimensions = new Dimension();
     }
 
     @Override
@@ -56,29 +53,30 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     @Override
     public boolean isValid() {
-        return parent != null;
-    }
-
-    public void setFocused(boolean focused) {
-        if (getWindow() != null) {
-            getWindow().setFocusedWidget(focused ? this : null);
-        }
+        return parent != null || window != null;
     }
 
     public void attachWindow(IWindow window) {
+        IWindow oldWindow = this.window;
         this.window = window;
         this.z = window.getZLevel() + 1F;
+        if (oldWindow == null) {
+            onInitialAttach();
+        }
         onParentPositionChanged();
     }
 
     @Override
     public void onParentPositionChanged() {
+        Preconditions.checkState(isValid());
         updateAbsolutePosition();
     }
 
     @Override
     public void onRelativePositionChanged() {
-        updateAbsolutePosition();
+        if (isValid()) {
+            updateAbsolutePosition();
+        }
     }
 
     private void updateAbsolutePosition() {
@@ -90,46 +88,37 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         if (parent != null) {
             return parent.getAbsoluteX();
         }
-        if (window != null) {
-            return window.getContentX();
-        }
-        return 0;
+        return window.getContentX();
     }
 
     private int getParentAbsYSafe() {
         if (parent != null) {
             return parent.getAbsoluteY();
         }
-        if (window != null) {
-            return window.getContentY();
-        }
-        return 0;
+        return window.getContentY();
     }
 
-    /**
-     * A safe version of {@code getParentWidget().getHeight()} that prevents NPE.
-     */
     public int getParentHeight() {
         if (parent != null) {
             return parent.getFullHeight();
         }
-        if (window != null) {
-            return window.getContentHeight();
-        }
-        return 0;
+        return window.getContentHeight();
     }
 
-    /**
-     * A safe version of {@code getParentWidget().getWidth()} that prevents NPE.
-     */
     public int getParentWidth() {
         if (parent != null) {
             return parent.getFullWidth();
         }
-        if (window != null) {
-            return window.getContentWidth();
+        return window.getContentWidth();
+    }
+
+    /**
+     * Helper method to set focus of a specific element. Notice this would cancel the originally focus element.
+     */
+    public void setFocused(boolean focused) {
+        if (isValid()) {
+            getWindow().setFocusedWidget(focused ? this : null);
         }
-        return 0;
     }
 
     public void fillParentContainer() {
@@ -147,7 +136,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     @Override
     public boolean isFocused() {
-        return getWindow().getFocusedWidget() == this;
+        return isValid() && getWindow().getFocusedWidget() == this;
     }
 
     public void alignTo(IWidget other, Side side, HorizontalAlignment alignment) {
@@ -442,39 +431,41 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
 
     @Override
     public void setBorderTop(int top) {
-        getBorders().top = top;
+        border.top = top;
         onBorderChanged();
     }
 
     @Override
     public void setBorderRight(int right) {
-        getBorders().right = right;
+        border.right = right;
         onBorderChanged();
     }
 
     @Override
     public void setBorderBottom(int bottom) {
-        getBorders().bottom = bottom;
+        border.bottom = bottom;
         onBorderChanged();
     }
 
     @Override
     public void setBorderLeft(int left) {
-        getBorders().left = left;
+        border.left = left;
         onBorderChanged();
     }
 
     @Override
     public void setBorders(int top, int right, int bottom, int left) {
-        getBorders().top = top;
-        getBorders().right = right;
-        getBorders().bottom = bottom;
-        getBorders().left = left;
+        border.top = top;
+        border.right = right;
+        border.bottom = bottom;
+        border.left = left;
         onBorderChanged();
     }
 
     protected void onBorderChanged() {
-        updateAbsolutePosition();
+        if (isValid()) {
+            updateAbsolutePosition();
+        }
     }
 
     public final void createContextMenu(double x, double y) {

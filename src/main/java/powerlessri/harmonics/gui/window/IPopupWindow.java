@@ -1,10 +1,12 @@
 package powerlessri.harmonics.gui.window;
 
-public interface IPopupWindow extends IWindow {
+import powerlessri.harmonics.gui.IOrdered;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
+
+public interface IPopupWindow extends IWindow, IOrdered {
 
     boolean shouldDiscard();
 
-    default void move(int xOffset, int yOffset) {
-        setPosition(getX() + xOffset, getY() + yOffset);
+    default void onAdded(WidgetScreen screen) {
     }
 }

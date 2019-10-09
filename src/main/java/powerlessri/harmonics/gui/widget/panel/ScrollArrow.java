@@ -1,4 +1,4 @@
-package powerlessri.harmonics.gui.widget.box;
+package powerlessri.harmonics.gui.widget.panel;
 
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.widget.button.AbstractIconButton;
@@ -78,7 +78,8 @@ public abstract class ScrollArrow extends AbstractIconButton implements LeafWidg
     }
 
     public ScrollArrow(int x, int y) {
-        super(x, y, 10, 6);
+        this.setLocation(x, y);
+        this.setDimensions(10, 6);
     }
 
     @Override

@@ -95,14 +95,4 @@ public interface ContainerWidgetMixin<T extends IWidget> extends IContainer<T> {
             child.update(particleTicks);
         }
     }
-
-    @Override
-    default void attach(IWidget newParent) {
-        // Pre-init execution safety
-        if (getChildren() != null) {
-            for (IWidget child : getChildren()) {
-                child.attach(this);
-            }
-        }
-    }
 }

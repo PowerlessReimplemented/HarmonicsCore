@@ -1,8 +1,9 @@
 /* Code adapted from net.minecraftforge.client.gui.ScrollPanel
  */
 
-package powerlessri.harmonics.gui.widget.box;
+package powerlessri.harmonics.gui.widget.panel;
 
+import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -35,9 +36,9 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     private final List<T> elements;
 
     public LinearList(int width, int height) {
-        super(width, height);
-        this.elements = new ArrayList<>();
+        this.setDimensions(width, height);
         this.setBorders(4);
+        this.elements = new ArrayList<>();
     }
 
     @Override
@@ -210,6 +211,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
 
     @Override
     public LinearList<T> addChildren(T widget) {
+        Preconditions.checkState(isValid());
         elements.add(widget);
         widget.attach(this);
         return this;
@@ -217,6 +219,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
 
     @Override
     public LinearList<T> addChildren(Collection<T> widgets) {
+        Preconditions.checkState(isValid());
         elements.addAll(widgets);
         for (T widget : widgets) {
             widget.attach(this);

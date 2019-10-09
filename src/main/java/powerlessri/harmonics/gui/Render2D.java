@@ -22,7 +22,6 @@ public final class Render2D {
     public static final float REGULAR_WINDOW_Z = 0F;
     public static final float POPUP_WINDOW_Z = 128F;
     public static final float CONTEXT_MENU_Z = 200F;
-    public static final float HOVERING_TEXT_Z = 256F;
 
     public static final ResourceLocation INVALID_TEXTURE = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/invalid.png");
     public static final ResourceLocation COMPONENTS = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/default_components.png");

@@ -9,8 +9,8 @@ public class Icon extends AbstractWidget implements INamedElement, LeafWidgetMix
 
     private ITexture texture;
 
-    public Icon(int x, int y, ITexture texture) {
-        super(x, y, texture.getPortionWidth(), texture.getPortionHeight());
+    public Icon(ITexture texture) {
+        this.setDimensions(texture.getPortionWidth(), texture.getPortionHeight());
         this.texture = texture;
     }
 

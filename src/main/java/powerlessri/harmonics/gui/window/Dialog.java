@@ -8,10 +8,9 @@ import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.*;
-import powerlessri.harmonics.gui.widget.box.Panel;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.widget.button.IButton;
-import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
+import powerlessri.harmonics.gui.widget.panel.Panel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class Dialog extends AbstractPopupWindow {
     public static Dialog createPrompt(String message, String defaultText, String confirm, String cancel, BiConsumer<Integer, String> onConfirm, BiConsumer<Integer, String> onCancel) {
         Dialog dialog = dialog(message);
 
-        TextField inputBox = new TextField(0, 0, 0, 16).setText(defaultText);
+        TextField inputBox = new TextField(0, 16).setText(defaultText);
         inputBox.setBorderBottom(4);
         dialog.insertBeforeButtons(inputBox);
         dialog.onPostReflow = inputBox::expandHorizontally;
@@ -127,7 +126,7 @@ public class Dialog extends AbstractPopupWindow {
     public Dialog() {
         this.messageBox = new Paragraph(10, 10, new ArrayList<>());
         this.messageBox.setFitContents(true);
-        this.buttons = new Panel<IButton>(0, 0, 10, 10)
+        this.buttons = new Panel<IButton>()
                 .setLayout(b -> {
                     int x = 0;
                     for (IButton button : b) {
@@ -135,14 +134,15 @@ public class Dialog extends AbstractPopupWindow {
                         x += button.getWidth() + 2;
                     }
                 });
+        this.buttons.setDimensions(10, 10);
         this.children = new ArrayList<>();
         children.add(messageBox);
         children.add(buttons);
-        this.useVanillaBorders();
-
         for (AbstractWidget child : children) {
             child.attachWindow(this);
         }
+
+        this.useVanillaBorders();
     }
 
     @Override
@@ -159,7 +159,7 @@ public class Dialog extends AbstractPopupWindow {
         buttons.reflow();
         buttons.adjustMinContent();
 
-        FlowLayout.vertical(children);
+        FlowLayout.vertical(children, 0, 0, 0);
 
         updateDimensions();
         updatePosition();
@@ -234,11 +234,11 @@ public class Dialog extends AbstractPopupWindow {
         if (button.hasClickAction()) {
             IntConsumer oldAction = button.getClickAction();
             button.setClickAction(b -> {
-                alive = false;
+                discard();
                 oldAction.accept(b);
             });
         } else {
-            button.setClickAction(b -> alive = false);
+            button.setClickAction(b -> discard());
         }
     }
 

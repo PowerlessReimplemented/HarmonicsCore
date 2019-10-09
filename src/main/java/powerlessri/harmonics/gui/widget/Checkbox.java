@@ -22,11 +22,7 @@ public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
     public BooleanConsumer onStateChange = b -> {};
 
     public Checkbox() {
-        this(0, 0, 9, 9);
-    }
-
-    public Checkbox(int x, int y, int width, int height) {
-        super(x, y, width, height);
+        this.setDimensions(9,9);
     }
 
     @Override

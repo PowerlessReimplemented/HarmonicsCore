@@ -23,9 +23,9 @@ public final class BackgroundRenderers {
     // Flat style
     ///////////////////////////////////////////////////////////////////////////
 
-    public static final int LIGHT_BORDER_COLOR = 0xffffff;
-    public static final int DARK_BORDER_COLOR = 0x606060;
-    public static final int BACKGROUND_COLOR = 0xc6c6c6;
+    public static final int LIGHT_BORDER_COLOR = 0xffffffff;
+    public static final int DARK_BORDER_COLOR = 0xff606060;
+    public static final int BACKGROUND_COLOR = 0xffc6c6c6;
 
     /**
      * Draw a flat style GUI background on the given position with the given width and height.

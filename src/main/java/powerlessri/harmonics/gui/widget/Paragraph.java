@@ -18,7 +18,7 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     private ITextRenderer textRenderer = TextRenderer.newVanilla();
 
     public Paragraph(int width, int height, List<String> texts) {
-        super(0, 0, width, height);
+        this.setDimensions(width, height);
         this.texts = texts;
         this.textView = Collections.unmodifiableList(texts);
     }

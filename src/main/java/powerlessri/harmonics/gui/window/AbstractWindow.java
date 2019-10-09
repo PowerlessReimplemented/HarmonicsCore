@@ -20,7 +20,6 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
     private final Point position;
     private final Dimension contents;
     private final Dimension border;
-    private final float z = Render2D.REGULAR_WINDOW_Z;
 
     private IWidget focusedWidget;
 
@@ -32,7 +31,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
 
     @Override
     public float getZLevel() {
-        return z;
+        return Render2D.REGULAR_WINDOW_Z;
     }
 
     @Override
@@ -63,6 +62,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         int borderSize = getBorderSize();
         border.width = borderSize + width + borderSize;
         border.height = borderSize + height + borderSize;
+        onResize();
     }
 
     public void setBorder(int width, int height) {
@@ -71,12 +71,16 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         int borderSize = getBorderSize();
         contents.width = width - borderSize * 2;
         contents.height = height - borderSize * 2;
+        onResize();
     }
 
     public void centralize() {
         position.x = scaledWidth() / 2 - getWidth() / 2;
         position.y = scaledHeight() / 2 - getHeight() / 2;
         updatePosition();
+    }
+
+    protected void onResize() {
     }
 
     @Override
@@ -99,7 +103,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         }
     }
 
-    public void drawVanillaStyleBackground() {
+    public void renderVanillaStyleBackground() {
         BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), getZLevel());
     }
 
@@ -107,7 +111,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         return DisplayListCaches.createVanillaStyleBackground(getX(), getY(), getWidth(), getHeight(), getZLevel());
     }
 
-    public void drawFlatStyleBackground() {
+    public void renderFlatStyleBackground() {
         BackgroundRenderers.drawFlatStyle(getX(), getY(), getWidth(), getHeight(), getZLevel());
     }
 
