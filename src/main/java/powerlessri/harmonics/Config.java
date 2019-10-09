@@ -1,6 +1,7 @@
 package powerlessri.harmonics;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.fml.config.ModConfig;
 
 public final class Config {
@@ -12,8 +13,13 @@ public final class Config {
 
     public static final class CommonCategory {
 
+        public final IntValue sessionRefreshInterval;
+
         private CommonCategory(ForgeConfigSpec.Builder builder) {
             builder.comment("General config options").push("common");
+            sessionRefreshInterval = builder
+                    .comment("The interval in which all session handlers are getting rechecked, in ticks")
+                    .defineInRange("sessionRefreshInterval", 160, -1, Integer.MAX_VALUE);
             builder.pop();
         }
     }

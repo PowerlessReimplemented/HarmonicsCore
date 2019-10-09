@@ -22,15 +22,15 @@ public final class ClientConfig {
             inspectionsHighlighting = builder
                     .comment("Enables box highlight when mouse over widgets")
                     .translation("config.harmonics.client.inspectionsHighlighting")
-                    .define("InspectionsHighlighting", false);
+                    .define("inspectionsHighlighting", false);
             scrollSpeed = builder
                     .comment("How long one move wheel movement for scrolling lists")
                     .translation("config.harmonics.client.scrollSpeed")
-                    .defineInRange("ScrollSpeed", 20, 1, 256);
+                    .defineInRange("scrollSpeed", 20, 1, 256);
             dialogMessageMaxWidth = builder
                     .comment("Maximum text width before splitting into a new line for dialog messages")
                     .translation("config.harmonics.client.dialogMsgMaxWidth")
-                    .defineInRange("DialogMessageMaxWidth", 160, 0, Integer.MAX_VALUE);
+                    .defineInRange("dialogMessageMaxWidth", 160, 0, Integer.MAX_VALUE);
 
             builder.pop();
         }

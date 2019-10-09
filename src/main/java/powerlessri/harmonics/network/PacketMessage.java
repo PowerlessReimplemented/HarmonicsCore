@@ -11,30 +11,35 @@ public class PacketMessage {
 
     public static void encode(PacketMessage msg, PacketBuffer buf) {
         buf.writeInt(msg.id);
-        buf.writeInt(msg.bytes.readableBytes());
-        buf.writeBytes(msg.bytes);
+        buf.writeInt(msg.messageType);
+        buf.writeInt(msg.data.readableBytes());
+        buf.writeBytes(msg.data);
     }
 
     public static PacketMessage decode(PacketBuffer buf) {
         int id = buf.readInt();
+        int messageType = buf.readInt();
         int size = buf.readInt();
         PacketBuffer bytes = new PacketBuffer(buf.readBytes(size));
-        return new PacketMessage(id, bytes);
+        return new PacketMessage(id, messageType, bytes);
     }
 
     public static void handle(PacketMessage msg, Supplier<NetworkEvent.Context> ctxSupplier) {
         NetworkEvent.Context ctx = ctxSupplier.get();
         ctx.enqueueWork(() -> {
-            ISessionHandler sessionHandler = SessionManager.INSTANCE.getSession(msg.id);
+            ISessionHandler handler = SessionManager.INSTANCE.getSession(msg.id);
+            handler.getConnectionHandler().receiveData(msg.messageType, msg.data);
             ctx.setPacketHandled(true);
         });
     }
 
     private int id;
-    private PacketBuffer bytes;
+    private int messageType;
+    private PacketBuffer data;
 
-    public PacketMessage(int id, PacketBuffer bytes) {
+    public PacketMessage(int id, int messageType, PacketBuffer data) {
         this.id = id;
-        this.bytes = bytes;
+        this.messageType = messageType;
+        this.data = data;
     }
 }
