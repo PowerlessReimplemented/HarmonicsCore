@@ -38,7 +38,6 @@ public class BackgroundTest extends WidgetScreen {
                 int next = style + 1;
                 style = next > STYLE_MAX ? 0 : next;
                 centralize();
-                updatePosition();
             });
             switchBkg.attachWindow(this);
             this.children = ImmutableList.of(switchBkg);

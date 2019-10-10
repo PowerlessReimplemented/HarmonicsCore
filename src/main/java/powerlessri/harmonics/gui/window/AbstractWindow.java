@@ -5,8 +5,7 @@ import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.DisplayListCaches;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
-import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
+import powerlessri.harmonics.gui.window.mixin.*;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -15,24 +14,21 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 import static powerlessri.harmonics.gui.Render2D.scaledHeight;
 import static powerlessri.harmonics.gui.Render2D.scaledWidth;
 
-public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
+public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin, WindowOverlayInfoMixin, WindowPropertiesMixin {
 
     private final Point position;
-    private final Dimension contents;
     private final Dimension border;
-    private final float z = Render2D.REGULAR_WINDOW_Z;
 
     private IWidget focusedWidget;
 
     public AbstractWindow() {
         this.position = new Point();
-        this.contents = new Dimension();
         this.border = new Dimension();
     }
 
     @Override
     public float getZLevel() {
-        return z;
+        return Render2D.REGULAR_WINDOW_Z;
     }
 
     @Override
@@ -41,8 +37,9 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
     }
 
     @Override
-    public Dimension getContents() {
-        return contents;
+    public void setPosition(int x, int y) {
+        WindowPropertiesMixin.super.setPosition(x, y);
+        updatePosition();
     }
 
     @Override
@@ -54,12 +51,10 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
                 }
             }
         }
-        return NestedEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
+        return WindowEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
     }
 
     public void setContents(int width, int height) {
-        contents.width = width;
-        contents.height = height;
         int borderSize = getBorderSize();
         border.width = borderSize + width + borderSize;
         border.height = borderSize + height + borderSize;
@@ -68,9 +63,6 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
     public void setBorder(int width, int height) {
         border.width = width;
         border.height = height;
-        int borderSize = getBorderSize();
-        contents.width = width - borderSize * 2;
-        contents.height = height - borderSize * 2;
     }
 
     public void centralize() {
@@ -79,13 +71,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         updatePosition();
     }
 
-    @Override
-    public void setPosition(int x, int y) {
-        NestedEventHandlerMixin.super.setPosition(x, y);
-        updatePosition();
-    }
-
-    protected final void updatePosition() {
+    protected void updatePosition() {
         if (getChildren() != null) {
             for (IWidget child : getChildren()) {
                 child.onParentPositionChanged();
@@ -93,7 +79,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         }
     }
 
-    protected final void renderChildren(int mouseX, int mouseY, float particleTicks) {
+    protected void renderChildren(int mouseX, int mouseY, float particleTicks) {
         for (IWidget child : getChildren()) {
             child.render(mouseX, mouseY, particleTicks);
         }

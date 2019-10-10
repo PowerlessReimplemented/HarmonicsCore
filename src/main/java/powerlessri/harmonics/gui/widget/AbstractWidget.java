@@ -253,6 +253,30 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     @Override
+    public void setLocation(Point point) {
+        setLocation(point.x, point.y);
+    }
+
+    @Override
+    public void setLocation(int x, int y) {
+        getPosition().x = x;
+        getPosition().y = y;
+        onRelativePositionChanged();
+    }
+
+    @Override
+    public void setX(int x) {
+        getPosition().x = x;
+        onRelativePositionChanged();
+    }
+
+    @Override
+    public void setY(int y) {
+        getPosition().y = y;
+        onRelativePositionChanged();
+    }
+
+    @Override
     public int getX() {
         return location.x;
     }
@@ -471,6 +495,11 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         getBorders().bottom = bottom;
         getBorders().left = left;
         onBorderChanged();
+    }
+
+    @Override
+    public void setBorders(int borders) {
+        setBorders(borders, borders, borders, borders);
     }
 
     protected void onBorderChanged() {

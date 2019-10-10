@@ -31,9 +31,7 @@ public interface IWidget {
 
     void setBorders(int top, int right, int bottom, int left);
 
-    default void setBorders(int borders) {
-        setBorders(borders, borders, borders, borders);
-    }
+    void setBorders(int borders);
 
     int getX();
 
@@ -51,25 +49,13 @@ public interface IWidget {
 
     int getOuterAbsoluteY();
 
-    default void setLocation(Point point) {
-        setLocation(point.x, point.y);
-    }
+    void setLocation(Point point);
 
-    default void setLocation(int x, int y) {
-        getPosition().x = x;
-        getPosition().y = y;
-        onRelativePositionChanged();
-    }
+    void setLocation(int x, int y);
 
-    default void setX(int x) {
-        getPosition().x = x;
-        onRelativePositionChanged();
-    }
+    void setX(int x);
 
-    default void setY(int y) {
-        getPosition().y = y;
-        onRelativePositionChanged();
-    }
+    void setY(int y);
 
     Dimension getDimensions();
 

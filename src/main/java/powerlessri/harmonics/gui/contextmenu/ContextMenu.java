@@ -9,8 +9,7 @@ import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.IPopupWindow;
-import powerlessri.harmonics.gui.window.mixin.NestedEventHandlerMixin;
-import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
+import powerlessri.harmonics.gui.window.mixin.*;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -18,7 +17,7 @@ import java.util.List;
 
 import static powerlessri.harmonics.gui.Render2D.*;
 
-public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, WindowOverlayInfoMixin {
+public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, WindowOverlayInfoMixin, WindowPropertiesMixin {
 
     public static ContextMenu withEntries(List<? extends IEntry> entries) {
         return withSections(toSections(entries));
@@ -49,11 +48,9 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
     }
 
     private final Point position;
+    private final Dimension border;
     private final List<? extends Section> sections;
     private IEntry focusedEntry;
-
-    private final Dimension contents;
-    private final Dimension border;
 
     private boolean alive = true;
 
@@ -64,7 +61,6 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
     public ContextMenu(Point position, List<? extends Section> sections) {
         this.position = position;
         this.sections = sections;
-        this.contents = new Dimension();
         this.border = new Dimension();
         for (Section section : sections) {
             section.attach(this);
@@ -73,23 +69,23 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
     }
 
     public void reflow() {
-        contents.width = 0;
-        contents.height = 0;
+        int width = 0;
+        int height = 0;
         int y = 0;
         for (Section section : sections) {
             section.setLocation(0, y);
             section.reflow();
             y += section.getFullHeight();
 
-            contents.width = Math.max(contents.width, section.getFullWidth());
-            contents.height += section.getFullHeight();
+            width = Math.max(width, section.getFullWidth());
+            height += section.getFullHeight();
         }
         int border = getBorderSize();
-        this.border.width = border + contents.width + border;
-        this.border.height = border + contents.height + border;
+        this.border.width = border + width + border;
+        this.border.height = border + height + border;
 
         for (Section section : sections) {
-            section.setWidth(contents.width);
+            section.setWidth(width);
         }
     }
 
@@ -125,7 +121,7 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
         if (!isInside(mouseX, mouseY)) {
             alive = false;
         }
-        NestedEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
+        WindowEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
         return false;
     }
 
@@ -149,11 +145,6 @@ public class ContextMenu implements IPopupWindow, NestedEventHandlerMixin, Windo
     @Override
     public Dimension getBorder() {
         return border;
-    }
-
-    @Override
-    public Dimension getContents() {
-        return contents;
     }
 
     @Override

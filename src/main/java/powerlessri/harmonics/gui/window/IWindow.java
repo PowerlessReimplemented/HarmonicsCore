@@ -11,25 +11,15 @@ public interface IWindow extends IRenderable {
 
     Dimension getBorder();
 
-    default int getWidth() {
-        return getBorder().width;
-    }
+    int getWidth();
 
-    default int getHeight() {
-        return getBorder().height;
-    }
+    int getHeight();
 
     int getBorderSize();
 
-    Dimension getContents();
+    int getContentWidth();
 
-    default int getContentWidth() {
-        return getContents().width;
-    }
-
-    default int getContentHeight() {
-        return getContents().height;
-    }
+    int getContentHeight();
 
     List<? extends IWidget> getChildren();
 
@@ -37,26 +27,23 @@ public interface IWindow extends IRenderable {
 
     float getZLevel();
 
-    default void setPosition(int x, int y) {
-        getPosition().x = x;
-        getPosition().y = y;
-    }
+    void setPosition(int x, int y);
 
-    default int getX() {
-        return getPosition().x;
-    }
+    int getX();
 
-    default int getY() {
-        return getPosition().y;
-    }
+    int getY();
 
-    default int getContentX() {
-        return getX() + getBorderSize();
-    }
+    int getXRight();
 
-    default int getContentY() {
-        return getY() + getBorderSize();
-    }
+    int getYBottom();
+
+    int getContentX();
+
+    int getContentY();
+
+    int getContentXRight();
+
+    int getContentYBottom();
 
     @Override
     void render(int mouseX, int mouseY, float particleTicks);

@@ -2,12 +2,11 @@ package powerlessri.harmonics.gui.widget;
 
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
-import powerlessri.harmonics.gui.widget.mixin.RelocatableContainerMixin;
 import powerlessri.harmonics.gui.window.IWindow;
 
 import java.util.Collection;
 
-public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T>, RelocatableContainerMixin<T> {
+public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T> {
 
     public AbstractContainer(int width, int height) {
         this(0, 0, width, height);
@@ -42,6 +41,15 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
         }
     }
 
+    public void notifyChildrenForPositionChange() {
+        // Prevent NPE when containers setting coordinates before child widgets get initialized
+        if (getChildren() != null) {
+            for (T child : getChildren()) {
+                child.onParentPositionChanged();
+            }
+        }
+    }
+
     @Override
     public void onParentPositionChanged() {
         super.onParentPositionChanged();
@@ -51,6 +59,24 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     @Override
     public void onRelativePositionChanged() {
         super.onRelativePositionChanged();
+        notifyChildrenForPositionChange();
+    }
+
+    @Override
+    public void setLocation(int x, int y) {
+        super.setLocation(x, y);
+        notifyChildrenForPositionChange();
+    }
+
+    @Override
+    public void setX(int x) {
+        super.setX(x);
+        notifyChildrenForPositionChange();
+    }
+
+    @Override
+    public void setY(int y) {
+        super.setY(y);
         notifyChildrenForPositionChange();
     }
 
@@ -76,7 +102,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
 
     public void fillWindow() {
         setLocation(0, 0);
-        setDimensions(getWindow().getContents());
+        setDimensions(getWindow().getContentWidth(), getWindow().getContentHeight());
     }
 
     @Override
