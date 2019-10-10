@@ -63,10 +63,10 @@ public class BackgroundTest extends WidgetScreen {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             switch (style) {
                 case VANILLA:
-                    drawVanillaStyleBackground();
+                    renderVanillaStyleBackground();
                     break;
                 case FLAT:
-                    drawFlatStyleBackground();
+                    renderFlatStyleBackground();
                     break;
             }
             renderChildren(mouseX, mouseY, particleTicks);

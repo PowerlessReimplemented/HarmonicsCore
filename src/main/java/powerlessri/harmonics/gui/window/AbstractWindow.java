@@ -99,15 +99,15 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         }
     }
 
-    public void drawVanillaStyleBackground() {
-        BackgroundRenderers.drawVanillaStyle(getX(), getY(), getWidth(), getHeight(), getZLevel());
+    public void renderVanillaStyleBackground() {
+        BackgroundRenderers.drawVanillaStyle4x4(getX(), getY(), getWidth(), getHeight(), getZLevel());
     }
 
     public int createVanillaStyleDL() {
         return DisplayListCaches.createVanillaStyleBackground(getX(), getY(), getWidth(), getHeight(), getZLevel());
     }
 
-    public void drawFlatStyleBackground() {
+    public void renderFlatStyleBackground() {
         BackgroundRenderers.drawFlatStyle(getX(), getY(), getWidth(), getHeight(), getZLevel());
     }
 

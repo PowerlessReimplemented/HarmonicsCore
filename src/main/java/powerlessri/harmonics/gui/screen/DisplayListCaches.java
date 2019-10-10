@@ -4,16 +4,14 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 import powerlessri.harmonics.HarmonicsCore;
 
 import java.awt.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-@OnlyIn(Dist.CLIENT)
+import static org.lwjgl.opengl.GL11.GL_COMPILE;
+
 public final class DisplayListCaches {
 
     private DisplayListCaches() {
@@ -37,9 +35,9 @@ public final class DisplayListCaches {
                 HarmonicsCore.logger.info("Created background display list with size {}", rectangle);
 
                 int id = GLAllocation.generateDisplayLists(1);
-                GlStateManager.newList(id, GL11.GL_COMPILE);
+                GlStateManager.newList(id, GL_COMPILE);
                 {
-                    BackgroundRenderers.drawVanillaStyle(rectangle.x, rectangle.y, rectangle.width, rectangle.height, z);
+                    BackgroundRenderers.drawVanillaStyle4x4(rectangle.x, rectangle.y, rectangle.width, rectangle.height, z);
                 }
                 GlStateManager.endList();
                 return id;

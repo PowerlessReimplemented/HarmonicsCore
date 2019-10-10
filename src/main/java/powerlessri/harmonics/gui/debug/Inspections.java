@@ -187,10 +187,10 @@ public abstract class Inspections implements IRenderEventListener {
         // 1------4
         // |      |
         // 2------3
-        quad(buffer, x1, y1, ix1, iy1, ix2, iy1, x2, y1, BORDER); // Top border
-        quad(buffer, ix2, iy1, ix2, iy2, x2, y2, x2, y1, BORDER); // Right border
-        quad(buffer, ix1, iy2, x1, y2, x2, y2, ix2, iy2, BORDER); // Bottom border
-        quad(buffer, x1, y1, x1, y2, ix1, iy2, ix1, iy1, BORDER); // Left border
+        quad(buffer, x1, y1, ix1, iy1, ix2, iy1, x2, y1, 0F, BORDER); // Top border
+        quad(buffer, ix2, iy1, ix2, iy2, x2, y2, x2, y1, 0F, BORDER); // Right border
+        quad(buffer, ix1, iy2, x1, y2, x2, y2, ix2, iy2, 0F, BORDER); // Bottom border
+        quad(buffer, x1, y1, x1, y2, ix1, iy2, ix1, iy1, 0F, BORDER); // Left border
         coloredRect(ix1, iy1, ix2, iy2, CONTENTS);
 
         tessellator.draw();

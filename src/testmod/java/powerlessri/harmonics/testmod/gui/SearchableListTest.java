@@ -16,8 +16,6 @@ import powerlessri.harmonics.testmod.HarmonicsCoreTest;
 
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class SearchableListTest extends WidgetScreen {
 
     public SearchableListTest() {
@@ -73,7 +71,7 @@ public class SearchableListTest extends WidgetScreen {
         @Override
         public void render(int mouseX, int mouseY, float particleTicks) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-            drawVanillaStyleBackground();
+            renderVanillaStyleBackground();
             renderChildren(mouseX, mouseY, particleTicks);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
@@ -105,7 +103,7 @@ public class SearchableListTest extends WidgetScreen {
         public void render(int mouseX, int mouseY, float particleTicks) {
             super.render(mouseX, mouseY, particleTicks);
             if (isInside(mouseX, mouseY)) {
-                Render2D.drawHoveringText(ImmutableList.of(name), mouseX, mouseY);
+                assertActive().scheduleTooltip(ImmutableList.of(name), mouseX, mouseY);
             }
         }
 

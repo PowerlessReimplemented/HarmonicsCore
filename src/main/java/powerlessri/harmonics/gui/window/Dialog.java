@@ -11,7 +11,6 @@ import powerlessri.harmonics.gui.widget.*;
 import powerlessri.harmonics.gui.widget.box.Panel;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.widget.button.IButton;
-import powerlessri.harmonics.gui.window.mixin.WindowOverlayInfoMixin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +102,7 @@ public class Dialog extends AbstractPopupWindow {
 
     public static final Consumer<Dialog> VANILLA_STYLE_RENDERER = d -> {
         GlStateManager.enableAlphaTest();
-        BackgroundRenderers.drawVanillaStyle(d.getX(), d.getY(), d.getWidth(), d.getHeight(), d.getZLevel());
+        BackgroundRenderers.drawVanillaStyle4x4(d.getX(), d.getY(), d.getWidth(), d.getHeight(), d.getZLevel());
     };
     public static final int VANILLA_STYLE_BORDER_SIZE = 4;
 

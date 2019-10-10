@@ -15,14 +15,14 @@ import powerlessri.harmonics.gui.screen.WidgetScreen;
 import java.awt.*;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_SMOOTH;
 
 public final class Render2D {
 
     public static final float REGULAR_WINDOW_Z = 0F;
     public static final float POPUP_WINDOW_Z = 128F;
     public static final float CONTEXT_MENU_Z = 200F;
-    public static final float HOVERING_TEXT_Z = 256F;
 
     public static final ResourceLocation INVALID_TEXTURE = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/invalid.png");
     public static final ResourceLocation COMPONENTS = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/default_components.png");
@@ -42,10 +42,7 @@ public final class Render2D {
     }
 
     public static boolean isInside(int x, int y, int bx1, int by1, int bx2, int by2) {
-        return x >= bx1 &&
-                x < bx2 &&
-                y >= by1 &&
-                y < by2;
+        return x >= bx1 && x < bx2 && y >= by1 && y < by2;
     }
 
     public static Minecraft minecraft() {
@@ -65,7 +62,7 @@ public final class Render2D {
     }
 
     public static int fontHeight() {
-        return fontRenderer().FONT_HEIGHT;
+        return Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
     }
 
     public static void bindTexture(ResourceLocation texture) {
@@ -84,15 +81,15 @@ public final class Render2D {
         Tessellator.getInstance().draw();
     }
 
-    public static void quad(BufferBuilder buffer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int color) {
+    public static void quad(BufferBuilder buffer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, float z, int color) {
         int alpha = (color >> 24) & 255;
         int red = (color >> 16) & 255;
         int green = (color >> 8) & 255;
         int blue = color & 255;
-        buffer.pos(x1, y1, 0D).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, 0D).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x3, y3, 0D).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x4, y4, 0D).color(red, green, blue, alpha).endVertex();
+        buffer.pos(x1, y1, z).color(red, green, blue, alpha).endVertex();
+        buffer.pos(x2, y2, z).color(red, green, blue, alpha).endVertex();
+        buffer.pos(x3, y3, z).color(red, green, blue, alpha).endVertex();
+        buffer.pos(x4, y4, z).color(red, green, blue, alpha).endVertex();
     }
 
     public static void coloredRect(Point position, Dimension dimensions, float z, int color) {
@@ -277,10 +274,6 @@ public final class Render2D {
     public static void useTextureGLStates() {
         GlStateManager.enableTexture();
         GlStateManager.disableBlend();
-        GlStateManager.color3f(1.0F, 1.0F, 1.0F);
-    }
-
-    public static void drawHoveringText(List<String> textLines, int mouseX, int mouseY) {
-        WidgetScreen.assertActive().scheduleTooltip(textLines, mouseX, mouseY);
+        GlStateManager.color3f(1F, 1F, 1F);
     }
 }

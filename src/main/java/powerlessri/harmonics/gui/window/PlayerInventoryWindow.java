@@ -6,7 +6,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
-import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.SimpleIconButton;
 import powerlessri.harmonics.gui.widget.slot.*;
@@ -55,7 +54,7 @@ public class PlayerInventoryWindow extends AbstractPopupWindow {
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        drawVanillaStyleBackground();
+        renderVanillaStyleBackground();
         renderChildren(mouseX, mouseY, particleTicks);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
