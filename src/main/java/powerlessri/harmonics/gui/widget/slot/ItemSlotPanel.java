@@ -2,6 +2,7 @@ package powerlessri.harmonics.gui.widget.slot;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 
 import javax.annotation.Nonnull;
@@ -91,6 +92,13 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
             }
             y += maxHeight;
         }
+    }
+
+    @Override
+    public void render(int mouseX, int mouseY, float particleTicks) {
+        RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+        renderChildren(mouseX, mouseY, particleTicks);
+        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
     static class DefaultSlot extends AbstractItemSlot {

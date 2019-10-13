@@ -25,7 +25,7 @@ public class Section extends AbstractContainer<IEntry> {
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        super.render(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, particleTicks);
         if (!getContextMenu().isLastSection(this)) {
             renderLine();
         }

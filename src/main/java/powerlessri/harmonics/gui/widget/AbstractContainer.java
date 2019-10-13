@@ -2,7 +2,6 @@ package powerlessri.harmonics.gui.widget;
 
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
-import powerlessri.harmonics.gui.window.IWindow;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

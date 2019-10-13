@@ -11,7 +11,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.collections.CompositeCollection;
-import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
@@ -140,7 +139,19 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (windows.stream().anyMatch(window -> window.mouseClicked(mouseX, mouseY, button))) {
+        boolean captured = false;
+        IPopupWindow capturedWindow = null;
+        for (IWindow window : windows) {
+            if (window.mouseClicked(mouseX, mouseY, button)) {
+                capturedWindow = window instanceof IPopupWindow ? (IPopupWindow) window : null;
+                captured = true;
+                break;
+            }
+        }
+        if (capturedWindow != null) {
+            raiseWindowToTop(capturedWindow);
+        }
+        if (captured) {
             return true;
         } else {
             return primaryWindow.mouseClicked(mouseX, mouseY, button);

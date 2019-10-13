@@ -14,11 +14,10 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+        if (super.mouseClickSubtree(mouseX, mouseY, button)) {
             return true;
         }
         if (isInside(mouseX, mouseY)) {
-            WidgetScreen.assertActive().raiseWindowToTop(this);
             setFocusedWidget(null);
             initialDragLocalX = (int) mouseX - getX();
             initialDragLocalY = (int) mouseY - getY();
@@ -29,7 +28,7 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (super.mouseReleased(mouseX, mouseY, button)) {
+        if (super.mouseReleasedSubtree(mouseX, mouseY, button)) {
             return true;
         }
         if (isInside(mouseX, mouseY)) {
@@ -42,7 +41,7 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+        if (super.mouseDraggedSubtree(mouseX, mouseY, button, deltaX, deltaY)) {
             return true;
         }
         if (isInside(mouseX, mouseY) && isDragging()) {

@@ -1,5 +1,7 @@
 package powerlessri.harmonics.gui.widget.navigation;
 
+import powerlessri.harmonics.gui.debug.ITextReceiver;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.IWidget;
@@ -15,6 +17,7 @@ public class NavigationBar extends AbstractContainer<IWidget> {
      */
     public static <T extends IWidget> NavigationBar standard(AbstractDockableWindow<T> window) {
         NavigationBar bar = new NavigationBar(12);
+        // TODO
         return bar;
     }
 
@@ -35,8 +38,8 @@ public class NavigationBar extends AbstractContainer<IWidget> {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (isInside(mouseX, mouseY)) {
-            initialDragLocalX = (int) mouseX - getX();
-            initialDragLocalY = (int) mouseY - getY();
+            initialDragLocalX = (int) mouseX - getWindow().getX();
+            initialDragLocalY = (int) mouseY - getWindow().getY();
             getWindow().setFocusedWidget(this);
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -85,7 +88,21 @@ public class NavigationBar extends AbstractContainer<IWidget> {
     }
 
     @Override
+    public void render(int mouseX, int mouseY, float particleTicks) {
+        RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+        renderChildren(mouseX, mouseY, particleTicks);
+        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+
+    @Override
     public void reflow() {
         FlowLayout.reverseHorizontal(children, getXRight(), 0, 2);
+    }
+
+    @Override
+    public void provideInformation(ITextReceiver receiver) {
+        super.provideInformation(receiver);
+        receiver.line("DragLocalX=" + initialDragLocalX);
+        receiver.line("DragLocalY=" + initialDragLocalY);
     }
 }

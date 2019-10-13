@@ -67,6 +67,7 @@ public class HarmonicsCoreTest {
         guiTests.put("searchable_list", SearchableListTest::new);
         guiTests.put("radio_button", RadioButtonTest::new);
         guiTests.put("text_button", TextButtonTest::new);
+        guiTests.put("dockable_window", DockableWindowTest::new);
 
         registerPackets();
     }

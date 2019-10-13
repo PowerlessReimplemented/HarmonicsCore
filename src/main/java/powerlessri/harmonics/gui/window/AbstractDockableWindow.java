@@ -3,10 +3,10 @@ package powerlessri.harmonics.gui.window;
 import com.google.common.collect.ImmutableList;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
-import powerlessri.harmonics.gui.screen.WidgetScreen;
+import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.widget.panel.Panel;
 import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
+import powerlessri.harmonics.gui.widget.panel.Panel;
 
 import java.util.List;
 
@@ -20,15 +20,14 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
     private int order;
 
     public AbstractDockableWindow(int width, int height) {
-        this.setContents(width, height);
         this.navigationBar = NavigationBar.standard(this);
         this.navigationBar.attachWindow(this);
         this.contentBox = new Panel<>();
         this.contentBox.attachWindow(this);
         this.children = ImmutableList.of(navigationBar, contentBox);
 
-        contentBox.setY(navigationBar.getYBottom());
-        onResize();
+        setContents(width, height);
+        FlowLayout.vertical(children, 0, 0, 0);
         populateContentBox();
     }
 
@@ -49,12 +48,12 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (isInside(mouseX, mouseY)) {
-            WidgetScreen.assertActive().raiseWindowToTop(this);
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
+    public NavigationBar getNavigationBar() {
+        return navigationBar;
+    }
+
+    public Panel<T> getContentBox() {
+        return contentBox;
     }
 
     @Override

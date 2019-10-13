@@ -44,8 +44,7 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
         return contents;
     }
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    protected final boolean mouseClickSubtree(double mouseX, double mouseY, int button) {
         if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             for (IWidget child : getChildren()) {
                 if (child.isInside(mouseX, mouseY) && child instanceof AbstractWidget) {
@@ -54,6 +53,38 @@ public abstract class AbstractWindow implements IWindow, NestedEventHandlerMixin
             }
         }
         return NestedEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return mouseClickSubtree(mouseX, mouseY, button) || isInside(mouseX, mouseY);
+    }
+
+    protected final boolean mouseReleasedSubtree(double mouseX, double mouseY, int button) {
+        return NestedEventHandlerMixin.super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return mouseReleasedSubtree(mouseX, mouseY, button) || isInside(mouseX, mouseY);
+    }
+
+    protected final boolean mouseDraggedSubtree(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return NestedEventHandlerMixin.super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return mouseDraggedSubtree(mouseX, mouseY, button, deltaX, deltaY) || isInside(mouseX, mouseY);
+    }
+
+    protected final boolean mouseScrolledSubtree(double mouseX, double mouseY, double scroll) {
+        return NestedEventHandlerMixin.super.mouseScrolled(mouseX, mouseY, scroll);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
+        return mouseScrolledSubtree(mouseX, mouseY, scroll) || isInside(mouseX, mouseY);
     }
 
     public void setContents(int width, int height) {
