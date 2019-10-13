@@ -15,10 +15,6 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
     private boolean hovered = false;
     private boolean clicked = false;
 
-    public AbstractIconButton(int x, int y, int width, int height) {
-        super(x, y, width, height);
-    }
-
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         preRenderEvent(mouseX, mouseY);

@@ -42,8 +42,7 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
         updatePosition();
     }
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    protected final boolean mouseClickSubtree(double mouseX, double mouseY, int button) {
         if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             for (IWidget child : getChildren()) {
                 if (child.isInside(mouseX, mouseY) && child instanceof AbstractWidget) {
@@ -54,15 +53,49 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
         return WindowEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
     }
 
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return mouseClickSubtree(mouseX, mouseY, button) || isInside(mouseX, mouseY);
+    }
+
+    protected final boolean mouseReleasedSubtree(double mouseX, double mouseY, int button) {
+        return WindowEventHandlerMixin.super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return mouseReleasedSubtree(mouseX, mouseY, button) || isInside(mouseX, mouseY);
+    }
+
+    protected final boolean mouseDraggedSubtree(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return WindowEventHandlerMixin.super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return mouseDraggedSubtree(mouseX, mouseY, button, deltaX, deltaY) || isInside(mouseX, mouseY);
+    }
+
+    protected final boolean mouseScrolledSubtree(double mouseX, double mouseY, double scroll) {
+        return WindowEventHandlerMixin.super.mouseScrolled(mouseX, mouseY, scroll);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
+        return mouseScrolledSubtree(mouseX, mouseY, scroll) || isInside(mouseX, mouseY);
+    }
+
     public void setContents(int width, int height) {
         int borderSize = getBorderSize();
         border.width = borderSize + width + borderSize;
         border.height = borderSize + height + borderSize;
+        onResize();
     }
 
     public void setBorder(int width, int height) {
         border.width = width;
         border.height = height;
+        onResize();
     }
 
     public void centralize() {
@@ -71,7 +104,10 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
         updatePosition();
     }
 
-    protected void updatePosition() {
+    protected void onResize() {
+    }
+
+    protected final void updatePosition() {
         if (getChildren() != null) {
             for (IWidget child : getChildren()) {
                 child.onParentPositionChanged();

@@ -2,24 +2,15 @@ package powerlessri.harmonics.gui.widget;
 
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
-import powerlessri.harmonics.gui.window.IWindow;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T> {
 
-    public AbstractContainer(int width, int height) {
-        this(0, 0, width, height);
-    }
-
-    public AbstractContainer(int x, int y, int width, int height) {
-        super(x, y, width, height);
-    }
-
     @Override
     public void attach(IWidget newParent) {
         super.attach(newParent);
-        ContainerWidgetMixin.super.attach(newParent);
     }
 
     @Override
@@ -33,11 +24,13 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     @Override
-    public void attachWindow(IWindow window) {
-        super.attachWindow(window);
-        for (T child : getChildren()) {
-            // This will also inherit window reference from this widget
-            child.attach(this);
+    public void onAttach(@Nullable IWidget oldParent, IWidget newParent) {
+        // Reattaching
+        if (oldParent != null) {
+            // Inherit the (possible) new window reference
+            for (T child : getChildren()) {
+                child.attach(this);
+            }
         }
     }
 

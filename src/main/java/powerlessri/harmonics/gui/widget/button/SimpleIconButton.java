@@ -15,8 +15,7 @@ public class SimpleIconButton extends AbstractIconButton implements ResizableWid
     private ITexture textureHovering;
     private IntConsumer onClick = DUMMY;
 
-    public SimpleIconButton(int x, int y, ITexture textureNormal, ITexture textureHovering) {
-        super(x, y, 0, 0);
+    public SimpleIconButton(ITexture textureNormal, ITexture textureHovering) {
         this.setTextures(textureNormal, textureHovering);
     }
 

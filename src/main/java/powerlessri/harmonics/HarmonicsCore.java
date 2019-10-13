@@ -23,7 +23,7 @@ public class HarmonicsCore {
     public static Logger logger = LogManager.getLogger(MODID);
 
     public HarmonicsCore() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
 
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();

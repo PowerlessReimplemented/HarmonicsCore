@@ -1,9 +1,7 @@
 package powerlessri.harmonics.gui.contextmenu;
 
-import com.google.common.collect.Lists;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 
-import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,6 +10,7 @@ public final class ContextMenuBuilder {
     public static final String GENERAL = "General";
     public static final String EDITING = "Editing";
 
+    private ContextMenu contextMenu = null;
     private Map<String, Section> sections = new LinkedHashMap<>();
 
     public Section getSection(String name) {
@@ -22,21 +21,30 @@ public final class ContextMenuBuilder {
 
         Section newSection = new Section();
         sections.put(name, newSection);
+        getContextMenu().addSectionNoReflow(newSection);
         return newSection;
     }
 
-    @Nullable
-    public ContextMenu build() {
-        if (sections.isEmpty()) {
-            return null;
+    private ContextMenu getContextMenu() {
+        if (contextMenu == null) {
+            contextMenu = ContextMenu.atCursor();
         }
-        return ContextMenu.withSections(Lists.newArrayList(sections.values()));
+        return contextMenu;
     }
 
-    public void buildAndAdd() {
-        ContextMenu menu = build();
-        if (menu != null) {
-            WidgetScreen.assertActive().addPopupWindow(menu);
+    public ContextMenu build() {
+        ContextMenu menu = getContextMenu();
+        menu.reflow();
+        return menu;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public ContextMenu buildAndAdd() {
+        if (contextMenu != null) {
+            contextMenu.reflow();
+            WidgetScreen.assertActive().addPopupWindow(contextMenu);
+            return contextMenu;
         }
+        return null;
     }
 }

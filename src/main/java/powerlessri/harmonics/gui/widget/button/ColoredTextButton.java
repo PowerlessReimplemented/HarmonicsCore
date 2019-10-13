@@ -56,10 +56,6 @@ public class ColoredTextButton extends AbstractWidget implements IButton, INamed
     private boolean hovered = false;
     private boolean clicked = false;
 
-    public ColoredTextButton() {
-        super(0, 0);
-    }
-
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);

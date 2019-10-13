@@ -7,27 +7,24 @@ import powerlessri.harmonics.utils.Utils;
 
 import java.awt.*;
 import java.util.Collection;
+import java.util.List;
 
 public class FlowLayout {
 
     private FlowLayout() {
     }
 
-    public static <T extends IWidget> Collection<T> vertical(Collection<T> widgets) {
-        return vertical(widgets, 0, 0);
-    }
-
-    public static <T extends IWidget> Collection<T> vertical(Collection<T> widgets, int x, int y) {
+    public static <T extends IWidget> Collection<T> vertical(Collection<T> widgets, int x, int y, int gap) {
         for (T widget : widgets) {
             if (BoxSizing.shouldIncludeWidget(widget)) {
                 widget.setLocation(x, y);
-                y += widget.getFullHeight();
+                y += widget.getFullHeight() + gap;
             }
         }
         return widgets;
     }
 
-    public static <T extends IWidget> Collection<T> vertical(Dimension bounds, HorizontalAlignment alignment, Collection<T> widgets, int y) {
+    public static <T extends IWidget> Collection<T> vertical(Dimension bounds, HorizontalAlignment alignment, Collection<T> widgets, int y, int gap) {
         for (T widget : widgets) {
             if (BoxSizing.shouldIncludeWidget(widget)) {
                 switch (alignment) {
@@ -46,27 +43,23 @@ public class FlowLayout {
                         break;
                     }
                 }
-                y += widget.getFullHeight();
+                y += widget.getFullHeight() + gap;
             }
         }
         return widgets;
     }
 
-    public static <T extends IWidget> Collection<T> horizontal(Collection<T> widgets) {
-        return horizontal(widgets, 0, 0);
-    }
-
-    public static <T extends IWidget> Collection<T> horizontal(Collection<T> widgets, int x, int y) {
+    public static <T extends IWidget> Collection<T> horizontal(Collection<T> widgets, int x, int y, int gap) {
         for (T widget : widgets) {
             if (BoxSizing.shouldIncludeWidget(widget)) {
                 widget.setLocation(x, y);
-                x += widget.getFullWidth();
+                x += widget.getFullWidth() + gap;
             }
         }
         return widgets;
     }
 
-    public static <T extends IWidget> Collection<T> horizontal(Dimension bounds, VerticalAlignment alignment, Collection<T> widgets, int x) {
+    public static <T extends IWidget> Collection<T> horizontal(Dimension bounds, VerticalAlignment alignment, Collection<T> widgets, int x, int gap) {
         for (T widget : widgets) {
             if (BoxSizing.shouldIncludeWidget(widget)) {
                 switch (alignment) {
@@ -85,7 +78,18 @@ public class FlowLayout {
                         break;
                     }
                 }
-                x += widget.getFullWidth();
+                x += widget.getFullWidth() + gap;
+            }
+        }
+        return widgets;
+    }
+
+    public static <T extends IWidget> List<T> reverseHorizontal(List<T> widgets, int x, int y, int gap) {
+        for (int i = widgets.size() - 1; i >= 0; i--) {
+            T widget = widgets.get(i);
+            if (BoxSizing.shouldIncludeWidget(widget)) {
+                x -= widget.getFullWidth() + gap;
+                widget.setLocation(x, y);
             }
         }
         return widgets;

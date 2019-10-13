@@ -33,8 +33,8 @@ public class PlayerInventoryWindow extends AbstractPopupWindow {
         inventory.setLocation(0, 0);
         ItemSlotPanel hotbar = new ItemSlotPanel(9, 1, playerInventory.mainInventory.subList(0, 9), factory);
         hotbar.setLocation(0, inventory.getYBottom());
-        SimpleIconButton close = new SimpleIconButton(inventory.getWidth() - 8, 0, CLOSE, CLOSE);
-        close.setDimensions(8, 8);
+        SimpleIconButton close = new SimpleIconButton( CLOSE, CLOSE);
+        close.setLocation(inventory.getWidth() - 8, 0);
         close.setClickAction(b -> discard());
         children = ImmutableList.of(close, inventory, hotbar);
 

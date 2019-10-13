@@ -1,5 +1,6 @@
-package powerlessri.harmonics.gui.widget.box;
+package powerlessri.harmonics.gui.widget.panel;
 
+import com.google.common.base.Preconditions;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.IWidget;
@@ -18,18 +19,6 @@ public class Panel<T extends IWidget> extends AbstractContainer<T> implements Re
     private Consumer<List<T>> layout = l -> {};
     private boolean paused = false;
 
-    public Panel() {
-        this(0, 0, 0, 0);
-    }
-
-    public Panel(int width, int height) {
-        super(width, height);
-    }
-
-    public Panel(int x, int y, int width, int height) {
-        super(x, y, width, height);
-    }
-
     @Override
     public List<T> getChildren() {
         return children;
@@ -37,6 +26,7 @@ public class Panel<T extends IWidget> extends AbstractContainer<T> implements Re
 
     @Override
     public Panel<T> addChildren(T widget) {
+        Preconditions.checkState(isValid());
         children.add(widget);
         widget.attach(this);
         reflow();
@@ -45,6 +35,7 @@ public class Panel<T extends IWidget> extends AbstractContainer<T> implements Re
 
     @Override
     public Panel<T> addChildren(Collection<T> widgets) {
+        Preconditions.checkState(isValid());
         children.addAll(widgets);
         for (T widget : widgets) {
             widget.attach(this);

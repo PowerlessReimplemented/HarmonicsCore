@@ -1,8 +1,6 @@
 package powerlessri.harmonics.gui.widget.button;
 
-import powerlessri.harmonics.gui.ITextRenderer;
-import powerlessri.harmonics.gui.Render2D;
-import powerlessri.harmonics.gui.TextRenderer;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
@@ -47,13 +45,8 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
     private ITextRenderer textRenderer = TextRenderer.newVanilla();
 
     public GradientTextButton(String text) {
-        this(0, 0, 0, 14, text);
-        fitTextWidth();
-    }
-
-    public GradientTextButton(int x, int y, int width, int height, String text) {
-        super(x, y, width, height);
         this.text = text;
+        fitTextWidth();
     }
 
     public String getText() {

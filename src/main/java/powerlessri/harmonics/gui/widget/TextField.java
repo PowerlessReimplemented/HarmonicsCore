@@ -84,8 +84,11 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     private int textColor = 0xff000000;
     private int textColorUneditable = 0xff333333;
 
-    public TextField(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public TextField(int width, int height) {
+        this.setDimensions(width, height);
+    }
+
+    public TextField() {
     }
 
     public boolean isEditable() {
@@ -167,7 +170,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
         } else {
             switch (keyCode) {
                 case GLFW_KEY_ESCAPE: {
-                    getWindow().changeFocus(this, false);
+                    setFocused(false);
                     break;
                 }
                 case GLFW_KEY_ENTER:

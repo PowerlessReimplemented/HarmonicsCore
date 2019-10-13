@@ -1,5 +1,6 @@
 package powerlessri.harmonics.gui.contextmenu;
 
+import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
@@ -19,16 +20,12 @@ public class Section extends AbstractContainer<IEntry> {
 
     private List<IEntry> entries = new ArrayList<>();
 
-    public Section() {
-        super(0, 0);
-    }
-
     // Relative position is (0,0) by default
 
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        super.render(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, particleTicks);
         if (!getContextMenu().isLastSection(this)) {
             renderLine();
         }
@@ -56,9 +53,10 @@ public class Section extends AbstractContainer<IEntry> {
         bounds.height = MARGIN_SIDES;
     }
 
+    @Deprecated
     @Override
     public void attachWindow(IWindow window) {
-        throw new UnsupportedOperationException("Use attach(ContextMenu) instead!");
+        throw new UnsupportedOperationException("Use #attach(ContextMenu) instead!");
     }
 
     @Override
@@ -85,13 +83,19 @@ public class Section extends AbstractContainer<IEntry> {
 
     @Override
     public Section addChildren(IEntry widget) {
+        Preconditions.checkState(isValid());
         entries.add(widget);
+        widget.attach(this);
         return this;
     }
 
     @Override
     public Section addChildren(Collection<IEntry> widgets) {
+        Preconditions.checkState(isValid());
         entries.addAll(widgets);
+        for (IEntry widget : widgets) {
+            widget.attach(this);
+        }
         return this;
     }
 

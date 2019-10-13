@@ -18,7 +18,8 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     private ITextRenderer textRenderer = TextRenderer.newVanilla();
 
     public Paragraph(int width, int height, List<String> texts) {
-        super(0, 0, width, height);
+        this.setDimensions(width, height);
+        this.setBorders(1);
         this.texts = texts;
         this.textView = Collections.unmodifiableList(texts);
     }
@@ -26,8 +27,8 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        int x = getAbsoluteX() + 1;
-        int y = getAbsoluteY() + 1;
+        int x = getAbsoluteX();
+        int y = getAbsoluteY();
         GlStateManager.enableTexture();
         textRenderer.setTextColor(0x000000);
         textRenderer.renderLines(textView, x, y, getZLevel());

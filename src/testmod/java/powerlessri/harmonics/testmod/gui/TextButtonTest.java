@@ -10,6 +10,7 @@ import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.widget.button.GradientTextButton;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TextButtonTest extends WidgetScreen {
@@ -44,7 +45,7 @@ public class TextButtonTest extends WidgetScreen {
             for (AbstractWidget child : children) {
                 child.attachWindow(this);
             }
-            FlowLayout.vertical(children);
+            FlowLayout.vertical(children, 0, 0, 0);
         }
 
         @Override

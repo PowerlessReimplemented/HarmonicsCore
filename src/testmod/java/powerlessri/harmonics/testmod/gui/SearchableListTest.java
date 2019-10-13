@@ -8,12 +8,13 @@ import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.*;
-import powerlessri.harmonics.gui.widget.box.FilteredList;
-import powerlessri.harmonics.gui.widget.box.WrappingList;
 import powerlessri.harmonics.gui.widget.button.AbstractIconButton;
+import powerlessri.harmonics.gui.widget.panel.FilteredList;
+import powerlessri.harmonics.gui.widget.panel.WrappingList;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 import powerlessri.harmonics.testmod.HarmonicsCoreTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchableListTest extends WidgetScreen {
@@ -36,11 +37,8 @@ public class SearchableListTest extends WidgetScreen {
             setContents(100, 80);
             centralize();
 
-            ImmutableList.Builder<IconBtn> buttons = ImmutableList.builder();
-            for (int i = 0; i < 40; i++) {
-                buttons.add(new IconBtn("Test" + i));
-            }
-            Pair<WrappingList, TextField> pair = FilteredList.createSearchableList(buttons.build(), "");
+            List<IconBtn> buttons = new ArrayList<>();
+            Pair<WrappingList, TextField> pair = FilteredList.createSearchableList(buttons, "");
 
             TextField textField = pair.getRight();
             textField.attachWindow(this);
@@ -54,6 +52,10 @@ public class SearchableListTest extends WidgetScreen {
             list.setLocation(0, textField.getFullHeight() + 4);
             list.getScrollUpArrow().setLocation(list.getXRight() + 2, 0);
             list.alignArrows();
+
+            for (int i = 0; i < 40; i++) {
+                buttons.add(new IconBtn("Test" + i));
+            }
 
             children = ImmutableList.of(textField, list);
         }
@@ -85,7 +87,7 @@ public class SearchableListTest extends WidgetScreen {
         private final String name;
 
         public IconBtn(String name) {
-            super(0, 0, 16, 16);
+            this.setDimensions(16, 16);
             this.name = name;
         }
 

@@ -18,5 +18,6 @@
 
   "config.harmonics.client.inspections.BoxHighlighting": "Box highlighting",
   "config.harmonics.client.scrollSpeed": "List scroll speed",
-  "config.harmonics.client.dialogMsgMaxWidth": "Max width for dialog message"
+  "config.harmonics.client.dialogMsgMaxWidth": "Max width for dialog message",
+  "config.harmonics.client.ctxMenuMinBorderDistance": "Minimum distance from context menu border to screen border"
 }

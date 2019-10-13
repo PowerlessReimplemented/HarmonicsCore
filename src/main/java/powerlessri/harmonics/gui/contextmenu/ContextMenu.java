@@ -1,10 +1,10 @@
 package powerlessri.harmonics.gui.contextmenu;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHelper;
+import powerlessri.harmonics.Config;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.IWidget;
@@ -13,59 +13,36 @@ import powerlessri.harmonics.gui.window.mixin.*;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static powerlessri.harmonics.gui.Render2D.*;
 
 public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, WindowOverlayInfoMixin, WindowPropertiesMixin {
 
-    public static ContextMenu withEntries(List<? extends IEntry> entries) {
-        return withSections(toSections(entries));
-    }
-
-    public static ContextMenu withSections(List<? extends Section> sections) {
+    public static ContextMenu atCursor() {
         MouseHelper m = Minecraft.getInstance().mouseHelper;
         double scale = Minecraft.getInstance().mainWindow.getGuiScaleFactor();
         double mouseX = m.getMouseX() / scale;
         double mouseY = m.getMouseY() / scale;
-        return withSections(mouseX, mouseY, sections);
-    }
-
-    public static ContextMenu withSections(double mouseX, double mouseY, List<? extends Section> sections) {
-        return new ContextMenu((int) mouseX, (int) mouseY, sections);
-    }
-
-    public static ContextMenu withEntries(double mouseX, double mouseY, List<? extends IEntry> entries) {
-        return new ContextMenu((int) mouseX, (int) mouseY, toSections(entries));
-    }
-
-    private static List<? extends Section> toSections(List<? extends IEntry> entries) {
-        Section section = new Section();
-        // Safe downwards erasure cast
-        @SuppressWarnings("unchecked") List<IEntry> c = (List<IEntry>) entries;
-        section.addChildren(c);
-        return ImmutableList.of(section);
+        return new ContextMenu((int) mouseX, (int) mouseY);
     }
 
     private final Point position;
     private final Dimension border;
-    private final List<? extends Section> sections;
+    private final List<Section> sections;
     private IEntry focusedEntry;
 
     private boolean alive = true;
 
-    public ContextMenu(int x, int y, List<? extends Section> sections) {
-        this(new Point(x, y), sections);
+    public ContextMenu(int x, int y) {
+        this(new Point(x, y));
     }
 
-    public ContextMenu(Point position, List<? extends Section> sections) {
+    public ContextMenu(Point position) {
         this.position = position;
-        this.sections = sections;
+        this.sections = new ArrayList<>();
         this.border = new Dimension();
-        for (Section section : sections) {
-            section.attach(this);
-        }
-        reflow();
     }
 
     public void reflow() {
@@ -86,6 +63,39 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
 
         for (Section section : sections) {
             section.setWidth(width);
+        }
+
+        adjustForBorders(Config.CLIENT.minBorderDistance.get());
+    }
+
+    public void adjustForBorders(int minDistance) {
+        int xOff = 0, yOff = 0;
+
+        // Prefer to have the top left corner inside (if the context menu is too large to fit in the whole screen)
+        int left = getX() - minDistance;
+        if (left < 0) {
+            xOff = left;
+        } else {
+            int right = getX() + getWidth() + minDistance;
+            if (right > scaledWidth()) {
+                xOff = right - scaledWidth();
+            }
+        }
+
+        int top = getY() - minDistance;
+        if (top < 0) {
+            yOff = top;
+        } else {
+            int bottom = getY() + getHeight() + minDistance;
+            if (bottom > scaledHeight()) {
+                yOff = bottom - scaledHeight();
+            }
+        }
+
+        position.x -= xOff;
+        position.y -= yOff;
+        for (Section section : sections) {
+            section.onParentPositionChanged();
         }
     }
 
@@ -174,5 +184,25 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
     @Override
     public boolean shouldDiscard() {
         return !alive;
+    }
+
+    @Override
+    public int getOrder() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void setOrder(int order) {
+    }
+
+    public void addSection(Section section) {
+        sections.add(section);
+        section.attach(this);
+        reflow();
+    }
+
+    void addSectionNoReflow(Section section) {
+        sections.add(section);
+        section.attach(this);
     }
 }

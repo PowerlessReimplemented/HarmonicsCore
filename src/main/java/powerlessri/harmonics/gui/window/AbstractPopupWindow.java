@@ -1,15 +1,20 @@
 package powerlessri.harmonics.gui.window;
 
 import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.debug.ITextReceiver;
 
+/**
+ * Simple base class for a draggable popup. For more complicated usages see {@link AbstractDockableWindow}.
+ */
 public abstract class AbstractPopupWindow extends AbstractWindow implements IPopupWindow {
 
     private int initialDragLocalX, initialDragLocalY;
-    protected boolean alive = true;
+    private boolean alive = true;
+    private int order;
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+        if (super.mouseClickSubtree(mouseX, mouseY, button)) {
             return true;
         }
         if (isInside(mouseX, mouseY)) {
@@ -23,7 +28,7 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (super.mouseReleased(mouseX, mouseY, button)) {
+        if (super.mouseReleasedSubtree(mouseX, mouseY, button)) {
             return true;
         }
         if (isInside(mouseX, mouseY)) {
@@ -36,7 +41,7 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+        if (super.mouseDraggedSubtree(mouseX, mouseY, button, deltaX, deltaY)) {
             return true;
         }
         if (isInside(mouseX, mouseY) && isDragging()) {
@@ -64,5 +69,21 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
     @Override
     public float getZLevel() {
         return Render2D.POPUP_WINDOW_Z;
+    }
+
+    @Override
+    public int getOrder() {
+        return order;
+    }
+
+    @Override
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    @Override
+    public void provideInformation(ITextReceiver receiver) {
+        super.provideInformation(receiver);
+        receiver.line("Order=" + order);
     }
 }

@@ -1,16 +1,13 @@
-package powerlessri.harmonics.gui.widget.box;
+package powerlessri.harmonics.gui.widget.panel;
 
 import com.google.common.collect.ImmutableList;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 import powerlessri.harmonics.gui.widget.IWidget;
 
 import java.util.Collection;
 
 public class GridPanel<T extends IWidget> extends AbstractContainer<T> {
-
-    public GridPanel() {
-        super(0, 0);
-    }
 
     @Override
     public Collection<T> getChildren() {
@@ -19,5 +16,12 @@ public class GridPanel<T extends IWidget> extends AbstractContainer<T> {
 
     @Override
     public void reflow() {
+    }
+
+    @Override
+    public void render(int mouseX, int mouseY, float particleTicks) {
+        RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+        renderChildren(mouseX, mouseY, particleTicks);
+        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 }

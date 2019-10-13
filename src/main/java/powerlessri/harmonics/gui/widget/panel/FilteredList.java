@@ -1,12 +1,13 @@
-package powerlessri.harmonics.gui.widget.box;
+package powerlessri.harmonics.gui.widget.panel;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.gui.widget.*;
 
 import java.util.*;
 import java.util.function.Consumer;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
 public class FilteredList<T extends IWidget & INamedElement> extends AbstractList<T> {
 
@@ -15,22 +16,25 @@ public class FilteredList<T extends IWidget & INamedElement> extends AbstractLis
         FilteredList<T> filteredList = pair.getLeft();
 
         TextField textField = pair.getRight();
-        WrappingList listView = new WrappingList();
+        WrappingList wrappingList = new WrappingList();
+        filteredList.onUpdate = searchResult -> {
+            // Safe erasure downcast
+            @SuppressWarnings("unchecked") List<IWidget> widgets = (List<IWidget>) (List<? extends IWidget>) searchResult;
+            wrappingList.setContentList(widgets);
+            wrappingList.reflow();
+        };
 
-        // Safe erasure downcast
-        @SuppressWarnings("unchecked") List<IWidget> widgetList = (List<IWidget>) (List<? extends IWidget>) filteredList;
-        listView.setContentList(widgetList);
-        filteredList.onUpdate = l -> listView.reflow();
-
-        return Pair.of(listView, textField);
+        return Pair.of(wrappingList, textField);
     }
 
     public static <T extends IWidget & INamedElement> Pair<FilteredList<T>, TextField> of(List<T> list, String defaultText) {
         FilteredList<T> filteredList = new FilteredList<>(list);
-        TextField textField = new TextField(0, 0, 64, 12) {
+        filteredList.updateSearch(defaultText);
+
+        TextField textField = new TextField(64, 12) {
             @Override
             public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
-                if (keyCode == GLFW.GLFW_KEY_ENTER) {
+                if (keyCode == GLFW_KEY_ENTER) {
                     filteredList.updateSearch(getText());
                     return true;
                 }
@@ -45,7 +49,7 @@ public class FilteredList<T extends IWidget & INamedElement> extends AbstractLis
                 }
             }
         }.setText(defaultText);
-        filteredList.updateSearch(defaultText);
+
         return Pair.of(filteredList, textField);
     }
 

@@ -2,7 +2,7 @@
  * https://github.com/gigabit101/HarmonicsCore/blob/2.0.X/src/main/java/powerlessri.harmonics.components/ScrollController.java
  */
 
-package powerlessri.harmonics.gui.widget.box;
+package powerlessri.harmonics.gui.widget.panel;
 
 import com.google.common.base.Preconditions;
 import powerlessri.harmonics.gui.Render2D;
@@ -33,14 +33,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
     }
 
     public WrappingList(int width, int height) {
-        super(width, height);
-
-        this.scrollUpArrow = ScrollArrow.up(0, 0);
-        this.scrollUpArrow.attach(this);
-        this.scrollDownArrow = ScrollArrow.down(0, 0);
-        this.scrollDownArrow.attach(this);
-        this.alignArrows();
-
+        this.setDimensions(width, height);
         this.children = new AbstractList<IWidget>() {
             @Override
             public IWidget get(int i) {
@@ -56,7 +49,15 @@ public class WrappingList extends AbstractContainer<IWidget> {
                 return 2 + contents.size();
             }
         };
+    }
 
+    @Override
+    public void onInitialAttach() {
+        this.scrollUpArrow = ScrollArrow.up(0, 0);
+        this.scrollUpArrow.attach(this);
+        this.scrollDownArrow = ScrollArrow.down(0, 0);
+        this.scrollDownArrow.attach(this);
+        this.alignArrows();
         // Update arrow states
         this.scroll(1);
     }
@@ -153,6 +154,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
 
     @Override
     public WrappingList addChildren(IWidget widget) {
+        Preconditions.checkState(isValid());
         Preconditions.checkArgument(widget.getFullWidth() == getItemSize() && widget.getFullHeight() == getItemSize());
         widget.attach(this);
         contents.add(widget);
@@ -162,6 +164,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
 
     @Override
     public WrappingList addChildren(Collection<IWidget> widgets) {
+        Preconditions.checkState(isValid());
         for (IWidget widget : widgets) {
             Preconditions.checkArgument(widget.getFullWidth() == getItemSize() && widget.getFullHeight() == getItemSize());
             widget.attach(this);
@@ -171,7 +174,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
         return this;
     }
 
-    public void setContentList(List<IWidget> list) {
+    void setContentList(List<IWidget> list) {
         this.contents = list;
         for (IWidget widget : list) {
             widget.attach(this);

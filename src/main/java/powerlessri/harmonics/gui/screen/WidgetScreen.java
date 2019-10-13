@@ -10,7 +10,7 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.HarmonicsCore;
-import powerlessri.harmonics.collections.CompositeUnmodifiableList;
+import powerlessri.harmonics.collections.CompositeCollection;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
@@ -48,7 +48,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     private IWindow primaryWindow;
     private List<IWindow> regularWindows = new ArrayList<>();
-    private List<IPopupWindow> popupWindows = new ArrayList<>();
+    private TreeSet<IPopupWindow> popupWindows = new TreeSet<>();
     private Collection<IWindow> windows;
 
     private final WidgetTreeInspections inspectionHandler = new WidgetTreeInspections();
@@ -57,8 +57,8 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     protected WidgetScreen(ITextComponent title) {
         super(title);
         // Safe downwards erasure cast
-        @SuppressWarnings("unchecked") List<IWindow> popupWindows = (List<IWindow>) (List<? extends IWindow>) this.popupWindows;
-        windows = CompositeUnmodifiableList.of(regularWindows, popupWindows);
+        @SuppressWarnings("unchecked") Collection<IWindow> popupWindowsView = (Collection<IWindow>) (Collection<? extends IWindow>) new DescendingTreeSetBackedUnmodifiableCollection<>(popupWindows);
+        windows = new CompositeCollection<>(regularWindows, popupWindowsView);
     }
 
     @Override
@@ -105,9 +105,17 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         GlStateManager.enableDepthTest();
         GlStateManager.enableAlphaTest();
         primaryWindow.render(mouseX, mouseY, particleTicks);
-        for (IWindow window : windows) {
+        for (IWindow window : regularWindows) {
             window.render(mouseX, mouseY, particleTicks);
         }
+        // We want to render things away from the screen first (painter's algorithm)
+        GlStateManager.pushMatrix();
+        float zOff = CONTEXT_MENU_Z - POPUP_WINDOW_Z;
+        for (IPopupWindow window : popupWindows) {
+            window.render(mouseX, mouseY, particleTicks);
+            GlStateManager.translatef(0F, 0F, zOff);
+        }
+        GlStateManager.popMatrix();
         GlStateManager.disableDepthTest();
         inspectionHandler.endCycle();
 
@@ -131,7 +139,19 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (windows.stream().anyMatch(window -> window.mouseClicked(mouseX, mouseY, button))) {
+        boolean captured = false;
+        IPopupWindow capturedWindow = null;
+        for (IWindow window : windows) {
+            if (window.mouseClicked(mouseX, mouseY, button)) {
+                capturedWindow = window instanceof IPopupWindow ? (IPopupWindow) window : null;
+                captured = true;
+                break;
+            }
+        }
+        if (capturedWindow != null) {
+            raiseWindowToTop(capturedWindow);
+        }
+        if (captured) {
             return true;
         } else {
             return primaryWindow.mouseClicked(mouseX, mouseY, button);
@@ -225,6 +245,8 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     public void addPopupWindow(IPopupWindow popup) {
         popupWindows.add(popup);
+        popup.onAdded(this);
+        raiseWindowToTop(popup);
     }
 
     public void removePopupWindow(IPopupWindow popup) {
@@ -232,8 +254,20 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         popup.onRemoved();
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
+    @SuppressWarnings("SuspiciousNameCombination") // Tuple3 is acting weird
     public void scheduleTooltip(List<String> lines, int x, int y) {
         tooltipRenderQueue.add(Triple.of(lines, x, y));
+    }
+
+    private int nextOrderIndex = 0;
+
+    public void raiseWindowToTop(IPopupWindow window) {
+        popupWindows.remove(window);
+        window.setOrder(nextOrderIndex());
+        popupWindows.add(window);
+    }
+
+    public int nextOrderIndex() {
+        return nextOrderIndex++;
     }
 }
