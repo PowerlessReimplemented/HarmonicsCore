@@ -28,14 +28,14 @@ import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static powerlessri.harmonics.gui.Render2D.coloredRect;
 import static powerlessri.harmonics.gui.Render2D.draw;
 
-public class LinearList<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
+public class VerticalList<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
 
     private boolean scrolling;
     protected float scrollDistance;
 
     private final List<T> elements;
 
-    public LinearList(int width, int height) {
+    public VerticalList(int width, int height) {
         this.setDimensions(width, height);
         this.setBorders(4);
         this.elements = new ArrayList<>();
@@ -210,7 +210,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     @Override
-    public LinearList<T> addChildren(T widget) {
+    public VerticalList<T> addChildren(T widget) {
         Preconditions.checkState(isValid());
         elements.add(widget);
         widget.attach(this);
@@ -218,7 +218,7 @@ public class LinearList<T extends IWidget> extends AbstractContainer<T> implemen
     }
 
     @Override
-    public LinearList<T> addChildren(Collection<T> widgets) {
+    public VerticalList<T> addChildren(Collection<T> widgets) {
         Preconditions.checkState(isValid());
         elements.addAll(widgets);
         for (T widget : widgets) {
