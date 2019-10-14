@@ -1,11 +1,12 @@
 package powerlessri.harmonics.gui.window;
 
 import com.google.common.collect.ImmutableList;
-import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.Icon;
 import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
 import powerlessri.harmonics.gui.widget.panel.Panel;
 
@@ -22,7 +23,6 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
 
     public AbstractDockableWindow(int width, int height) {
         this.navigationBar = NavigationBar.standard(this);
-        this.navigationBar.attachWindow(this);
         this.contentBox = new Panel<>();
         this.contentBox.attachWindow(this);
         this.children = ImmutableList.of(navigationBar, contentBox);
@@ -47,6 +47,22 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
         renderVanillaStyleBackground();
         renderChildren(mouseX, mouseY, particleTicks);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+
+    public void maximize() {
+        // No support by default
+    }
+
+    public void minimize() {
+
+    }
+
+    public ITexture getIcon() {
+        return Texture.NONE;
+    }
+
+    public String getTitle() {
+        return "test";
     }
 
     public NavigationBar getNavigationBar() {

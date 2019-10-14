@@ -2,6 +2,7 @@ package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.StringTextComponent;
+import powerlessri.harmonics.gui.ITexture;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
@@ -90,6 +91,11 @@ public class DockableWindowTest extends WidgetScreen {
                     .addChildren(cbtn3);
             getContentBox().setLayout(w -> FlowLayout.vertical(w, 2, 2, 2));
             getContentBox().reflow();
+        }
+
+        @Override
+        public ITexture getIcon() {
+            return super.getIcon();
         }
     }
 }

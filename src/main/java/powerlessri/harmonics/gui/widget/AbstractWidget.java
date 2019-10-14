@@ -139,7 +139,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         return isValid() && getWindow().getFocusedWidget() == this;
     }
 
-    public void alignTo(IWidget other, Side side, HorizontalAlignment alignment) {
+    public void alignTo(IWidget other, Side side, Alignment alignment) {
         if (this.getParent() != other.getParent()) {
             return;
         }
@@ -169,29 +169,29 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
         }
     }
 
-    private void alignHorizontally(HorizontalAlignment alignment, int left, int right) {
+    private void alignHorizontally(Alignment alignment, int left, int right) {
         switch (alignment) {
-            case LEFT:
+            case TOP_LEFT:
                 alignLeft(left);
                 break;
             case CENTER:
                 alignCenterX(left, right);
                 break;
-            case RIGHT:
+            case BOTTOM_RIGHT:
                 alignRight(right);
                 break;
         }
     }
 
-    private void alignVertically(HorizontalAlignment alignment, int top, int bottom) {
+    private void alignVertically(Alignment alignment, int top, int bottom) {
         switch (alignment) {
-            case LEFT:
+            case TOP_LEFT:
                 alignTop(top);
                 break;
             case CENTER:
                 alignCenterY(top, bottom);
                 break;
-            case RIGHT:
+            case BOTTOM_RIGHT:
                 alignBottom(bottom);
                 break;
         }
@@ -280,7 +280,7 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     public int getYBottom() {
-        return location.y + getFullWidth();
+        return location.y + getFullHeight();
     }
 
     @Override
@@ -504,5 +504,9 @@ public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvid
     }
 
     protected void buildContextMenu(ContextMenuBuilder builder) {
+    }
+
+    public enum Alignment {
+        TOP_LEFT, CENTER, BOTTOM_RIGHT
     }
 }

@@ -1,33 +1,101 @@
 package powerlessri.harmonics.gui.widget.navigation;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
-import powerlessri.harmonics.gui.widget.AbstractContainer;
-import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.layout.properties.BoxSizing;
+import powerlessri.harmonics.gui.widget.*;
+import powerlessri.harmonics.gui.widget.button.SimpleIconButton;
 import powerlessri.harmonics.gui.window.AbstractDockableWindow;
+import powerlessri.harmonics.utils.Utils;
 
+import javax.rmi.CORBA.Util;
 import java.util.*;
+import java.util.function.Consumer;
+
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class NavigationBar extends AbstractContainer<IWidget> {
 
+    public static final ITexture CLOSE = Texture.portion(Render2D.COMPONENTS, 256, 256, 0, 28, 9, 9);
+    public static final ITexture MAXIMIZE = CLOSE.moveRight(1);
+    public static final ITexture MINIMIZE = CLOSE.moveRight(2);
+    public static final ITexture CLOSE_HOVERED = CLOSE.moveDown(1);
+    public static final ITexture MAXIMIZE_HOVERED = MAXIMIZE.moveDown(1);
+    public static final ITexture MINIMIZE_HOVERED = MINIMIZE.moveDown(1);
+
     /**
-     * Construct and return a standard navigation bar with three buttons: close window, maximize window, and minimize window. This does not
-     * attach the return navigation bar to the given window, user must manually attach it.
+     * Construct and return a standard navigation bar with three buttons: close window, maximize window, and minimize window. This will also
+     * attach the navigation bar to the window.
      */
     public static <T extends IWidget> NavigationBar standard(AbstractDockableWindow<T> window) {
-        NavigationBar bar = new NavigationBar(12);
-        // TODO
+        NavigationBar bar = new NavigationBar(10);
+        bar.attachWindow(window);
+
+        SimpleIconButton close = new SimpleIconButton(CLOSE, CLOSE_HOVERED);
+        close.setClickAction(b -> window.discard());
+        bar.addChildren(close);
+
+        SimpleIconButton maximize = new SimpleIconButton(MAXIMIZE, MAXIMIZE_HOVERED);
+        maximize.setClickAction(b -> window.maximize());
+        bar.addChildren(maximize);
+
+        SimpleIconButton minimize = new SimpleIconButton(MINIMIZE, MINIMIZE_HOVERED);
+        minimize.setClickAction(b -> window.minimize());
+        bar.addChildren(minimize);
+
+        bar.icon.setTexture(window.getIcon());
+        bar.icon.setHeight(Utils.lowerBound(bar.icon.getHeight(), 8));
+        bar.title.text(window.getTitle());
+
+        bar.render = b -> {
+            GlStateManager.disableTexture();
+            beginColoredQuad();
+            int x1 = b.getOuterAbsoluteX() - 1;
+            int x2 = b.getOuterAbsoluteXRight() + 1;
+            int innerY = b.getAbsoluteYBottom();
+            int outerY = b.getOuterAbsoluteYBottom();
+            float z = b.getZLevel();
+            coloredRect(x1, innerY, x2, outerY, z, 0xff797979);
+            coloredRect(x1, innerY, x2, outerY - b.getBorderBottom() / 2, z, 0xffffffff);
+            draw();
+            GlStateManager.enableTexture();
+        };
+
+        bar.reflow();
         return bar;
     }
 
-    private List<IWidget> children = new ArrayList<>();
+    private final List<IWidget> children = new ArrayList<>();
+    private Icon icon;
+    private Label title;
+
+    public Consumer<NavigationBar> render = n -> {};
 
     private int initialDragLocalX;
     private int initialDragLocalY;
 
     public NavigationBar(int height) {
         this.setHeight(height);
+        this.setBorderBottom(2);
+    }
+
+    @Override
+    public void onInitialAttach() {
+        icon = new Icon(Texture.NONE) {
+            @Override
+            public BoxSizing getBoxSizing() {
+                return BoxSizing.PHANTOM;
+            }
+        };
+        icon.setDimensions(0, 8);
+        addChildrenInternal(icon);
+
+        title = new Label(icon);
+        addChildrenInternal(title);
+        adjustMinHeight();
     }
 
     @Override
@@ -50,7 +118,7 @@ public class NavigationBar extends AbstractContainer<IWidget> {
         if (super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
             return true;
         }
-        if (isInside(mouseX, mouseY) && isDragging()) {
+        if (isDragging()) {
             int x = (int) mouseX - initialDragLocalX;
             int y = (int) mouseY - initialDragLocalY;
             getWindow().setPosition(x, y);
@@ -71,10 +139,15 @@ public class NavigationBar extends AbstractContainer<IWidget> {
         return initialDragLocalX != -1 && initialDragLocalY != -1;
     }
 
-    @Override
-    public NavigationBar addChildren(IWidget widget) {
+    private void addChildrenInternal(IWidget widget) {
         children.add(widget);
         widget.attach(this);
+    }
+
+    @Override
+    public NavigationBar addChildren(IWidget widget) {
+        addChildrenInternal(widget);
+        adjustMinHeight();
         return this;
     }
 
@@ -84,6 +157,7 @@ public class NavigationBar extends AbstractContainer<IWidget> {
         for (IWidget widget : widgets) {
             widget.attach(this);
         }
+        adjustMinHeight();
         return this;
     }
 
@@ -91,12 +165,23 @@ public class NavigationBar extends AbstractContainer<IWidget> {
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         renderChildren(mouseX, mouseY, particleTicks);
+        render.accept(this);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
     @Override
+    public void onDimensionChanged() {
+        reflow();
+    }
+
+    @Override
     public void reflow() {
+        // Do not change widget size, since size change will cause reflow
         FlowLayout.reverseHorizontal(children, getXRight(), 0, 2);
+        if (isValid()) {
+            icon.setLocation(0, 0);
+            title.updatePosition();
+        }
     }
 
     @Override

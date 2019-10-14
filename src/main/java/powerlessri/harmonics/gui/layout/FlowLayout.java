@@ -85,8 +85,7 @@ public class FlowLayout {
     }
 
     public static <T extends IWidget> List<T> reverseHorizontal(List<T> widgets, int x, int y, int gap) {
-        for (int i = widgets.size() - 1; i >= 0; i--) {
-            T widget = widgets.get(i);
+        for (T widget : widgets) {
             if (BoxSizing.shouldIncludeWidget(widget)) {
                 x -= widget.getFullWidth() + gap;
                 widget.setLocation(x, y);

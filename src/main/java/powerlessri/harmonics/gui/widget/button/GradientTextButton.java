@@ -46,6 +46,7 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
 
     public GradientTextButton(String text) {
         this.text = text;
+        setHeight(3 + fontHeight() + 2);
         fitTextWidth();
     }
 
