@@ -141,13 +141,23 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         boolean captured = false;
         IPopupWindow capturedWindow = null;
-        for (IWindow window : windows) {
-            if (window.mouseClicked(mouseX, mouseY, button)) {
-                capturedWindow = window instanceof IPopupWindow ? (IPopupWindow) window : null;
-                captured = true;
-                break;
+        passEvents:
+        {
+            for (IWindow window : regularWindows) {
+                if (window.mouseClicked(mouseX, mouseY, button)) {
+                    captured = true;
+                    break passEvents;
+                }
+            }
+            for (IPopupWindow window : popupWindows) {
+                if (window.mouseClicked(mouseX, mouseY, button)) {
+                    capturedWindow = window;
+                    captured = true;
+                    break passEvents;
+                }
             }
         }
+
         if (capturedWindow != null) {
             raiseWindowToTop(capturedWindow);
         }

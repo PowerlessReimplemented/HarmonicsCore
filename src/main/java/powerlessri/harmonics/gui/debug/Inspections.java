@@ -196,5 +196,4 @@ public abstract class Inspections implements IRenderEventListener {
         tessellator.draw();
         useTextureGLStates();
     }
-
 }

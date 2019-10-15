@@ -25,11 +25,11 @@ import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static powerlessri.harmonics.gui.Render2D.coloredRect;
-import static powerlessri.harmonics.gui.Render2D.draw;
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class VerticalList<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
 
+    public static final int MIN_BAR_HEIGHT = 16;
     private boolean scrolling;
     protected float scrollDistance;
 
@@ -37,7 +37,6 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
 
     public VerticalList(int width, int height) {
         this.setDimensions(width, height);
-        this.setBorders(4);
         this.elements = new ArrayList<>();
     }
 
@@ -77,7 +76,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
             return true;
         }
         if (scrolling) {
-            int maxScroll = getFullHeight() - getBarHeight();
+            int maxScroll = getHeight() - getBarHeight();
             double moved = deltaY / maxScroll;
             scrollDistance += getMaxScroll() * moved;
             applyScrollLimits();
@@ -108,41 +107,35 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
 
         int left = getAbsoluteX();
         int top = getAbsoluteY();
-        int right = getAbsoluteXRight();
         int bottom = getAbsoluteYBottom();
-        int width = getFullWidth();
-        int height = getFullHeight();
-
-        Tessellator tess = Tessellator.getInstance();
-        BufferBuilder renderer = tess.getBuffer();
+        int width = getWidth();
+        int height = getHeight();
 
         ScissorTest test = ScissorTest.scaled(left, top, width, height);
-
         for (T child : getChildren()) {
             child.render(mouseX, mouseY, partialTicks);
         }
         drawOverlay();
+        test.destroy();
 
         int extraHeight = getBarExtraHeight();
         if (extraHeight > 0) {
             int barWidth = getBarWidth();
             int barHeight = getBarHeight();
-            int barTopY = Utils.lowerBound((int) scrollDistance * (height - barHeight) / extraHeight + top, top);
-            int barBottomY = barTopY + barHeight;
-            int barLeftX = getAbsBarLeft();
-            int barRightX = barLeftX + barWidth;
+            int barTop = getAbsBarTop();
+            int barBottom = barTop + barHeight;
+            int barLeft = getAbsBarLeft();
+            int barRight = barLeft + barWidth;
 
-            GlStateManager.disableDepthTest();
             GlStateManager.disableTexture();
-            renderer.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-            coloredRect(barLeftX, top, barRightX, bottom, getShadowColor());
-            coloredRect(barLeftX, barTopY, barRightX, barBottomY, getBarBorderColor());
-            coloredRect(barLeftX, barTopY, barRightX - 1, barBottomY - 1, getBarBodyColor());
-            tess.draw();
+            beginColoredQuad();
+            coloredRect(barLeft, top, barRight, bottom, getZLevel(), getShadowColor());
+            coloredRect(barLeft, barTop, barRight, barBottom, getZLevel(), getBarBorderColor());
+            coloredRect(barLeft, barTop, barRight - 1, barBottom - 1, getZLevel(), getBarBodyColor());
+            draw();
             GlStateManager.enableTexture();
         }
 
-        test.destroy();
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
@@ -202,7 +195,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     @Override
     public void reflow() {
         int offset = (int) -scrollDistance;
-        int y = getBorderTop();
+        int y = 0;
         for (T child : getChildren()) {
             child.setY(y + offset);
             y += child.getFullHeight() + getMarginMiddle();
@@ -236,10 +229,6 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
         return contentHeight - getMarginMiddle();
     }
 
-    public int getFirstRowY() {
-        return getAbsoluteY() + getBorderTop();
-    }
-
     public int getScrollAmount() {
         return Config.CLIENT.scrollSpeed.get();
     }
@@ -249,20 +238,20 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     }
 
     public int getBarLeft() {
-        return getX() + getFullWidth() - getBarWidth();
+        return getInnerXRight() - getBarWidth();
     }
 
     public int getAbsBarLeft() {
-        return getAbsoluteX() + getBarLeft();
+        return getAbsoluteXRight() - getBarWidth();
     }
 
     public int getMaxScroll() {
-        return getContentHeight() - (getFullHeight() - getBorderTop());
+        return getContentHeight() - getHeight();
     }
 
     private void applyScrollLimits() {
         int max = Utils.lowerBound(getMaxScroll(), 0);
-        scrollDistance = MathHelper.clamp(scrollDistance, 0.0F, max);
+        scrollDistance = MathHelper.clamp(scrollDistance, 0F, max);
     }
 
     public int getBarWidth() {
@@ -270,13 +259,13 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     }
 
     public int getBarHeight() {
-        int height = getFullHeight();
-        return MathHelper.clamp((height * height) / getContentHeight(), 32, height - getVerticalBorder());
+        int height = getHeight();
+        return MathHelper.clamp((height * height) / getContentHeight(), MIN_BAR_HEIGHT, height);
     }
 
     public int getAbsBarTop() {
-        int top = getAbsoluteX();
-        return Utils.lowerBound((int) scrollDistance * (getFullHeight() - getBarHeight()) / getBarExtraHeight() + top, top);
+        int top = getAbsoluteY();
+        return Utils.lowerBound((int) scrollDistance * (getHeight() - getBarHeight()) / getBarExtraHeight() + top, top);
     }
 
     public int getAbsBarBottom() {
