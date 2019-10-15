@@ -1,5 +1,5 @@
 package powerlessri.harmonics.gui.layout;
 
 // TODO
-public class FlexLayout {
+public class FlexboxLayout {
 }
