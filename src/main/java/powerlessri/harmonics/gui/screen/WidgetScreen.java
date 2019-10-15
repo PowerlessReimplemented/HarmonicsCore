@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.screen;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
@@ -8,9 +9,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.HarmonicsCore;
-import powerlessri.harmonics.collections.CompositeCollection;
+import powerlessri.harmonics.collections.CompositeUnmodifiableList;
 import powerlessri.harmonics.gui.debug.Inspections;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static powerlessri.harmonics.gui.Render2D.*;
 
 public abstract class WidgetScreen extends Screen implements IGuiEventListener {
@@ -48,8 +49,9 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     private IWindow primaryWindow;
     private List<IWindow> regularWindows = new ArrayList<>();
-    private TreeSet<IPopupWindow> popupWindows = new TreeSet<>();
-    private Collection<IWindow> windows;
+    private List<IPopupWindow> popupWindows = new ArrayList<>();
+    private List<IPopupWindow> orderedPopupWindows = new ArrayList<>();
+    private List<IWindow> windows;
 
     private final WidgetTreeInspections inspectionHandler = new WidgetTreeInspections();
     private final Queue<Triple<List<String>, Integer, Integer>> tooltipRenderQueue = new ArrayDeque<>();
@@ -57,8 +59,8 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     protected WidgetScreen(ITextComponent title) {
         super(title);
         // Safe downwards erasure cast
-        @SuppressWarnings("unchecked") Collection<IWindow> popupWindowsView = (Collection<IWindow>) (Collection<? extends IWindow>) new DescendingTreeSetBackedUnmodifiableCollection<>(popupWindows);
-        windows = new CompositeCollection<>(regularWindows, popupWindowsView);
+        @SuppressWarnings("unchecked") List<IWindow> popupWindowsView = (List<IWindow>) (List<? extends IWindow>) Lists.reverse(orderedPopupWindows);
+        windows = CompositeUnmodifiableList.of(regularWindows, popupWindowsView);
     }
 
     @Override
@@ -81,6 +83,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         });
 
         float particleTicks = Minecraft.getInstance().getRenderPartialTicks();
+        updateCache();
         for (IWindow window : windows) {
             window.update(particleTicks);
         }
@@ -111,7 +114,9 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         // We want to render things away from the screen first (painter's algorithm)
         GlStateManager.pushMatrix();
         float zOff = CONTEXT_MENU_Z - POPUP_WINDOW_Z;
-        for (IPopupWindow window : popupWindows) {
+        updateCache();
+        // This is in ascending order; the one used to build the composite list in in descending order
+        for (IPopupWindow window : orderedPopupWindows) {
             window.render(mouseX, mouseY, particleTicks);
             GlStateManager.translatef(0F, 0F, zOff);
         }
@@ -139,19 +144,8 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        boolean captured = false;
-        IPopupWindow capturedWindow = null;
-        for (IWindow window : windows) {
-            if (window.mouseClicked(mouseX, mouseY, button)) {
-                capturedWindow = window instanceof IPopupWindow ? (IPopupWindow) window : null;
-                captured = true;
-                break;
-            }
-        }
-        if (capturedWindow != null) {
-            raiseWindowToTop(capturedWindow);
-        }
-        if (captured) {
+        updateCache();
+        if (windows.stream().anyMatch(window -> window.mouseClicked(mouseX, mouseY, button))) {
             return true;
         } else {
             return primaryWindow.mouseClicked(mouseX, mouseY, button);
@@ -160,6 +154,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        updateCache();
         if (windows.stream().anyMatch(window -> window.mouseReleased(mouseX, mouseY, button))) {
             return true;
         } else {
@@ -169,6 +164,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragAmountX, double dragAmountY) {
+        updateCache();
         if (windows.stream().anyMatch(window -> window.mouseDragged(mouseX, mouseY, button, dragAmountX, dragAmountY))) {
             return true;
         } else {
@@ -178,6 +174,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amountScrolled) {
+        updateCache();
         if (windows.stream().anyMatch(window -> window.mouseScrolled(mouseX, mouseY, amountScrolled))) {
             return true;
         } else {
@@ -187,6 +184,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
+        updateCache();
         for (IWindow window : windows) {
             window.mouseMoved(mouseX, mouseY);
         }
@@ -195,6 +193,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        updateCache();
         if (windows.stream().anyMatch(window -> window.keyPressed(keyCode, scanCode, modifiers))) {
             return true;
         } else if (primaryWindow.keyPressed(keyCode, scanCode, modifiers)) {
@@ -204,7 +203,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         if (super.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         }
-        if (keyCode == GLFW.GLFW_KEY_E) {
+        if (keyCode == GLFW_KEY_E) {
             this.onClose();
             Minecraft.getInstance().player.closeScreen();
             return true;
@@ -214,6 +213,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        updateCache();
         if (windows.stream().anyMatch(window -> window.keyReleased(keyCode, scanCode, modifiers))) {
             return true;
         } else {
@@ -223,6 +223,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public boolean charTyped(char charTyped, int keyCode) {
+        updateCache();
         if (windows.stream().anyMatch(window -> window.charTyped(charTyped, keyCode))) {
             return true;
         } else {
@@ -232,6 +233,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public void removed() {
+        updateCache();
         for (IWindow window : windows) {
             window.onRemoved();
         }
@@ -243,10 +245,15 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         return false;
     }
 
+    private boolean dirty = false;
+
     public void addPopupWindow(IPopupWindow popup) {
         popupWindows.add(popup);
         popup.onAdded(this);
-        raiseWindowToTop(popup);
+        popup.setOrder(nextOrderIndex());
+        while (orderedPopupWindows.size() < popupWindows.size()) {
+            orderedPopupWindows.add(null);
+        }
     }
 
     public void removePopupWindow(IPopupWindow popup) {
@@ -261,13 +268,19 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     private int nextOrderIndex = 0;
 
-    public void raiseWindowToTop(IPopupWindow window) {
-        popupWindows.remove(window);
-        window.setOrder(nextOrderIndex());
-        popupWindows.add(window);
+    public int nextOrderIndex() {
+        dirty = true;
+        return nextOrderIndex++;
     }
 
-    public int nextOrderIndex() {
-        return nextOrderIndex++;
+    private void updateCache() {
+        if (dirty) {
+            // In-continuous index will crash
+            int baseIndex = nextOrderIndex - popupWindows.size();
+            for (IPopupWindow window : popupWindows) {
+                orderedPopupWindows.set(window.getOrder() - baseIndex, window);
+            }
+            dirty = false;
+        }
     }
 }

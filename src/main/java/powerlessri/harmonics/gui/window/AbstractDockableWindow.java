@@ -5,6 +5,7 @@ import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
 import powerlessri.harmonics.gui.widget.panel.Panel;
@@ -47,6 +48,18 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
         renderVanillaStyleBackground();
         renderChildren(mouseX, mouseY, particleTicks);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (super.mouseClickSubtree(mouseX, mouseY, button)) {
+            return true;
+        }
+        if (isInside(mouseX, mouseY)) {
+            setOrder(WidgetScreen.assertActive().nextOrderIndex());
+            return true;
+        }
+        return false;
     }
 
     public NavigationBar getNavigationBar() {

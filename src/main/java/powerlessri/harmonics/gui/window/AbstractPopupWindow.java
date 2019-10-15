@@ -2,6 +2,7 @@ package powerlessri.harmonics.gui.window;
 
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
 
 /**
  * Simple base class for a draggable popup. For more complicated usages see {@link AbstractDockableWindow}.
@@ -18,6 +19,7 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
             return true;
         }
         if (isInside(mouseX, mouseY)) {
+            setOrder(WidgetScreen.assertActive().nextOrderIndex());
             setFocusedWidget(null);
             initialDragLocalX = (int) mouseX - getX();
             initialDragLocalY = (int) mouseY - getY();
