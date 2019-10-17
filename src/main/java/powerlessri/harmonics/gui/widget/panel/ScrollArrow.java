@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.widget.panel;
 
 import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.button.AbstractIconButton;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
@@ -102,6 +103,16 @@ public abstract class ScrollArrow extends AbstractIconButton implements LeafWidg
     @Override
     public WrappingList getParent() {
         return Objects.requireNonNull((WrappingList) super.getParent());
+    }
+
+    @Override
+    protected void preRenderEvent(int mx, int my) {
+        RenderEventDispatcher.onPreRender(this, mx, my);
+    }
+
+    @Override
+    protected void postRenderEvent(int mx, int my) {
+        RenderEventDispatcher.onPostRender(this, mx, my);
     }
 
     protected abstract int getScrollDirectionMask();

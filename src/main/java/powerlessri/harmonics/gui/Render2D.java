@@ -15,8 +15,7 @@ import powerlessri.harmonics.gui.screen.WidgetScreen;
 import java.awt.*;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_SMOOTH;
+import static org.lwjgl.opengl.GL11.*;
 
 public final class Render2D {
 
@@ -63,6 +62,14 @@ public final class Render2D {
 
     public static int fontHeight() {
         return Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
+    }
+
+    public static void color(int color) {
+        int alpha = (color >> 24) & 255;
+        int red = (color >> 16) & 255;
+        int green = (color >> 8) & 255;
+        int blue = color & 255;
+        GlStateManager.color4f(red / 255F, green / 255F, blue / 255F, alpha / 255F);
     }
 
     public static void bindTexture(ResourceLocation texture) {
@@ -166,6 +173,16 @@ public final class Render2D {
         buffer.pos(x1, y2, z).tex(u1, v2).endVertex();
         buffer.pos(x2, y2, z).tex(u2, v2).endVertex();
         buffer.pos(x2, y1, z).tex(u2, v1).endVertex();
+    }
+
+    public static void verticalLine(int x, int y1, int y2, float z) {
+        glVertex3f(x, y1, z);
+        glVertex3f(x, y2, z);
+    }
+
+    public static void horizontalLine(int x1, int x2, int y, float z) {
+        glVertex3f(x1, y, z);
+        glVertex3f(x2, y, z);
     }
 
     public static void completeTexture(int x1, int y1, int x2, int y2, float z, ResourceLocation texture) {

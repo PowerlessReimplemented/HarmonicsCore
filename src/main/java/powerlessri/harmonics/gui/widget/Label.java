@@ -1,7 +1,6 @@
 package powerlessri.harmonics.gui.widget;
 
 import net.minecraft.client.resources.I18n;
-import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.TextRenderer;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -17,6 +16,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     private Side side = Side.RIGHT;
     private Alignment alignment = Alignment.CENTER;
 
+    private BoxSizing boxSizing = BoxSizing.BORDER_BOX;
     private String text = "";
     private int color;
 
@@ -89,13 +89,17 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
         return this;
     }
 
-    public void updatePosition() {
-        alignTo(target, side, alignment);
-    }
-
     @Override
     public BoxSizing getBoxSizing() {
-        return BoxSizing.PHANTOM;
+        return boxSizing;
+    }
+
+    public void setBoxSizing(BoxSizing boxSizing) {
+        this.boxSizing = boxSizing;
+    }
+
+    public void updatePosition() {
+        alignTo(target, side, alignment);
     }
 
     @Override

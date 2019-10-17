@@ -16,18 +16,17 @@ import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static powerlessri.harmonics.gui.Render2D.beginColoredQuad;
-import static powerlessri.harmonics.gui.Render2D.draw;
+import static powerlessri.harmonics.gui.Render2D.*;
 
 public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     public enum BackgroundStyle implements IBackgroundRenderer {
-        NONE(0xff000000, 0xff333333) {
+        NONE(0xff000000, 0xff333333, 0xff000000) {
             @Override
             public void render(int x1, int y1, int x2, int y2, float z, boolean hovered, boolean focused) {
             }
         },
-        THICK_BEVELED(0xff000000, 0xff333333) {
+        THICK_BEVELED(0xff000000, 0xff333333, 0xff000000) {
             @Override
             public void render(int x1, int y1, int x2, int y2, float z, boolean hovered, boolean focused) {
                 int color = focused ? 0xffeeeeee
@@ -35,22 +34,33 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
                         : 0xffc6c6c6;
                 GlStateManager.disableTexture();
                 beginColoredQuad();
-                Render2D.thickBeveledBox(x1, y1, x2, y2, z, 1, 0xff2b2b2b, 0xffffffff, color);
+                thickBeveledBox(x1, y1, x2, y2, z, 1, 0xff2b2b2b, 0xffffffff, color);
                 draw();
                 GlStateManager.enableTexture();
             }
         },
-        RED_OUTLINE(0xffffffff, 0xffcccccc) {
+        BLACK_WHITE(0xffffffff, 0xffcccccc, 0xffffffff) {
+            @Override
+            public void render(int x1, int y1, int x2, int y2, float z, boolean hovered, boolean focused) {
+                GlStateManager.disableTexture();
+                beginColoredQuad();
+                coloredRect(x1, y1, x2, y2, z, 0xffd0d0d0);
+                coloredRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, z, 0xff000000);
+                draw();
+                GlStateManager.enableTexture();
+            }
+        },
+        RED_OUTLINE(0xffffffff, 0xffcccccc, 0xffffffff) {
             @Override
             public void render(int x1, int y1, int x2, int y2, float z, boolean hovered, boolean focused) {
                 GlStateManager.disableTexture();
                 beginColoredQuad();
                 if (focused) {
-                    Render2D.coloredRect(x1, y1, x2, y2, z, 0xffcf191f);
-                    Render2D.verticalGradientRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, z, 0xff191919, 0xff313131);
+                    coloredRect(x1, y1, x2, y2, z, 0xffcf191f);
+                    verticalGradientRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, z, 0xff191919, 0xff313131);
                 } else {
-                    Render2D.coloredRect(x1, y1, x2, y2, z, 0xff6d0b0e);
-                    Render2D.coloredRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, z, 0xff1c1c1c);
+                    coloredRect(x1, y1, x2, y2, z, 0xff6d0b0e);
+                    coloredRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, z, 0xff1c1c1c);
                 }
                 draw();
                 GlStateManager.enableTexture();
@@ -59,14 +69,16 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
         public final int textColor;
         public final int textColorUneditable;
+        public final int cursorColor;
 
-        BackgroundStyle(int textColor, int textColorUneditable) {
+        BackgroundStyle(int textColor, int textColorUneditable, int cursorColor) {
             this.textColor = textColor;
             this.textColorUneditable = textColorUneditable;
+            this.cursorColor = cursorColor;
         }
     }
 
-    private IBackgroundRenderer backgroundStyle = BackgroundStyle.THICK_BEVELED;
+    private IBackgroundRenderer backgroundStyle = BackgroundStyle.BLACK_WHITE;
     private ITextRenderer textRenderer = TextRenderer.newVanilla();
 
     private String text = "";
@@ -86,9 +98,11 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     public TextField(int width, int height) {
         this.setDimensions(width, height);
+        this.setBackgroundStyle(BackgroundStyle.BLACK_WHITE);
     }
 
     public TextField() {
+        this.setBackgroundStyle(BackgroundStyle.BLACK_WHITE);
     }
 
     public boolean isEditable() {
@@ -434,7 +448,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
                 GlStateManager.disableTexture();
                 GlStateManager.logicOp(LogicOp.OR_REVERSE);
                 beginColoredQuad();
-                Render2D.coloredRect(selectionX, textY, selectionX + selectionWidth, textY + (int) textRenderer.getFontHeight(), getZLevel(), 0xff3c93f2);
+                coloredRect(selectionX, textY, selectionX + selectionWidth, textY + (int) textRenderer.getFontHeight(), getZLevel(), 0xff3c93f2);
                 draw();
                 GlStateManager.enableTexture();
             }
@@ -448,12 +462,19 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
             int cx = x + 2 + w;
             GlStateManager.disableTexture();
             beginColoredQuad();
-            Render2D.coloredRect(cx, y + 2, cx + 1, y2 - 3, getZLevel(), 0xff000000);
+            coloredRect(cx, y + 2, cx + 1, y2 - 3, getZLevel(), getCursorColor());
             draw();
             GlStateManager.enableTexture();
         }
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+
+    public int getCursorColor() {
+        if (backgroundStyle instanceof BackgroundStyle) {
+            return ((BackgroundStyle) backgroundStyle).cursorColor;
+        }
+        return 0xff000000;
     }
 
     /**
