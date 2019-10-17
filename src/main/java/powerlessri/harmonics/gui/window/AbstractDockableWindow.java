@@ -5,14 +5,18 @@ import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
-import powerlessri.harmonics.gui.widget.Icon;
+import powerlessri.harmonics.gui.widget.navigation.DockedWindow;
 import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
 import powerlessri.harmonics.gui.widget.panel.Panel;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class AbstractDockableWindow<T extends IWidget> extends AbstractWindow implements IPopupWindow {
+
+    private final DockingBar dockingBar;
 
     private final NavigationBar navigationBar;
     private final Panel<T> contentBox;
@@ -21,7 +25,8 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
     private boolean alive = true;
     private int order;
 
-    public AbstractDockableWindow(int width, int height) {
+    public AbstractDockableWindow(@Nullable DockingBar dockingBar, int width, int height) {
+        this.dockingBar = dockingBar;
         this.navigationBar = NavigationBar.standard(this);
         this.contentBox = new Panel<>();
         this.contentBox.attachWindow(this);
@@ -54,7 +59,14 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
     }
 
     public void minimize() {
+        DockedWindow item = new DockedWindow(this);
+        dockingBar.addDockedWindow(item);
+        discard();
+    }
 
+    public void restore() {
+        alive = true;
+        WidgetScreen.assertActive().addPopupWindow(this);
     }
 
     public ITexture getIcon() {

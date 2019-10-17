@@ -107,6 +107,36 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
     protected void onResize() {
     }
 
+    public void moveToBottom() {
+        position.y = scaledHeight() - border.height;
+        updatePosition();
+    }
+
+    public void moveToVerticalCenter() {
+        position.y = scaledHeight() / 2 - border.height / 2;
+        updatePosition();
+    }
+
+    public void moveToTop() {
+        position.y = 0;
+        updatePosition();
+    }
+
+    public void moveToLeft() {
+        position.x = 0;
+        updatePosition();
+    }
+
+    public void moveToHorizontalCenter() {
+        position.x = scaledWidth() / 2 - border.width / 2;
+        updatePosition();
+    }
+
+    public void moveToRight() {
+        position.x = scaledWidth() - border.width;
+        updatePosition();
+    }
+
     protected final void updatePosition() {
         if (getChildren() != null) {
             for (IWidget child : getChildren()) {

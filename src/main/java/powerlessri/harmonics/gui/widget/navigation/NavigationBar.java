@@ -169,6 +169,14 @@ public class NavigationBar extends AbstractContainer<IWidget> {
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
+    public Icon getIcon() {
+        return icon;
+    }
+
+    public Label getTitle() {
+        return title;
+    }
+
     @Override
     public void onDimensionChanged() {
         reflow();

@@ -180,6 +180,11 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
         return this;
     }
 
+    public void removeChildren(T widget) {
+        elements.remove(widget);
+        widget.onRemoved();
+    }
+
     protected int getContentWidth() {
         int contentWidth = 0;
         for (T child : elements) {
