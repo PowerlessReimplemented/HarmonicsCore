@@ -11,6 +11,7 @@ import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.widget.button.GradientTextButton;
+import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
 import powerlessri.harmonics.gui.window.*;
 
 import java.util.List;
@@ -99,6 +100,13 @@ public class DockableWindowTest extends WidgetScreen {
                     .addChildren(cbtn3);
             getContentBox().setLayout(w -> FlowLayout.vertical(w, 2, 2, 2));
             getContentBox().reflow();
+        }
+
+        @Override
+        protected void onInitialized() {
+            NavigationBar navBar = getNavigationBar();
+            navBar.getIcon().setDimensions(8, 8);
+            navBar.reflow();
         }
 
         @Override

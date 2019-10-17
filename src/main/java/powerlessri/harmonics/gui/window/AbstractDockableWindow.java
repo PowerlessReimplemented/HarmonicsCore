@@ -35,6 +35,10 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
         setContents(width, height);
         FlowLayout.vertical(children, 0, 0, 0);
         populateContentBox();
+        onInitialized();
+    }
+
+    protected void onInitialized() {
     }
 
     protected abstract void populateContentBox();
