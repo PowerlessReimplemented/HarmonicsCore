@@ -33,4 +33,20 @@ public final class Utils {
         Arrays.setAll(result, i -> i + start);
         return result;
     }
+
+    public static int map(int x, int minIn, int maxIn, int minOut, int maxOut) {
+        return (x - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
+    }
+
+    public static long map(long x, long minIn, long maxIn, long minOut, long maxOut) {
+        return (x - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
+    }
+
+    public static float map(float x, float minIn, float maxIn, float minOut, float maxOut) {
+        return (x - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
+    }
+
+    public static double map(double x, double minIn, double maxIn, double minOut, double maxOut) {
+        return (x - minIn) * (maxOut - minOut) / (maxIn - minIn) + minOut;
+    }
 }
