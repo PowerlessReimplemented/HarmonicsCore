@@ -11,7 +11,6 @@ import powerlessri.harmonics.gui.widget.button.SimpleIconButton;
 import powerlessri.harmonics.gui.window.AbstractDockableWindow;
 import powerlessri.harmonics.utils.Utils;
 
-import javax.rmi.CORBA.Util;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -74,8 +73,8 @@ public class NavigationBar extends AbstractContainer<IWidget> {
 
     public Consumer<NavigationBar> render = n -> {};
 
-    private int initialDragLocalX;
-    private int initialDragLocalY;
+    private int initialDragLocalX = -1;
+    private int initialDragLocalY = -1;
 
     public NavigationBar(int height) {
         this.setHeight(height);
@@ -94,6 +93,7 @@ public class NavigationBar extends AbstractContainer<IWidget> {
         addChildrenInternal(icon);
 
         title = new Label(icon);
+        title.setBoxSizing(BoxSizing.PHANTOM);
         addChildrenInternal(title);
         adjustMinHeight();
     }
@@ -128,10 +128,8 @@ public class NavigationBar extends AbstractContainer<IWidget> {
     }
 
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (isInside(mouseX, mouseY)) {
-            initialDragLocalX = -1;
-            initialDragLocalY = -1;
-        }
+        initialDragLocalX = -1;
+        initialDragLocalY = -1;
         return super.mouseReleased(mouseX, mouseY, button);
     }
 

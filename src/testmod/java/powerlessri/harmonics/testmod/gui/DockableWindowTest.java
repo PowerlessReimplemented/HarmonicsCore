@@ -37,7 +37,7 @@ public class DockableWindowTest extends WidgetScreen {
             setContents(100, 80);
             centralize();
 
-            DockingBar dockingBar = new DockingBar((int) (scaledWidth() * (2F / 3F)), 20);
+            DockingBar dockingBar = new DockingBar((int) (scaledWidth() * (3F / 5F)), 20);
             dockingBar.moveToHorizontalCenter();
             dockingBar.moveToBottom();
             WidgetScreen.assertActive().addWindow(dockingBar);

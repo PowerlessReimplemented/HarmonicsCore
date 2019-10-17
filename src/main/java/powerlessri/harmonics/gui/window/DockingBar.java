@@ -18,7 +18,12 @@ public class DockingBar extends AbstractWindow {
 
     public DockingBar(int width, int height) {
         this.setBorder(width, height);
-        this.dockedWindows = new HorizontalList<>(getContentWidth(), getContentHeight());
+        this.dockedWindows = new HorizontalList<DockedWindow>(getContentWidth(), getContentHeight()) {
+            @Override
+            public int getBarHeight() {
+                return 3;
+            }
+        };
         this.dockedWindows.attachWindow(this);
         this.children = ImmutableList.of(dockedWindows);
     }
@@ -27,11 +32,12 @@ public class DockingBar extends AbstractWindow {
         int height = dockedWindows.getHeight() - dockedWindows.getBarHeight();
         item.setHeight(height);
         dockedWindows.addChildren(item);
+        dockedWindows.reflow();
     }
 
     @Override
     public int getBorderSize() {
-        return 4;
+        return 2;
     }
 
     @Override
@@ -42,7 +48,7 @@ public class DockingBar extends AbstractWindow {
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        renderVanillaStyleBackground();
+        renderFlatStyleBackground();
         renderChildren(mouseX, mouseY, particleTicks);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }

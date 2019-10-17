@@ -91,7 +91,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
         if (super.mouseScrolled(mouseX, mouseY, scroll)) {
             return true;
         }
-        if (scroll != 0) {
+        if (isInside(mouseX, mouseY) && scroll != 0) {
             scrollDistance += -scroll * getScrollAmount();
             applyScrollLimits();
             reflow();
@@ -234,7 +234,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     }
 
     public int getMarginMiddle() {
-        return 10;
+        return 0;
     }
 
     public int getBarLeft() {

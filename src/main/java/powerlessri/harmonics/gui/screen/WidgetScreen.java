@@ -53,6 +53,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     private final WidgetTreeInspections inspectionHandler = new WidgetTreeInspections();
     private final Queue<Triple<List<String>, Integer, Integer>> tooltipRenderQueue = new ArrayDeque<>();
+    private final Queue<Runnable> taskQueue = new ArrayDeque<>();
 
     protected WidgetScreen(ITextComponent title) {
         super(title);
@@ -72,6 +73,10 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
     @Override
     public void tick() {
+        while (!taskQueue.isEmpty()) {
+            taskQueue.remove().run();
+        }
+
         popupWindows.removeIf(popup -> {
             if (popup.shouldDiscard()) {
                 popup.onRemoved();
@@ -262,6 +267,10 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     public void removePopupWindow(IPopupWindow popup) {
         popupWindows.remove(popup);
         popup.onRemoved();
+    }
+
+    public void defer(Runnable task) {
+        taskQueue.add(task);
     }
 
     @SuppressWarnings("SuspiciousNameCombination") // Tuple3 is acting weird

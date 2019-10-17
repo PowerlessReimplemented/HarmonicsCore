@@ -8,7 +8,8 @@ import powerlessri.harmonics.gui.debug.ITextReceiver;
  */
 public abstract class AbstractPopupWindow extends AbstractWindow implements IPopupWindow {
 
-    private int initialDragLocalX, initialDragLocalY;
+    private int initialDragLocalX = -1;
+    private int initialDragLocalY = -1;
     private boolean alive = true;
     private int order;
 
