@@ -74,10 +74,6 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     public void adjustMinContent() {
-        if (getChildren().isEmpty()) {
-            return;
-        }
-
         int rightmost = 0;
         int bottommost = 0;
         for (IWidget child : getChildren()) {
@@ -91,6 +87,28 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
             }
         }
         setDimensions(rightmost, bottommost);
+    }
+
+    public void adjustMinWidth() {
+        int rightmost = 0;
+        for (IWidget child : getChildren()) {
+            int right = child.getX() + child.getFullWidth();
+            if (right > rightmost) {
+                rightmost = right;
+            }
+        }
+        setHeight(rightmost);
+    }
+
+    public void adjustMinHeight() {
+        int bottommost = 0;
+        for (IWidget child : getChildren()) {
+            int bottom = child.getY() + child.getFullHeight();
+            if (bottom > bottommost) {
+                bottommost = bottom;
+            }
+        }
+        setHeight(bottommost);
     }
 
     public void fillWindow() {

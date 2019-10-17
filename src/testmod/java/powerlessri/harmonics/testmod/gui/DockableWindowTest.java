@@ -1,17 +1,22 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import powerlessri.harmonics.gui.ITexture;
+import powerlessri.harmonics.gui.Texture;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
 import powerlessri.harmonics.gui.widget.button.GradientTextButton;
-import powerlessri.harmonics.gui.window.AbstractDockableWindow;
-import powerlessri.harmonics.gui.window.AbstractWindow;
+import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
+import powerlessri.harmonics.gui.window.*;
 
 import java.util.List;
+
+import static powerlessri.harmonics.gui.Render2D.scaledWidth;
 
 public class DockableWindowTest extends WidgetScreen {
 
@@ -33,8 +38,13 @@ public class DockableWindowTest extends WidgetScreen {
             setContents(100, 80);
             centralize();
 
+            DockingBar dockingBar = new DockingBar((int) (scaledWidth() * (3F / 5F)), 20);
+            dockingBar.moveToHorizontalCenter();
+            dockingBar.moveToBottom();
+            WidgetScreen.assertActive().addWindow(dockingBar);
+
             ColoredTextButton createWindow = ColoredTextButton.ofText("Window", b -> {
-                Window window = new Window();
+                Window window = new Window(dockingBar);
                 WidgetScreen.assertActive().addPopupWindow(window);
             });
             createWindow.attachWindow(this);
@@ -64,8 +74,8 @@ public class DockableWindowTest extends WidgetScreen {
 
     public static class Window extends AbstractDockableWindow<IWidget> {
 
-        public Window() {
-            super(200, 160);
+        public Window(DockingBar dockingBar) {
+            super(dockingBar, 200, 160);
         }
 
         @Override
@@ -90,6 +100,18 @@ public class DockableWindowTest extends WidgetScreen {
                     .addChildren(cbtn3);
             getContentBox().setLayout(w -> FlowLayout.vertical(w, 2, 2, 2));
             getContentBox().reflow();
+        }
+
+        @Override
+        protected void onInitialized() {
+            NavigationBar navBar = getNavigationBar();
+            navBar.getIcon().setDimensions(8, 8);
+            navBar.reflow();
+        }
+
+        @Override
+        public ITexture getIcon() {
+            return Texture.portion(new ResourceLocation("minecraft:textures/item/bucket.png"), 16, 16, 0, 0, 16, 16);
         }
     }
 }

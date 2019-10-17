@@ -18,7 +18,7 @@ public class Icon extends AbstractWidget implements INamedElement, LeafWidgetMix
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         if (isEnabled()) {
-            texture.render(getAbsoluteX(), getAbsoluteY(), getZLevel());
+            texture.render(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom(), getZLevel());
         }
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }

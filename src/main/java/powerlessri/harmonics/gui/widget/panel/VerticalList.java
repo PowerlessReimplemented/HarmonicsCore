@@ -21,6 +21,7 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
+import javax.annotation.Nonnegative;
 import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -30,10 +31,12 @@ import static powerlessri.harmonics.gui.Render2D.*;
 public class VerticalList<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
 
     public static final int MIN_BAR_HEIGHT = 16;
+
     private boolean scrolling;
     protected float scrollDistance;
 
     private final List<T> elements;
+    private int marginMiddle = 0;
 
     public VerticalList(int width, int height) {
         this.setDimensions(width, height);
@@ -91,7 +94,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
         if (super.mouseScrolled(mouseX, mouseY, scroll)) {
             return true;
         }
-        if (scroll != 0) {
+        if (isInside(mouseX, mouseY) && scroll != 0) {
             scrollDistance += -scroll * getScrollAmount();
             applyScrollLimits();
             reflow();
@@ -234,7 +237,11 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     }
 
     public int getMarginMiddle() {
-        return 10;
+        return marginMiddle;
+    }
+
+    public void setMarginMiddle(@Nonnegative int marginMiddle) {
+        this.marginMiddle = Utils.lowerBound(marginMiddle, 0);
     }
 
     public int getBarLeft() {

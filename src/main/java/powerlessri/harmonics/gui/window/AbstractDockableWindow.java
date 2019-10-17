@@ -1,17 +1,22 @@
 package powerlessri.harmonics.gui.window;
 
 import com.google.common.collect.ImmutableList;
-import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
+import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.navigation.DockedWindow;
 import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
 import powerlessri.harmonics.gui.widget.panel.Panel;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class AbstractDockableWindow<T extends IWidget> extends AbstractWindow implements IPopupWindow {
+
+    private final DockingBar dockingBar;
 
     private final NavigationBar navigationBar;
     private final Panel<T> contentBox;
@@ -20,9 +25,9 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
     private boolean alive = true;
     private int order;
 
-    public AbstractDockableWindow(int width, int height) {
+    public AbstractDockableWindow(@Nullable DockingBar dockingBar, int width, int height) {
+        this.dockingBar = dockingBar;
         this.navigationBar = NavigationBar.standard(this);
-        this.navigationBar.attachWindow(this);
         this.contentBox = new Panel<>();
         this.contentBox.attachWindow(this);
         this.children = ImmutableList.of(navigationBar, contentBox);
@@ -30,6 +35,10 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
         setContents(width, height);
         FlowLayout.vertical(children, 0, 0, 0);
         populateContentBox();
+        onInitialized();
+    }
+
+    protected void onInitialized() {
     }
 
     protected abstract void populateContentBox();
@@ -47,6 +56,29 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
         renderVanillaStyleBackground();
         renderChildren(mouseX, mouseY, particleTicks);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+
+    public void maximize() {
+        // No support by default
+    }
+
+    public void minimize() {
+        DockedWindow item = new DockedWindow(this);
+        dockingBar.addDockedWindow(item);
+        discard();
+    }
+
+    public void restore() {
+        alive = true;
+        WidgetScreen.assertActive().addPopupWindow(this);
+    }
+
+    public ITexture getIcon() {
+        return Texture.NONE;
+    }
+
+    public String getTitle() {
+        return "test";
     }
 
     public NavigationBar getNavigationBar() {

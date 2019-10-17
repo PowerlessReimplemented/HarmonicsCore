@@ -5,11 +5,14 @@ import net.minecraft.client.Minecraft;
 
 import java.util.List;
 
-class VanillaTextRenderer implements ITextRenderer {
+public class VanillaTextRenderer implements ITextRenderer {
 
     private float fontHeight = getDefaultFontHeight();
     private float scaleFactor = 1F;
     private int textColor = 0xffffff;
+
+    VanillaTextRenderer() {
+    }
 
     @Override
     public void renderText(String text, int x, int y, float z) {

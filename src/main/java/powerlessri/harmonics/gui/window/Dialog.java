@@ -125,16 +125,12 @@ public class Dialog extends AbstractPopupWindow {
 
     public Dialog() {
         this.messageBox = new Paragraph(10, 10, new ArrayList<>());
+        this.messageBox.setBorders(0);
         this.messageBox.setFitContents(true);
-        this.buttons = new Panel<IButton>()
-                .setLayout(b -> {
-                    int x = 0;
-                    for (IButton button : b) {
-                        button.setLocation(x, 0);
-                        x += button.getWidth() + 2;
-                    }
-                });
-        this.buttons.setDimensions(10, 10);
+        this.buttons = new Panel<>();
+        this.buttons
+                .setLayout(b -> FlowLayout.reverseHorizontal(b, buttons.getWidth(), 0, 2))
+                .setDimensions(10, 10);
         this.children = new ArrayList<>();
         children.add(messageBox);
         children.add(buttons);
@@ -155,14 +151,16 @@ public class Dialog extends AbstractPopupWindow {
 
     public void reflow() {
         onPreReflow.run();
-        messageBox.expandHorizontally();
-        buttons.reflow();
-        buttons.adjustMinContent();
+        buttons.adjustMinHeight();
+        // Calculate the min width of the buttons
+        FlowLayout.horizontal(buttons.getChildren(), 0, 0, 2);
 
         FlowLayout.vertical(children, 0, 0, 0);
-
         updateDimensions();
         updatePosition();
+
+        buttons.expandHorizontally();
+        buttons.reflow();
         onPostReflow.run();
     }
 

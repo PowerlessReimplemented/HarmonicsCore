@@ -17,10 +17,12 @@ public interface ResizableWidgetMixin extends IWidget {
 
     default void setWidth(int width) {
         getDimensions().width = width;
+        onDimensionChanged();
     }
 
     default void setHeight(int height) {
         getDimensions().height = height;
+        onDimensionChanged();
     }
 
     default int getBorderTop() {
@@ -41,18 +43,22 @@ public interface ResizableWidgetMixin extends IWidget {
 
     default void setBorderTop(int top) {
         getBorders().top = top;
+        onBordersChanged();
     }
 
     default void setBorderRight(int right) {
         getBorders().right = right;
+        onBordersChanged();
     }
 
     default void setBorderBottom(int bottom) {
         getBorders().bottom = bottom;
+        onBordersChanged();
     }
 
     default void setBorderLeft(int left) {
         getBorders().left = left;
+        onBordersChanged();
     }
 
     default void setBorders(int top, int right, int bottom, int left) {
@@ -60,9 +66,16 @@ public interface ResizableWidgetMixin extends IWidget {
         getBorders().right = right;
         getBorders().bottom = bottom;
         getBorders().left = left;
+        onBordersChanged();
     }
 
     default void setBorders(int borders) {
         setBorders(borders, borders, borders, borders);
+    }
+
+    default void onDimensionChanged() {
+    }
+
+    default void onBordersChanged() {
     }
 }

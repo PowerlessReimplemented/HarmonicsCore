@@ -1,17 +1,20 @@
 package powerlessri.harmonics.gui.widget;
 
 import net.minecraft.client.resources.I18n;
-import powerlessri.harmonics.gui.Render2D;
+import powerlessri.harmonics.gui.TextRenderer;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
-import powerlessri.harmonics.gui.layout.properties.*;
+import powerlessri.harmonics.gui.layout.properties.BoxSizing;
+import powerlessri.harmonics.gui.layout.properties.Side;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
+
+import static powerlessri.harmonics.gui.Render2D.fontRenderer;
 
 public class Label extends AbstractWidget implements LeafWidgetMixin {
 
     private IWidget target;
     private Side side = Side.RIGHT;
-    private HorizontalAlignment alignment = HorizontalAlignment.CENTER;
+    private Alignment alignment = Alignment.CENTER;
 
     private BoxSizing boxSizing = BoxSizing.BORDER_BOX;
     private String text = "";
@@ -25,6 +28,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
         } else {
             this.attachWindow(target.getWindow());
         }
+        setHeight(fontRenderer().FONT_HEIGHT);
         setBorders(1);
         updatePosition();
     }
@@ -36,8 +40,8 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     @SuppressWarnings("UnusedReturnValue")
     public Label text(String text) {
         this.text = text;
-        int width = Render2D.fontRenderer().getStringWidth(text);
-        int height = Render2D.fontRenderer().FONT_HEIGHT;
+        int width = fontRenderer().getStringWidth(text);
+        int height = fontRenderer().FONT_HEIGHT;
         setDimensions(width, height);
         updatePosition();
         return this;
@@ -74,12 +78,12 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
         return this;
     }
 
-    public HorizontalAlignment getAlignment() {
+    public Alignment getAlignment() {
         return alignment;
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public Label setAlignment(HorizontalAlignment alignment) {
+    public Label setAlignment(Alignment alignment) {
         this.alignment = alignment;
         updatePosition();
         return this;
@@ -94,14 +98,15 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
         this.boxSizing = boxSizing;
     }
 
-    private void updatePosition() {
+    public void updatePosition() {
         alignTo(target, side, alignment);
     }
 
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        Render2D.fontRenderer().drawString(text, getAbsoluteX(), getAbsoluteY(), color);
+        TextRenderer.vanilla().setTextColor(color);
+        TextRenderer.vanilla().renderText(text, getAbsoluteX(), getAbsoluteY(), getZLevel());
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

@@ -12,6 +12,7 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
+import javax.annotation.Nonnegative;
 import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -20,10 +21,12 @@ import static powerlessri.harmonics.gui.Render2D.*;
 public class HorizontalList<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
 
     public static final int MIN_BAR_WIDTH = 16;
+
     private boolean scrolling;
     protected float scrollDistance;
 
     private final List<T> elements;
+    private int marginMiddle = 0;
 
     public HorizontalList(int width, int height) {
         this.setDimensions(width, height);
@@ -81,7 +84,7 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
         if (super.mouseScrolled(mouseX, mouseY, scroll)) {
             return true;
         }
-        if (scroll != 0) {
+        if (isInside(mouseX, mouseY) && scroll != 0) {
             scrollDistance += -scroll * getScrollAmount();
             applyScrollLimits();
             reflow();
@@ -180,6 +183,11 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
         return this;
     }
 
+    public void removeChildren(T widget) {
+        elements.remove(widget);
+        widget.onRemoved();
+    }
+
     protected int getContentWidth() {
         int contentWidth = 0;
         for (T child : elements) {
@@ -194,7 +202,11 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
     }
 
     public int getMarginMiddle() {
-        return 10;
+        return marginMiddle;
+    }
+
+    public void setMarginMiddle(@Nonnegative int marginMiddle) {
+        this.marginMiddle = Utils.lowerBound(marginMiddle, 0);
     }
 
     public int getMaxScroll() {
