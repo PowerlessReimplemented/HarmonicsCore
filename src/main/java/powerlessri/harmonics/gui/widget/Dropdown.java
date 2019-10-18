@@ -1,0 +1,174 @@
+package powerlessri.harmonics.gui.widget;
+
+import com.google.common.collect.ImmutableList;
+import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
+import powerlessri.harmonics.gui.layout.FlowLayout;
+import powerlessri.harmonics.gui.screen.BackgroundRenderers;
+import powerlessri.harmonics.gui.widget.panel.VerticalList;
+
+import java.util.*;
+
+public class Dropdown<B extends IWidget, L extends B, P extends B> extends AbstractContainer<B> {
+
+    public static <T extends IWidget> Dropdown<IWidget, Paragraph, VerticalList<T>> textAndList(int width, int headerHeight, int panelHeight) {
+        Paragraph header = new Paragraph(width, headerHeight, new ArrayList<>());
+        VerticalList<T> panel = new VerticalList<>(width, panelHeight);
+        return new Dropdown<>(header, panel);
+    }
+
+    private L label;
+    private P panel;
+    private final List<B> children;
+
+    private boolean expanded = false;
+
+    public Dropdown(L label, P panel) {
+        this.label = label;
+        this.panel = panel;
+        this.children = ImmutableList.of(label, panel);
+        this.setWidth(Math.max(label.getFullWidth(), panel.getFullWidth()));
+        this.setHeight(label.getFullHeight());
+        this.setBorders(4);
+        this.reflow();
+    }
+
+    @Override
+    public void onInitialAttach() {
+        label.attach(this);
+        panel.attach(this);
+    }
+
+    @Override
+    public Collection<B> getChildren() {
+        return children;
+    }
+
+    @Override
+    public void reflow() {
+        FlowLayout.vertical(children, 0, 0, getBorderBottom());
+    }
+
+    public L getLabel() {
+        return label;
+    }
+
+    public P getPanel() {
+        return panel;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public boolean isCollapsed() {
+        return !expanded;
+    }
+
+    public void toggle() {
+        expanded = !expanded;
+        if (expanded) {
+            setHeight(label.getFullHeight() + this.getBorderBottom() + panel.getFullHeight());
+        } else {
+            setHeight(label.getFullHeight());
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (expanded) {
+            if (super.mouseClicked(mouseX, mouseY, button)) {
+                return true;
+            }
+        } else if (label.mouseClicked(mouseX, mouseY, button)) {
+            return true;
+        }
+        if (isInside(mouseX, mouseY)) {
+            toggle();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (expanded) {
+            return super.mouseReleased(mouseX, mouseY, button);
+        }
+        return label.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (expanded) {
+            return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        }
+        return label.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
+        if (expanded) {
+            return super.mouseScrolled(mouseX, mouseY, scroll);
+        }
+        return label.mouseScrolled(mouseX, mouseY, scroll);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (expanded) {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
+        return label.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        if (expanded) {
+            return super.keyReleased(keyCode, scanCode, modifiers);
+        }
+        return label.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char charTyped, int keyCode) {
+        if (expanded) {
+            return super.charTyped(charTyped, keyCode);
+        }
+        return label.charTyped(charTyped, keyCode);
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        if (expanded) {
+            super.mouseMoved(mouseX, mouseY);
+        }
+        label.mouseMoved(mouseX, mouseY);
+    }
+
+    @Override
+    public void update(float particleTicks) {
+        if (expanded) {
+            super.update(particleTicks);
+        }
+        label.update(particleTicks);
+    }
+
+    @Override
+    public void render(int mouseX, int mouseY, float particleTicks) {
+        RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+
+        int x1 = getOuterAbsoluteX();
+        int y1 = getOuterAbsoluteY();
+        int width = getFullWidth();
+        if (expanded) {
+            BackgroundRenderers.drawVanillaStyle4x4(x1, y1, width, getFullHeight(), getZLevel());
+        }
+        BackgroundRenderers.drawVanillaStyle4x4(x1, y1, width, getBorderTop() + label.getFullHeight() + getBorderBottom(), getZLevel());
+        label.render(mouseX, mouseY, particleTicks);
+        if (expanded) {
+            panel.render(mouseX, mouseY, particleTicks);
+        }
+
+        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
+}

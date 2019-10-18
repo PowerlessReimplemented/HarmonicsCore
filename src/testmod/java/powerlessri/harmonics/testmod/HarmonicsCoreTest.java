@@ -71,6 +71,7 @@ public class HarmonicsCoreTest {
         guiTests.put("switch&checkbox_test", Switch8CheckboxTest::new);
         guiTests.put("scrolling_list_test", ScrollingListTest::new);
         guiTests.put("slider_test", SliderTest::new);
+        guiTests.put("dropdown_test", DropdownTest::new);
 
         registerPackets();
     }

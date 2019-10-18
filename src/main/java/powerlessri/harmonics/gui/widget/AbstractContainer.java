@@ -9,11 +9,6 @@ import java.util.Collection;
 public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T> {
 
     @Override
-    public void attach(IWidget newParent) {
-        super.attach(newParent);
-    }
-
-    @Override
     public IContainer<T> addChildren(T widget) {
         throw new UnsupportedOperationException();
     }

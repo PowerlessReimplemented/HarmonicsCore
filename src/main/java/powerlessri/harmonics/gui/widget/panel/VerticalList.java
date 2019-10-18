@@ -45,6 +45,9 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!isInside(mouseX, mouseY)) {
+            return false;
+        }
         scrolling = button == GLFW_MOUSE_BUTTON_LEFT && isInsideBar(mouseX, mouseY);
         if (scrolling) {
             setFocused(true);
@@ -65,6 +68,9 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (!isInside(mouseX, mouseY)) {
+            return false;
+        }
         if (isInside(mouseX, mouseY)) {
             boolean ret = scrolling;
             scrolling = false;
