@@ -140,24 +140,26 @@ public final class BackgroundRenderers {
         int bodyHeight = height - 3 * 2;
         int bodyX = x + 3;
         int bodyY = y + 3;
+        int bodyXRight = bodyX + bodyWidth;
+        int bodyYBottom = bodyY + bodyHeight;
         useTextureGLStates();
         beginTexturedQuad();
         bindTexture(GENERIC_COMPONENTS);
         {
-            int cornerXRight = x + width - 4;
-            int cornerYBottom = y + height - 4;
-            TOP_LEFT_CORNER3x3.vertices(x, y);
-            TOP_RIGHT_CORNER3x3.vertices(cornerXRight, y);
-            BOTTOM_LEFT_CORNER3x3.vertices(x, cornerYBottom);
-            BOTTOM_RIGHT_CORNER3x3.vertices(cornerXRight, cornerYBottom);
+            int cornerXRight = x + width - 3;
+            int cornerYBottom = y + height - 3;
+            TOP_LEFT_CORNER3x3.vertices(x, y, z);
+            TOP_RIGHT_CORNER3x3.vertices(cornerXRight, y, z);
+            BOTTOM_LEFT_CORNER3x3.vertices(x, cornerYBottom, z);
+            BOTTOM_RIGHT_CORNER3x3.vertices(cornerXRight, cornerYBottom, z);
 
             if (bodyWidth > 0) {
-                TOP_EDGE3x3.vertices(bodyX, y, bodyX + bodyWidth, y);
-                BOTTOM_EDGE3x3.vertices(bodyX, bodyY + bodyHeight, bodyX, bodyY + bodyHeight);
+                TOP_EDGE3x3.vertices(bodyX, y, bodyXRight, y + 3, z);
+                BOTTOM_EDGE3x3.vertices(bodyX, bodyYBottom, bodyXRight, bodyYBottom + 3, z);
             }
             if (bodyHeight > 0) {
-                LEFT_EDGE3x3.vertices(x, bodyY, x, bodyY + bodyHeight);
-                RIGHT_EDGE3x3.vertices(bodyX + bodyWidth, bodyY, bodyX + bodyWidth, bodyY + bodyHeight);
+                LEFT_EDGE3x3.vertices(x, bodyY, x + 3, bodyYBottom, z);
+                RIGHT_EDGE3x3.vertices(bodyXRight, bodyY, bodyXRight + 3, bodyYBottom, z);
             }
         }
         draw();

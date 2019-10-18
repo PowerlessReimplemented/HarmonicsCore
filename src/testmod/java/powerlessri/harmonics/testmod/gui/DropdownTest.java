@@ -30,12 +30,12 @@ public class DropdownTest extends WidgetScreen {
             setContents(100, 80);
             centralize();
 
-            Dropdown<IWidget, Paragraph, VerticalList<TextField>> dropdown = Dropdown.textAndList(60, 20, 64);
+            Dropdown<IWidget, Paragraph, VerticalList<TextField>> dropdown = Dropdown.textAndList(60, 20, 100);
             dropdown.attachWindow(this);
             dropdown.getLabel().addLineSplit("Example dropdown");
             VerticalList<TextField> list = dropdown.getPanel();
             for (int i = 0; i < 16; i++) {
-                TextField textField = new TextField(list.getWidth() - list.getBarWidth(), 12);
+                TextField textField = new TextField(list.getWidth() - list.getBarWidth(), 14);
                 textField.setText("i=" + i);
                 list.addChildren(textField);
             }

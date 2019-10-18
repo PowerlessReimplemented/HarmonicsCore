@@ -10,7 +10,7 @@ import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.button.ColoredTextButton;
-import powerlessri.harmonics.gui.widget.button.GradientTextButton;
+import powerlessri.harmonics.gui.widget.button.TextButton;
 import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
 import powerlessri.harmonics.gui.window.*;
 
@@ -80,10 +80,10 @@ public class DockableWindowTest extends WidgetScreen {
 
         @Override
         protected void populateContentBox() {
-            GradientTextButton btn1 = new GradientTextButton("test1");
-            GradientTextButton btn2 = new GradientTextButton("test2");
-            GradientTextButton btn3 = new GradientTextButton("Long name button");
-            GradientTextButton btn4 = new GradientTextButton(".");
+            TextButton btn1 = new TextButton("test1");
+            TextButton btn2 = new TextButton("test2");
+            TextButton btn3 = new TextButton("Long name button");
+            TextButton btn4 = new TextButton(".");
             ColoredTextButton cbtn1 = ColoredTextButton.ofText("colored");
             ColoredTextButton cbtn2 = ColoredTextButton.ofText(".");
             ColoredTextButton cbtn3 = ColoredTextButton.ofText("COLORED 2");

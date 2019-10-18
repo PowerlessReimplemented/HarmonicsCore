@@ -16,6 +16,12 @@ public class Dropdown<B extends IWidget, L extends B, P extends B> extends Abstr
         return new Dropdown<>(header, panel);
     }
 
+    public static final IBackgroundRenderer VANILLA4x4_BACKGROUND_RENDERER = (x1, y1, x2, y2, z, hovered, focused) -> BackgroundRenderers.drawVanillaStyle4x4(x1, y1, x2, y2, z);
+    public static final IBackgroundRenderer VANILLA3x3_BACKGROUND_RENDERER = (x1, y1, x2, y2, z, hovered, focused) -> BackgroundRenderers.drawVanillaStyle3x3(x1, y1, x2, y2, z);
+    public static final IBackgroundRenderer FLAT_BACKGROUND_RENDERER = (x1, y1, x2, y2, z, hovered, focused) -> BackgroundRenderers.drawFlatStyle(x1, y1, x2, y2, z);
+
+    private IBackgroundRenderer backgroundRenderer;
+
     private L label;
     private P panel;
     private final List<B> children;
@@ -28,7 +34,16 @@ public class Dropdown<B extends IWidget, L extends B, P extends B> extends Abstr
         this.children = ImmutableList.of(label, panel);
         this.setWidth(Math.max(label.getFullWidth(), panel.getFullWidth()));
         this.setHeight(label.getFullHeight());
-        this.setBorders(4);
+        this.setBackgroundRenderer(3, VANILLA3x3_BACKGROUND_RENDERER);
+    }
+
+    public IBackgroundRenderer getBackgroundRenderer() {
+        return backgroundRenderer;
+    }
+
+    public void setBackgroundRenderer(int borderSize, IBackgroundRenderer backgroundRenderer) {
+        this.setBorders(borderSize);
+        this.backgroundRenderer = backgroundRenderer;
         this.reflow();
     }
 
@@ -161,9 +176,9 @@ public class Dropdown<B extends IWidget, L extends B, P extends B> extends Abstr
         int y1 = getOuterAbsoluteY();
         int width = getFullWidth();
         if (expanded) {
-            BackgroundRenderers.drawVanillaStyle4x4(x1, y1, width, getFullHeight(), getZLevel());
+            backgroundRenderer.render(x1, y1, width, getFullHeight(), getZLevel(), false, false);
         }
-        BackgroundRenderers.drawVanillaStyle4x4(x1, y1, width, getBorderTop() + label.getFullHeight() + getBorderBottom(), getZLevel());
+        backgroundRenderer.render(x1, y1, width, getBorderTop() + label.getFullHeight() + getBorderBottom(), getZLevel(), false, false);
         label.render(mouseX, mouseY, particleTicks);
         if (expanded) {
             panel.render(mouseX, mouseY, particleTicks);

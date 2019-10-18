@@ -68,10 +68,10 @@ public class HarmonicsCoreTest {
         guiTests.put("radio_button", RadioButtonTest::new);
         guiTests.put("text_button", TextButtonTest::new);
         guiTests.put("dockable_window", DockableWindowTest::new);
-        guiTests.put("switch&checkbox_test", Switch8CheckboxTest::new);
-        guiTests.put("scrolling_list_test", ScrollingListTest::new);
-        guiTests.put("slider_test", SliderTest::new);
-        guiTests.put("dropdown_test", DropdownTest::new);
+        guiTests.put("switch&checkbox", Switch8CheckboxTest::new);
+        guiTests.put("scrolling_list", ScrollingListTest::new);
+        guiTests.put("slider", SliderTest::new);
+        guiTests.put("dropdown", DropdownTest::new);
 
         registerPackets();
     }

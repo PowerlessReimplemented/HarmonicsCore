@@ -1,11 +1,12 @@
 package powerlessri.harmonics.gui.widget;
 
+import net.minecraft.util.IStringSerializable;
 import powerlessri.harmonics.gui.ITexture;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
-public class Icon extends AbstractWidget implements INamedElement, LeafWidgetMixin {
+public class Icon extends AbstractWidget implements LeafWidgetMixin, IStringSerializable {
 
     private ITexture texture;
 

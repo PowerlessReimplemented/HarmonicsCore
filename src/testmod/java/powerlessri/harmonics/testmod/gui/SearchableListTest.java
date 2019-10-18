@@ -1,6 +1,7 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
@@ -79,7 +80,7 @@ public class SearchableListTest extends WidgetScreen {
         }
     }
 
-    private static class IconBtn extends AbstractIconButton implements INamedElement {
+    private static class IconBtn extends AbstractIconButton implements IStringSerializable {
 
         private static final ITexture NORMAL = Texture.portion(new ResourceLocation(HarmonicsCoreTest.MODID, "textures/gui/icons.png"), 256, 256, 0, 0, 16, 16);
         private static final ITexture HOVERED = NORMAL.moveRight(1);

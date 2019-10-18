@@ -5,8 +5,8 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.Label;
-import powerlessri.harmonics.gui.widget.button.RadioButton;
-import powerlessri.harmonics.gui.widget.button.RadioController;
+import powerlessri.harmonics.gui.widget.RadioInput;
+import powerlessri.harmonics.gui.widget.RadioController;
 import powerlessri.harmonics.gui.window.AbstractWindow;
 
 import java.util.ArrayList;
@@ -36,15 +36,15 @@ public class RadioButtonTest extends WidgetScreen {
             children = new ArrayList<>();
             int y = 0;
             for (int i = 0; i < 6; i++) {
-                RadioButton radioButton = new RadioButton(controller);
-                radioButton.attachWindow(this);
-                radioButton.setLocation(0, y);
-                Label label = radioButton.textLabel("Radio button " + (i + 1));
+                RadioInput radioInput = new RadioInput(controller);
+                radioInput.attachWindow(this);
+                radioInput.setLocation(0, y);
+                Label label = radioInput.textLabel("Radio button " + (i + 1));
 
-                children.add(radioButton);
+                children.add(radioInput);
                 children.add(label);
 
-                y += radioButton.getFullHeight() + 2;
+                y += radioInput.getFullHeight() + 2;
             }
         }
 

@@ -1,16 +1,15 @@
-package powerlessri.harmonics.gui.widget.button;
+package powerlessri.harmonics.gui.widget;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
-import powerlessri.harmonics.gui.widget.AbstractWidget;
-import powerlessri.harmonics.gui.widget.Label;
+import powerlessri.harmonics.gui.widget.button.IButton;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
 import java.util.function.IntConsumer;
 
-public class RadioButton extends AbstractWidget implements IButton, IRadioButton, LeafWidgetMixin {
+public class RadioInput extends AbstractWidget implements IButton, IRadioInput, LeafWidgetMixin {
 
     private static final ITexture UNCHECKED = Texture.portion(Render2D.COMPONENTS, 256, 256, 0, 12, 8, 8);
     private static final ITexture CHECKED = UNCHECKED.moveRight(1);
@@ -24,7 +23,7 @@ public class RadioButton extends AbstractWidget implements IButton, IRadioButton
     private boolean hovered;
     private boolean checked;
 
-    public RadioButton(RadioController controller) {
+    public RadioInput(RadioController controller) {
         this.setDimensions(8, 8);
         this.controller = controller;
         this.index = controller.add(this);

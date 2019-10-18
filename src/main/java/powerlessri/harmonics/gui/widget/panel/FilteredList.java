@@ -1,5 +1,6 @@
 package powerlessri.harmonics.gui.widget.panel;
 
+import net.minecraft.util.IStringSerializable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import powerlessri.harmonics.gui.widget.*;
@@ -9,9 +10,9 @@ import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
-public class FilteredList<T extends IWidget & INamedElement> extends AbstractList<T> {
+public class FilteredList<T extends IWidget & IStringSerializable> extends AbstractList<T> {
 
-    public static <T extends IWidget & INamedElement> Pair<WrappingList, TextField> createSearchableList(List<T> list, String defaultText) {
+    public static <T extends IWidget & IStringSerializable> Pair<WrappingList, TextField> createSearchableList(List<T> list, String defaultText) {
         Pair<FilteredList<T>, TextField> pair = of(list, defaultText);
         FilteredList<T> filteredList = pair.getLeft();
 
@@ -27,7 +28,7 @@ public class FilteredList<T extends IWidget & INamedElement> extends AbstractLis
         return Pair.of(wrappingList, textField);
     }
 
-    public static <T extends IWidget & INamedElement> Pair<FilteredList<T>, TextField> of(List<T> list, String defaultText) {
+    public static <T extends IWidget & IStringSerializable> Pair<FilteredList<T>, TextField> of(List<T> list, String defaultText) {
         FilteredList<T> filteredList = new FilteredList<>(list);
         filteredList.updateSearch(defaultText);
 

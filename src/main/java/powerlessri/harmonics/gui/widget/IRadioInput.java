@@ -1,8 +1,6 @@
-package powerlessri.harmonics.gui.widget.button;
+package powerlessri.harmonics.gui.widget;
 
-import powerlessri.harmonics.gui.widget.IWidget;
-
-public interface IRadioButton extends IButton, IWidget {
+public interface IRadioInput extends IWidget {
 
     boolean isChecked();
 

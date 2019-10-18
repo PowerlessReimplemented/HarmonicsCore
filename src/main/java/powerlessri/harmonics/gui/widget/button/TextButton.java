@@ -9,7 +9,7 @@ import java.util.function.IntConsumer;
 
 import static powerlessri.harmonics.gui.Render2D.*;
 
-public class GradientTextButton extends AbstractWidget implements IButton, LeafWidgetMixin {
+public class TextButton extends AbstractWidget implements IButton, LeafWidgetMixin {
 
     public static final int SIDE_MARGIN = 8;
 
@@ -44,7 +44,7 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
 
     private ITextRenderer textRenderer = TextRenderer.newVanilla();
 
-    public GradientTextButton(String text) {
+    public TextButton(String text) {
         this.text = text;
         setHeight(3 + fontHeight() + 2);
         fitTextWidth();
@@ -55,18 +55,18 @@ public class GradientTextButton extends AbstractWidget implements IButton, LeafW
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public GradientTextButton setText(String text) {
+    public TextButton setText(String text) {
         this.text = text;
         return this;
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public GradientTextButton fitTextWidth() {
+    public TextButton fitTextWidth() {
         return fitTextWidth(SIDE_MARGIN);
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public GradientTextButton fitTextWidth(int sideMargin) {
+    public TextButton fitTextWidth(int sideMargin) {
         int textWidth = textRenderer.calculateWidth(text);
         setWidth(textWidth + sideMargin * 2);
         return this;

@@ -1,18 +1,18 @@
 package powerlessri.harmonics.gui.widget.button;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.IStringSerializable;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
-import powerlessri.harmonics.gui.widget.INamedElement;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
 import java.util.function.IntConsumer;
 
 import static powerlessri.harmonics.gui.Render2D.*;
 
-public class ColoredTextButton extends AbstractWidget implements IButton, INamedElement, LeafWidgetMixin {
+public class ColoredTextButton extends AbstractWidget implements IButton, LeafWidgetMixin, IStringSerializable {
 
     public static ColoredTextButton of(String key) {
         return ofText(I18n.format(key));
