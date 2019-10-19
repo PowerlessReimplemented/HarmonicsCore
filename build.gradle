@@ -145,10 +145,6 @@ jar {
     }
 }
 
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
 def reobfFile = file("$buildDir/reobfJar/output.jar")
 def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
@@ -156,13 +152,22 @@ def reobfArtifact = artifacts.add('default', reobfFile) {
 }
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             artifact reobfArtifact
+            pom {
+                url.set("https://github.com/hnOsmium0001/HarmonicsCore.git")
+            }
         }
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            name = "Github"
+            url = "https://maven.pkg.github.com/hnOsmium0001/HarmonicsCore"
+            credentials {
+                // findProperty will allow these properties to be absent and still run the build, just won't publish
+                username = findProperty("github.username")
+                password = findProperty("github.gpr_token")
+            }
         }
     }
 }
