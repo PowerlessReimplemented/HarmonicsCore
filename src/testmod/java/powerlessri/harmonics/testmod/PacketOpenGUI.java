@@ -1,35 +1,35 @@
 package powerlessri.harmonics.testmod;
 
-import com.google.common.base.Preconditions;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.Packet;
+import net.minecraft.util.PacketByteBuf;
 
-import java.util.function.Supplier;
+import java.io.IOException;
 
-public class PacketOpenGUI {
+public class PacketOpenGUI implements Packet<ClientPlayNetworkHandler> {
 
-    public static void encode(PacketOpenGUI msg, PacketBuffer buf) {
-        buf.writeString(msg.id);
+    private String id = "";
+
+    public PacketOpenGUI() {
     }
-
-    public static PacketOpenGUI decode(PacketBuffer buf) {
-        return new PacketOpenGUI(buf.readString());
-    }
-
-    public static void handle(PacketOpenGUI msg, Supplier<NetworkEvent.Context> ctxSupplier) {
-        NetworkEvent.Context ctx = ctxSupplier.get();
-        ctx.enqueueWork(() -> {
-            Preconditions.checkState(EffectiveSide.get() == LogicalSide.CLIENT);
-            HarmonicsCoreTest.openGUI(msg.id);
-            ctx.setPacketHandled(true);
-        });
-    }
-
-    private String id;
 
     public PacketOpenGUI(String id) {
         this.id = id;
+    }
+
+    @Override
+    public void read(PacketByteBuf buf) throws IOException {
+        buf.writeString(id);
+    }
+
+    @Override
+    public void write(PacketByteBuf buf) throws IOException {
+        id = buf.readString();
+    }
+
+    @Override
+    public void apply(ClientPlayNetworkHandler handler) {
+        MinecraftClient.getInstance().method_18858(() -> HarmonicsCoreTest.openGUI(id));
     }
 }

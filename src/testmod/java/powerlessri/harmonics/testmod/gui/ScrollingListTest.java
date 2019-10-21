@@ -1,11 +1,12 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.text.LiteralText;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.*;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.TextField;
 import powerlessri.harmonics.gui.widget.panel.HorizontalList;
 import powerlessri.harmonics.gui.widget.panel.VerticalList;
 import powerlessri.harmonics.gui.window.AbstractWindow;
@@ -15,7 +16,7 @@ import java.util.List;
 public class ScrollingListTest extends WidgetScreen {
 
     public ScrollingListTest() {
-        super(new StringTextComponent("test"));
+        super(new LiteralText("test"));
     }
 
     @Override
@@ -67,10 +68,10 @@ public class ScrollingListTest extends WidgetScreen {
         }
 
         @Override
-        public void render(int mouseX, int mouseY, float particleTicks) {
+        public void render(int mouseX, int mouseY, float tickDelta) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             renderVanillaStyleBackground();
-            renderChildren(mouseX, mouseY, particleTicks);
+            renderChildren(mouseX, mouseY, tickDelta);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
     }

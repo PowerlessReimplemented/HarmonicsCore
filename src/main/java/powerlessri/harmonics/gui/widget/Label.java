@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.widget;
 
-import net.minecraft.client.resources.I18n;
-import powerlessri.harmonics.gui.TextRenderer;
+import net.minecraft.client.resource.language.I18n;
+import powerlessri.harmonics.gui.TextRenderers;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.properties.BoxSizing;
@@ -28,7 +28,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
         } else {
             this.attachWindow(target.getWindow());
         }
-        setHeight(fontRenderer().FONT_HEIGHT);
+        setHeight(fontRenderer().fontHeight);
         setBorders(1);
         updatePosition();
     }
@@ -41,7 +41,7 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     public Label text(String text) {
         this.text = text;
         int width = fontRenderer().getStringWidth(text);
-        int height = fontRenderer().FONT_HEIGHT;
+        int height = fontRenderer().fontHeight;
         setDimensions(width, height);
         updatePosition();
         return this;
@@ -49,12 +49,12 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
 
     @SuppressWarnings("UnusedReturnValue")
     public Label translate(String translationKey) {
-        return text(I18n.format(translationKey));
+        return text(I18n.translate(translationKey));
     }
 
     @SuppressWarnings("UnusedReturnValue")
     public Label translate(String translationKey, Object... args) {
-        return text(I18n.format(translationKey, args));
+        return text(I18n.translate(translationKey, args));
     }
 
     public int getColor() {
@@ -103,10 +103,10 @@ public class Label extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        TextRenderer.vanilla().setTextColor(color);
-        TextRenderer.vanilla().renderText(text, getAbsoluteX(), getAbsoluteY(), getZLevel());
+        TextRenderers.vanilla().setTextColor(color);
+        TextRenderers.vanilla().renderText(text, getAbsoluteX(), getAbsoluteY(), getZLevel());
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

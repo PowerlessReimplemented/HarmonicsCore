@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.widget.navigation;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import org.jetbrains.annotations.NotNull;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
@@ -10,7 +11,6 @@ import powerlessri.harmonics.gui.widget.panel.HorizontalList;
 import powerlessri.harmonics.gui.window.AbstractDockableWindow;
 import powerlessri.harmonics.gui.window.DockingBar;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 import static powerlessri.harmonics.gui.Render2D.*;
@@ -38,7 +38,7 @@ public class DockedWindow extends AbstractWidget implements LeafWidgetMixin {
         return 0xffffffff;
     }
 
-    public String getName() {
+    public String asString() {
         return name;
     }
 
@@ -57,7 +57,7 @@ public class DockedWindow extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         GlStateManager.disableTexture();
         beginColoredQuad();
@@ -74,7 +74,7 @@ public class DockedWindow extends AbstractWidget implements LeafWidgetMixin {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
     public HorizontalList<DockedWindow> getParent() {

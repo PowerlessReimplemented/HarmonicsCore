@@ -12,7 +12,6 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
-import javax.annotation.Nonnegative;
 import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -211,7 +210,7 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
         return marginMiddle;
     }
 
-    public void setMarginMiddle(@Nonnegative int marginMiddle) {
+    public void setMarginMiddle(int marginMiddle) {
         this.marginMiddle = Utils.lowerBound(marginMiddle, 0);
     }
 

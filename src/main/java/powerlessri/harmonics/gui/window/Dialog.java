@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.window;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import powerlessri.harmonics.Config;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
@@ -142,10 +142,10 @@ public class Dialog extends AbstractPopupWindow {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         backgroundRenderer.accept(this);
-        renderChildren(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, tickDelta);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
@@ -246,7 +246,7 @@ public class Dialog extends AbstractPopupWindow {
 
     @SuppressWarnings("UnusedReturnValue")
     public boolean tryAddSelfToActiveGUI() {
-        if (Minecraft.getInstance().currentScreen instanceof WidgetScreen) {
+        if (MinecraftClient.getInstance().currentScreen instanceof WidgetScreen) {
             addSelfTo(WidgetScreen.assertActive());
             return true;
         }

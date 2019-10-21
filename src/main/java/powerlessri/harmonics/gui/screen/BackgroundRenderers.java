@@ -2,7 +2,7 @@ package powerlessri.harmonics.gui.screen;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.gui.ITexture;
 import powerlessri.harmonics.gui.Texture;
@@ -55,7 +55,7 @@ public final class BackgroundRenderers {
     // Vanilla style
     ///////////////////////////////////////////////////////////////////////////
 
-    private static final ResourceLocation GENERIC_COMPONENTS = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/generic_components.png");
+    private static final Identifier GENERIC_COMPONENTS = new Identifier(HarmonicsCore.MODID, "textures/gui/generic_components.png");
     private static final int TEX_WIDTH = 256;
     private static final int TEX_HEIGHT = 256;
 

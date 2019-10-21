@@ -2,13 +2,12 @@ package powerlessri.harmonics.gui.screen;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IGuiEventListener;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraft.text.Text;
 import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.glfw.GLFW;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.collections.CompositeCollection;
 import powerlessri.harmonics.gui.debug.Inspections;
@@ -16,33 +15,33 @@ import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.window.IPopupWindow;
 import powerlessri.harmonics.gui.window.IWindow;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 
-import static powerlessri.harmonics.gui.Render2D.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
+import static powerlessri.harmonics.gui.Render2D.CONTEXT_MENU_Z;
+import static powerlessri.harmonics.gui.Render2D.POPUP_WINDOW_Z;
 
-public abstract class WidgetScreen extends Screen implements IGuiEventListener {
+public abstract class WidgetScreen extends Screen {
 
     /**
      * @throws ClassCastException If the current open screen is not a WidgetScreen
      */
     public static WidgetScreen assertActive() {
-        return (WidgetScreen) Minecraft.getInstance().currentScreen;
+        return (WidgetScreen) MinecraftClient.getInstance().currentScreen;
     }
 
     @Nullable
     public static WidgetScreen activeNullable() {
-        Screen screen = Minecraft.getInstance().currentScreen;
+        Screen screen = MinecraftClient.getInstance().currentScreen;
         if (screen instanceof WidgetScreen) {
             return (WidgetScreen) screen;
         }
         return null;
     }
 
-    @Nonnull
+    @NotNull
     public static Optional<WidgetScreen> active() {
-        Screen screen = Minecraft.getInstance().currentScreen;
+        Screen screen = MinecraftClient.getInstance().currentScreen;
         return Optional.ofNullable(screen instanceof WidgetScreen ? (WidgetScreen) screen : null);
     }
 
@@ -55,7 +54,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     private final Queue<Triple<List<String>, Integer, Integer>> tooltipRenderQueue = new ArrayDeque<>();
     private final Queue<Runnable> taskQueue = new ArrayDeque<>();
 
-    protected WidgetScreen(ITextComponent title) {
+    protected WidgetScreen(Text title) {
         super(title);
         // Safe downwards erasure cast
         @SuppressWarnings("unchecked") Collection<IWindow> popupWindowsView = (Collection<IWindow>) (Collection<? extends IWindow>) new DescendingTreeSetBackedUnmodifiableCollection<>(popupWindows);
@@ -85,11 +84,11 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
             return false;
         });
 
-        float particleTicks = Minecraft.getInstance().getRenderPartialTicks();
+        float tickDelta = MinecraftClient.getInstance().getTickDelta();
         for (IWindow window : windows) {
-            window.update(particleTicks);
+            window.update(tickDelta);
         }
-        primaryWindow.update(particleTicks);
+        primaryWindow.update(tickDelta);
     }
 
     protected final void setPrimaryWindow(IWindow primaryWindow) {
@@ -102,22 +101,22 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         // Dark transparent overlay
         renderBackground();
 
         inspectionHandler.startCycle();
         GlStateManager.enableDepthTest();
         GlStateManager.enableAlphaTest();
-        primaryWindow.render(mouseX, mouseY, particleTicks);
+        primaryWindow.render(mouseX, mouseY, tickDelta);
         for (IWindow window : regularWindows) {
-            window.render(mouseX, mouseY, particleTicks);
+            window.render(mouseX, mouseY, tickDelta);
         }
         // We want to render things away from the screen first (painter's algorithm)
         GlStateManager.pushMatrix();
         float zOff = CONTEXT_MENU_Z - POPUP_WINDOW_Z;
         for (IPopupWindow window : popupWindows) {
-            window.render(mouseX, mouseY, particleTicks);
+            window.render(mouseX, mouseY, tickDelta);
             GlStateManager.translatef(0F, 0F, zOff);
         }
         GlStateManager.popMatrix();
@@ -125,11 +124,11 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         inspectionHandler.endCycle();
 
         // This should do nothing because we are not adding vanilla buttons
-        super.render(mouseX, mouseY, particleTicks);
+        super.render(mouseX, mouseY, tickDelta);
 
         while (!tooltipRenderQueue.isEmpty()) {
             Triple<List<String>, Integer, Integer> entry = tooltipRenderQueue.remove();
-            GuiUtils.drawHoveringText(entry.getLeft(), entry.getMiddle(), entry.getRight(), scaledWidth(), scaledHeight(), Integer.MAX_VALUE, fontRenderer());
+            renderTooltip(entry.getLeft(), entry.getMiddle(), entry.getRight());
         }
     }
 
@@ -219,9 +218,9 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         if (super.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         }
-        if (keyCode == GLFW.GLFW_KEY_E) {
+        if (keyCode == GLFW_KEY_E) {
             this.onClose();
-            Minecraft.getInstance().player.closeScreen();
+            MinecraftClient.getInstance().player.closeScreen();
             return true;
         }
         return false;

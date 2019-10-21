@@ -1,5 +1,6 @@
 package powerlessri.harmonics.gui.window;
 
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.screen.BackgroundRenderers;
 import powerlessri.harmonics.gui.screen.DisplayListCaches;
@@ -7,7 +8,6 @@ import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.mixin.*;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
@@ -145,9 +145,9 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
         }
     }
 
-    protected void renderChildren(int mouseX, int mouseY, float particleTicks) {
+    protected void renderChildren(int mouseX, int mouseY, float tickDelta) {
         for (IWidget child : getChildren()) {
-            child.render(mouseX, mouseY, particleTicks);
+            child.render(mouseX, mouseY, tickDelta);
         }
     }
 

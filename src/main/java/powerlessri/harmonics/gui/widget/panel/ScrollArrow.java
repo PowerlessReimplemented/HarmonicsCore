@@ -1,11 +1,11 @@
 package powerlessri.harmonics.gui.widget.panel;
 
+import org.jetbrains.annotations.NotNull;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.button.AbstractIconButton;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 public abstract class ScrollArrow extends AbstractIconButton implements LeafWidgetMixin {
@@ -84,7 +84,7 @@ public abstract class ScrollArrow extends AbstractIconButton implements LeafWidg
     }
 
     @Override
-    public void update(float particleTicks) {
+    public void update(float tickDelta) {
         if (isClicked()) {
             WrappingList parent = getParent();
             parent.scroll(parent.getScrollSpeed() * getScrollDirectionMask());
@@ -99,7 +99,7 @@ public abstract class ScrollArrow extends AbstractIconButton implements LeafWidg
         return super.onMouseClicked(mouseX, mouseY, button);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public WrappingList getParent() {
         return Objects.requireNonNull((WrappingList) super.getParent());

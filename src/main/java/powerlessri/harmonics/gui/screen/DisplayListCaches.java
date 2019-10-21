@@ -3,7 +3,7 @@ package powerlessri.harmonics.gui.screen;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.util.GlAllocationUtils;
 import powerlessri.harmonics.HarmonicsCore;
 
 import java.awt.*;
@@ -21,7 +21,7 @@ public final class DisplayListCaches {
             .expireAfterAccess(60, TimeUnit.SECONDS)
             .removalListener(removal -> {
                 HarmonicsCore.logger.info("Removed background display list with size {}", removal.getKey());
-                GLAllocation.deleteDisplayLists((Integer) removal.getValue());
+                GlAllocationUtils.deleteLists((int) removal.getValue(), 1);
             })
             .build();
 
@@ -34,7 +34,7 @@ public final class DisplayListCaches {
             return VANILLA_BACKGROUND_CACHE.get(rectangle, () -> {
                 HarmonicsCore.logger.info("Created background display list with size {}", rectangle);
 
-                int id = GLAllocation.generateDisplayLists(1);
+                int id = GlAllocationUtils.genLists(1);
                 GlStateManager.newList(id, GL_COMPILE);
                 {
                     BackgroundRenderers.drawVanillaStyle4x4(rectangle.x, rectangle.y, rectangle.width, rectangle.height, z);

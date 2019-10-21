@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "harmonics",
+  "version": "${version}",
+  "name": "Harmonics Core",
+  "description": "",
+  "authors": [
+    "hnOsmium0001"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/harmonics-core",
+    "sources": "https://github.com/hnOsmium0001/HarmonicsCore",
+    "issues": "https://github.com/hnOsmium0001/HarmonicsCore/issues"
+  },
+  "license": "MIT",
+  "icon": "",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "powerlessri.harmonics.HarmonicsCore"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

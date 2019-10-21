@@ -15,7 +15,7 @@ public class Spacer extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }

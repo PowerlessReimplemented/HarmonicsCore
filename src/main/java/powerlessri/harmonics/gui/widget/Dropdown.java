@@ -161,15 +161,15 @@ public class Dropdown<B extends IWidget, L extends B, P extends B> extends Abstr
     }
 
     @Override
-    public void update(float particleTicks) {
+    public void update(float tickDelta) {
         if (expanded) {
-            super.update(particleTicks);
+            super.update(tickDelta);
         }
-        label.update(particleTicks);
+        label.update(tickDelta);
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
         int x1 = getOuterAbsoluteX();
@@ -179,9 +179,9 @@ public class Dropdown<B extends IWidget, L extends B, P extends B> extends Abstr
             backgroundRenderer.render(x1, y1, width, getFullHeight(), getZLevel(), false, false);
         }
         backgroundRenderer.render(x1, y1, width, getBorderTop() + label.getFullHeight() + getBorderBottom(), getZLevel(), false, false);
-        label.render(mouseX, mouseY, particleTicks);
+        label.render(mouseX, mouseY, tickDelta);
         if (expanded) {
-            panel.render(mouseX, mouseY, particleTicks);
+            panel.render(mouseX, mouseY, tickDelta);
         }
 
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);

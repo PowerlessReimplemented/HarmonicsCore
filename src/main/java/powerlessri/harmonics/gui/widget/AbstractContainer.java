@@ -1,9 +1,9 @@
 package powerlessri.harmonics.gui.widget;
 
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.widget.mixin.ContainerWidgetMixin;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 public abstract class AbstractContainer<T extends IWidget> extends AbstractWidget implements IContainer<T>, ContainerWidgetMixin<T> {

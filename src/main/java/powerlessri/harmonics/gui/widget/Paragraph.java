@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.widget;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resource.language.I18n;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
@@ -15,7 +15,7 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     private List<String> textView;
     private boolean fitContents = false;
 
-    private ITextRenderer textRenderer = TextRenderer.newVanilla();
+    private ITextRenderer textRenderer = TextRenderers.newVanilla();
 
     public Paragraph(int width, int height, List<String> texts) {
         this.setDimensions(width, height);
@@ -25,7 +25,7 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         int x = getAbsoluteX();
         int y = getAbsoluteY();
@@ -57,11 +57,11 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     }
 
     public void addTranslatedLine(String translationKey) {
-        addLine(I18n.format(translationKey));
+        addLine(I18n.translate(translationKey));
     }
 
     public void addTranslatedLine(String translationKey, Object... args) {
-        addLine(I18n.format(translationKey, args));
+        addLine(I18n.translate(translationKey, args));
     }
 
     public void addLineSplit(String text) {
@@ -69,7 +69,7 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     }
 
     public void addLineSplit(int maxWidth, String text) {
-        int end = Render2D.fontRenderer().sizeStringToWidth(text, maxWidth);
+        int end = Render2D.fontRenderer().getCharacterCountForWidth(text, maxWidth);
         if (end >= text.length()) {
             addLine(text);
         } else {
@@ -81,11 +81,11 @@ public class Paragraph extends AbstractWidget implements LeafWidgetMixin {
     }
 
     public void addTranslatedLineSplit(int maxWidth, String translationKey) {
-        addLineSplit(maxWidth, I18n.format(translationKey));
+        addLineSplit(maxWidth, I18n.translate(translationKey));
     }
 
     public void addTranslatedLineSplit(int maxWidth, String translationKey, Object... args) {
-        addLineSplit(maxWidth, I18n.format(translationKey, args));
+        addLineSplit(maxWidth, I18n.translate(translationKey, args));
     }
 
     private void tryExpand(String line) {

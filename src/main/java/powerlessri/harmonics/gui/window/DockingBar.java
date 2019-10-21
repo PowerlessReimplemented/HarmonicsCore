@@ -6,10 +6,7 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.navigation.DockedWindow;
 import powerlessri.harmonics.gui.widget.panel.HorizontalList;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static powerlessri.harmonics.gui.Render2D.scaledHeight;
 
 public class DockingBar extends AbstractWindow {
 
@@ -46,10 +43,10 @@ public class DockingBar extends AbstractWindow {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         renderFlatStyleBackground();
-        renderChildren(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, tickDelta);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 }

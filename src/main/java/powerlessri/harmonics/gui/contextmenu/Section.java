@@ -23,9 +23,9 @@ public class Section extends AbstractContainer<IEntry> {
     // Relative position is (0,0) by default
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        renderChildren(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, tickDelta);
         if (!getContextMenu().isLastSection(this)) {
             renderLine();
         }

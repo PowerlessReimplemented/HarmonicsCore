@@ -1,13 +1,12 @@
 package powerlessri.harmonics.gui.window;
 
-import net.minecraft.client.gui.IRenderable;
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.gui.widget.IWidget;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 
-public interface IWindow extends IRenderable {
+public interface IWindow {
 
     Dimension getBorder();
 
@@ -45,8 +44,7 @@ public interface IWindow extends IRenderable {
 
     int getContentYBottom();
 
-    @Override
-    void render(int mouseX, int mouseY, float particleTicks);
+    void render(int mouseX, int mouseY, float tickDelta);
 
     @Nullable
     IWidget getFocusedWidget();
@@ -130,5 +128,5 @@ public interface IWindow extends IRenderable {
 
     void mouseMoved(double mouseX, double mouseY);
 
-    void update(float particleTicks);
+    void update(float tickDelta);
 }

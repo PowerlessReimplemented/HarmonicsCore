@@ -1,8 +1,7 @@
 package powerlessri.harmonics.gui.widget.slot;
 
-import com.google.common.base.MoreObjects;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -20,7 +19,7 @@ public abstract class AbstractItemSlot extends AbstractWidget implements LeafWid
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         renderBase();
         if (isInside(mouseX, mouseY)) {
@@ -33,11 +32,11 @@ public abstract class AbstractItemSlot extends AbstractWidget implements LeafWid
     public void renderStack() {
         ItemStack stack = getRenderedStack();
         ItemRenderer ir = minecraft().getItemRenderer();
-        FontRenderer fr = MoreObjects.firstNonNull(stack.getItem().getFontRenderer(stack), minecraft().fontRenderer);
+        TextRenderer fr = minecraft().textRenderer;
         int x = getAbsoluteX() + 2;
         int y = getAbsoluteY() + 2;
-        ir.renderItemAndEffectIntoGUI(stack, x, y);
-        ir.renderItemOverlayIntoGUI(fr, stack, x, y, null);
+        ir.renderGuiItem(stack, x, y);
+        ir.renderGuiItemOverlay(fr, stack, x, y, null);
     }
 
     public void renderBase() {

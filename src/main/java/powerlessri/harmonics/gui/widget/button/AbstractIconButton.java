@@ -16,7 +16,7 @@ public abstract class AbstractIconButton extends AbstractWidget implements IButt
     private boolean clicked = false;
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         preRenderEvent(mouseX, mouseY);
         GlStateManager.color3f(1F, 1F, 1F);
         ITexture tex = isDisabled() ? getTextureDisabled()

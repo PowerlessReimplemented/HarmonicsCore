@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.widget;
 
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.contextmenu.ContextMenuBuilder;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
@@ -9,7 +10,6 @@ import powerlessri.harmonics.gui.layout.properties.*;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import powerlessri.harmonics.gui.window.IWindow;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 
 public abstract class AbstractWidget implements IWidget, Inspections.IInfoProvider, Inspections.IHighlightRenderer, ISizedBox, ResizableWidgetMixin {

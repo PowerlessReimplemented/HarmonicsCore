@@ -1,10 +1,10 @@
 package powerlessri.harmonics.gui;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 public interface ITexture {
 
-    ResourceLocation getResourceLocation();
+    Identifier getIdentifier();
 
     int getTextureWidth();
 

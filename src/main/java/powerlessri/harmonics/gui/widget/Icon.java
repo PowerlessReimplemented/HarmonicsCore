@@ -1,12 +1,12 @@
 package powerlessri.harmonics.gui.widget;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringIdentifiable;
 import powerlessri.harmonics.gui.ITexture;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 
-public class Icon extends AbstractWidget implements LeafWidgetMixin, IStringSerializable {
+public class Icon extends AbstractWidget implements LeafWidgetMixin, StringIdentifiable {
 
     private ITexture texture;
 
@@ -16,7 +16,7 @@ public class Icon extends AbstractWidget implements LeafWidgetMixin, IStringSeri
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         if (isEnabled()) {
             texture.render(getAbsoluteX(), getAbsoluteY(), getAbsoluteXRight(), getAbsoluteYBottom(), getZLevel());
@@ -40,7 +40,7 @@ public class Icon extends AbstractWidget implements LeafWidgetMixin, IStringSeri
     }
 
     @Override
-    public String getName() {
+    public String asString() {
         return texture.toString();
     }
 }

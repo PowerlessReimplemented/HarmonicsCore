@@ -83,9 +83,9 @@ public interface WindowEventHandlerMixin extends IWindow {
     }
 
     @Override
-    default void update(float particleTicks) {
+    default void update(float tickDelta) {
         for (IWidget child : getChildren()) {
-            child.update(particleTicks);
+            child.update(tickDelta);
         }
     }
 

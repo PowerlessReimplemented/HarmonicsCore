@@ -1,8 +1,8 @@
 package powerlessri.harmonics.gui.widget;
 
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 

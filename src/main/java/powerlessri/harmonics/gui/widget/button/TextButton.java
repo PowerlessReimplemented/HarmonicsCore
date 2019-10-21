@@ -42,7 +42,7 @@ public class TextButton extends AbstractWidget implements IButton, LeafWidgetMix
     private boolean hovered;
     private boolean clicked;
 
-    private ITextRenderer textRenderer = TextRenderer.newVanilla();
+    private ITextRenderer textRenderer = TextRenderers.newVanilla();
 
     public TextButton(String text) {
         this.text = text;
@@ -96,7 +96,7 @@ public class TextButton extends AbstractWidget implements IButton, LeafWidgetMix
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
         int x = getAbsoluteX();

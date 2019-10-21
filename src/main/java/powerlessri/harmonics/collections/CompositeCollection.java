@@ -2,8 +2,8 @@ package powerlessri.harmonics.collections;
 
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.PeekingIterator;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 public class CompositeCollection<E> extends AbstractCollection<E> {
@@ -15,7 +15,7 @@ public class CompositeCollection<E> extends AbstractCollection<E> {
         this.collections = collections;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Iterator<E> iterator() {
         if (collections.length == 0) {

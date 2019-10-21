@@ -1,9 +1,9 @@
 package powerlessri.harmonics.gui;
 
 import com.google.common.base.MoreObjects;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ import static powerlessri.harmonics.gui.Render2D.*;
 
 class PartialTexture implements ITexture {
 
-    private ResourceLocation texture;
+    private Identifier texture;
     private int texWidth;
     private int texHeight;
     private int portionX;
@@ -19,7 +19,7 @@ class PartialTexture implements ITexture {
     private int portionWidth;
     private int portionHeight;
 
-    public PartialTexture(ResourceLocation texture, int texWidth, int texHeight, int portionX, int portionY, int portionWidth, int portionHeight) {
+    public PartialTexture(Identifier texture, int texWidth, int texHeight, int portionX, int portionY, int portionWidth, int portionHeight) {
         this.texture = texture;
         this.texWidth = texWidth;
         this.texHeight = texHeight;
@@ -30,7 +30,7 @@ class PartialTexture implements ITexture {
     }
 
     @Override
-    public ResourceLocation getResourceLocation() {
+    public Identifier getIdentifier() {
         return texture;
     }
 
@@ -82,11 +82,11 @@ class PartialTexture implements ITexture {
         float v1 = portionY * vFactor;
         float u2 = px2 * uFactor;
         float v2 = py2 * vFactor;
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.pos(x1, y1, z).tex(u1, v1).endVertex();
-        buffer.pos(x1, y2, z).tex(u1, v2).endVertex();
-        buffer.pos(x2, y2, z).tex(u2, v2).endVertex();
-        buffer.pos(x2, y1, z).tex(u2, v1).endVertex();
+        BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
+        buffer.vertex(x1, y1, z).texture(u1, v1).end();
+        buffer.vertex(x1, y2, z).texture(u1, v2).end();
+        buffer.vertex(x2, y2, z).texture(u2, v2).end();
+        buffer.vertex(x2, y1, z).texture(u2, v1).end();
     }
 
     @Override

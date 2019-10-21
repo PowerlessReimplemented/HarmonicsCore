@@ -57,11 +57,11 @@ public class Panel<T extends IWidget> extends AbstractContainer<T> implements Re
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         if (isEnabled()) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             for (T child : children) {
-                child.render(mouseX, mouseY, particleTicks);
+                child.render(mouseX, mouseY, tickDelta);
             }
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
@@ -163,9 +163,9 @@ public class Panel<T extends IWidget> extends AbstractContainer<T> implements Re
     }
 
     @Override
-    public void update(float particleTicks) {
+    public void update(float tickDelta) {
         if (isEnabled()) {
-            super.update(particleTicks);
+            super.update(tickDelta);
         }
     }
 }

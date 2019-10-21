@@ -2,10 +2,10 @@ package powerlessri.harmonics.gui.widget.slot;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractContainer;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -95,9 +95,9 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        renderChildren(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, tickDelta);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
@@ -118,7 +118,7 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
             return stack;
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public ItemSlotPanel getParent() {
             return (ItemSlotPanel) Objects.requireNonNull(super.getParent());

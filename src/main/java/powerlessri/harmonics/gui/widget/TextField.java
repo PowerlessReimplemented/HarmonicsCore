@@ -9,7 +9,8 @@ import com.mojang.blaze3d.platform.GlStateManager.LogicOp;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
-import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.ITextRenderer;
+import powerlessri.harmonics.gui.TextRenderers;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
@@ -79,7 +80,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     private IBackgroundRenderer backgroundStyle = BackgroundStyle.BLACK_WHITE;
-    private ITextRenderer textRenderer = TextRenderer.newVanilla();
+    private ITextRenderer textRenderer = TextRenderers.newVanilla();
 
     private String text = "";
     private int cursor = 0;
@@ -303,12 +304,12 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     private void copyText() {
         if (isRegionSelected()) {
-            Render2D.minecraft().keyboardListener.setClipboardString(getSelectedText());
+            minecraft().keyboard.setClipboard(getSelectedText());
         }
     }
 
     private void pasteText() {
-        String text = Render2D.minecraft().keyboardListener.getClipboardString();
+        String text = minecraft().keyboard.getClipboard();
         if (isRegionSelected()) {
             replaceSelectedRegion(text);
         } else {
@@ -318,7 +319,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
 
     private void cutText() {
         if (isRegionSelected()) {
-            Render2D.minecraft().keyboardListener.setClipboardString(getSelectedText());
+            minecraft().keyboard.setClipboard(getSelectedText());
             replaceSelectedRegion("");
         }
     }
@@ -400,7 +401,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     private int calculateVerticalOffset() {
-        return (getDimensions().height - Render2D.fontRenderer().FONT_HEIGHT) / 2;
+        return (getDimensions().height - fontRenderer().fontHeight) / 2;
     }
 
     private void ensureVisible() {
@@ -416,7 +417,7 @@ public class TextField extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
         ensureVisible();

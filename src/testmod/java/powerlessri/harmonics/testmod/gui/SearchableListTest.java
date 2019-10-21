@@ -1,14 +1,16 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 import org.apache.commons.lang3.tuple.Pair;
-import powerlessri.harmonics.gui.*;
+import powerlessri.harmonics.gui.ITexture;
+import powerlessri.harmonics.gui.Texture;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
-import powerlessri.harmonics.gui.widget.*;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.TextField;
 import powerlessri.harmonics.gui.widget.button.AbstractIconButton;
 import powerlessri.harmonics.gui.widget.panel.FilteredList;
 import powerlessri.harmonics.gui.widget.panel.WrappingList;
@@ -21,7 +23,7 @@ import java.util.List;
 public class SearchableListTest extends WidgetScreen {
 
     public SearchableListTest() {
-        super(new StringTextComponent("Test"));
+        super(new LiteralText("Test"));
     }
 
     @Override
@@ -72,17 +74,17 @@ public class SearchableListTest extends WidgetScreen {
         }
 
         @Override
-        public void render(int mouseX, int mouseY, float particleTicks) {
+        public void render(int mouseX, int mouseY, float tickDelta) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             renderVanillaStyleBackground();
-            renderChildren(mouseX, mouseY, particleTicks);
+            renderChildren(mouseX, mouseY, tickDelta);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
     }
 
-    private static class IconBtn extends AbstractIconButton implements IStringSerializable {
+    private static class IconBtn extends AbstractIconButton implements StringIdentifiable {
 
-        private static final ITexture NORMAL = Texture.portion(new ResourceLocation(HarmonicsCoreTest.MODID, "textures/gui/icons.png"), 256, 256, 0, 0, 16, 16);
+        private static final ITexture NORMAL = Texture.portion(new Identifier(HarmonicsCoreTest.MODID, "textures/gui/icons.png"), 256, 256, 0, 0, 16, 16);
         private static final ITexture HOVERED = NORMAL.moveRight(1);
 
         private final String name;
@@ -103,15 +105,15 @@ public class SearchableListTest extends WidgetScreen {
         }
 
         @Override
-        public void render(int mouseX, int mouseY, float particleTicks) {
-            super.render(mouseX, mouseY, particleTicks);
+        public void render(int mouseX, int mouseY, float tickDelta) {
+            super.render(mouseX, mouseY, tickDelta);
             if (isInside(mouseX, mouseY)) {
                 assertActive().scheduleTooltip(ImmutableList.of(name), mouseX, mouseY);
             }
         }
 
         @Override
-        public String getName() {
+        public String asString() {
             return name;
         }
     }

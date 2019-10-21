@@ -3,17 +3,13 @@ package powerlessri.harmonics.gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.*;
+import net.minecraft.util.Identifier;
 import powerlessri.harmonics.HarmonicsCore;
-import powerlessri.harmonics.gui.screen.WidgetScreen;
 
 import java.awt.*;
-import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -23,15 +19,15 @@ public final class Render2D {
     public static final float POPUP_WINDOW_Z = 128F;
     public static final float CONTEXT_MENU_Z = 200F;
 
-    public static final ResourceLocation INVALID_TEXTURE = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/invalid.png");
-    public static final ResourceLocation COMPONENTS = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/default_components.png");
-    public static final ResourceLocation DELETE = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/delete.png");
-    public static final ResourceLocation CUT = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/cut.png");
-    public static final ResourceLocation COPY = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/copy.png");
-    public static final ResourceLocation PASTE = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/paste.png");
-    public static final ResourceLocation BACK = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/back.png");
-    public static final ResourceLocation CLOSE = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/close.png");
-    public static final ResourceLocation ITEM_SLOT = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/item_slot.png");
+    public static final Identifier INVALID_TEXTURE = new Identifier(HarmonicsCore.MODID, "textures/gui/invalid.png");
+    public static final Identifier COMPONENTS = new Identifier(HarmonicsCore.MODID, "textures/gui/default_components.png");
+    public static final Identifier DELETE = new Identifier(HarmonicsCore.MODID, "textures/gui/icons/delete.png");
+    public static final Identifier CUT = new Identifier(HarmonicsCore.MODID, "textures/gui/icons/cut.png");
+    public static final Identifier COPY = new Identifier(HarmonicsCore.MODID, "textures/gui/icons/copy.png");
+    public static final Identifier PASTE = new Identifier(HarmonicsCore.MODID, "textures/gui/icons/paste.png");
+    public static final Identifier BACK = new Identifier(HarmonicsCore.MODID, "textures/gui/icons/back.png");
+    public static final Identifier CLOSE = new Identifier(HarmonicsCore.MODID, "textures/gui/icons/close.png");
+    public static final Identifier ITEM_SLOT = new Identifier(HarmonicsCore.MODID, "textures/gui/icons/item_slot.png");
 
     private Render2D() {
     }
@@ -44,24 +40,24 @@ public final class Render2D {
         return x >= bx1 && x < bx2 && y >= by1 && y < by2;
     }
 
-    public static Minecraft minecraft() {
-        return Minecraft.getInstance();
+    public static MinecraftClient minecraft() {
+        return MinecraftClient.getInstance();
     }
 
     public static int scaledWidth() {
-        return Minecraft.getInstance().mainWindow.getScaledWidth();
+        return MinecraftClient.getInstance().window.getScaledWidth();
     }
 
     public static int scaledHeight() {
-        return Minecraft.getInstance().mainWindow.getScaledHeight();
+        return MinecraftClient.getInstance().window.getScaledHeight();
     }
 
-    public static FontRenderer fontRenderer() {
-        return Minecraft.getInstance().fontRenderer;
+    public static TextRenderer fontRenderer() {
+        return MinecraftClient.getInstance().textRenderer;
     }
 
     public static int fontHeight() {
-        return Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
+        return MinecraftClient.getInstance().textRenderer.fontHeight;
     }
 
     public static void color(int color) {
@@ -72,16 +68,16 @@ public final class Render2D {
         GlStateManager.color4f(red / 255F, green / 255F, blue / 255F, alpha / 255F);
     }
 
-    public static void bindTexture(ResourceLocation texture) {
-        Minecraft.getInstance().getTextureManager().bindTexture(texture);
+    public static void bindTexture(Identifier texture) {
+        MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
     }
 
     public static void beginColoredQuad() {
-        Tessellator.getInstance().getBuffer().begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        Tessellator.getInstance().getBufferBuilder().begin(GL_QUADS, VertexFormats.POSITION_COLOR);
     }
 
     public static void beginTexturedQuad() {
-        Tessellator.getInstance().getBuffer().begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        Tessellator.getInstance().getBufferBuilder().begin(GL_QUADS, VertexFormats.POSITION_UV);
     }
 
     public static void draw() {
@@ -93,10 +89,10 @@ public final class Render2D {
         int red = (color >> 16) & 255;
         int green = (color >> 8) & 255;
         int blue = color & 255;
-        buffer.pos(x1, y1, z).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, z).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x3, y3, z).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x4, y4, z).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y1, z).color(red, green, blue, alpha).end();
+        buffer.vertex(x2, y2, z).color(red, green, blue, alpha).end();
+        buffer.vertex(x3, y3, z).color(red, green, blue, alpha).end();
+        buffer.vertex(x4, y4, z).color(red, green, blue, alpha).end();
     }
 
     public static void coloredRect(Point position, Dimension dimensions, float z, int color) {
@@ -116,11 +112,11 @@ public final class Render2D {
         int red = (color >> 16) & 255;
         int green = (color >> 8) & 255;
         int blue = color & 255;
-        BufferBuilder renderer = Tessellator.getInstance().getBuffer();
-        renderer.pos(x1, y1, z).color(red, green, blue, alpha).endVertex();
-        renderer.pos(x1, y2, z).color(red, green, blue, alpha).endVertex();
-        renderer.pos(x2, y2, z).color(red, green, blue, alpha).endVertex();
-        renderer.pos(x2, y1, z).color(red, green, blue, alpha).endVertex();
+        BufferBuilder renderer = Tessellator.getInstance().getBufferBuilder();
+        renderer.vertex(x1, y1, z).color(red, green, blue, alpha).end();
+        renderer.vertex(x1, y2, z).color(red, green, blue, alpha).end();
+        renderer.vertex(x2, y2, z).color(red, green, blue, alpha).end();
+        renderer.vertex(x2, y1, z).color(red, green, blue, alpha).end();
     }
 
     public static void coloredRect(int x1, int y1, int x2, int y2, int color) {
@@ -137,11 +133,11 @@ public final class Render2D {
         int g2 = (color2 >> 8) & 255;
         int b2 = color2 & 255;
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.pos(x2, y1, z).color(r1, g1, b1, a1).endVertex();
-        buffer.pos(x1, y1, z).color(r1, g1, b1, a1).endVertex();
-        buffer.pos(x1, y2, z).color(r2, g2, b2, a2).endVertex();
-        buffer.pos(x2, y2, z).color(r2, g2, b2, a2).endVertex();
+        BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
+        buffer.vertex(x2, y1, z).color(r1, g1, b1, a1).end();
+        buffer.vertex(x1, y1, z).color(r1, g1, b1, a1).end();
+        buffer.vertex(x1, y2, z).color(r2, g2, b2, a2).end();
+        buffer.vertex(x2, y2, z).color(r2, g2, b2, a2).end();
     }
 
     public static void horizontalGradientRect(int x1, int y1, int x2, int y2, float z, int color1, int color2) {
@@ -154,11 +150,11 @@ public final class Render2D {
         int g2 = (color2 >> 8) & 255;
         int b2 = color2 & 255;
 
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.pos(x1, y1, z).color(r1, g1, b1, a1).endVertex();
-        buffer.pos(x1, y2, z).color(r1, g1, b1, a1).endVertex();
-        buffer.pos(x2, y2, z).color(r2, g2, b2, a2).endVertex();
-        buffer.pos(x2, y1, z).color(r2, g2, b2, a2).endVertex();
+        BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
+        buffer.vertex(x1, y1, z).color(r1, g1, b1, a1).end();
+        buffer.vertex(x1, y2, z).color(r1, g1, b1, a1).end();
+        buffer.vertex(x2, y2, z).color(r2, g2, b2, a2).end();
+        buffer.vertex(x2, y1, z).color(r2, g2, b2, a2).end();
     }
 
     public static void thickBeveledBox(int x1, int y1, int x2, int y2, float z, int thickness, int topLeftColor, int bottomRightColor, int fillColor) {
@@ -168,11 +164,11 @@ public final class Render2D {
     }
 
     public static void textureVertices(int x1, int y1, int x2, int y2, float z, float u1, float v1, float u2, float v2) {
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.pos(x1, y1, z).tex(u1, v1).endVertex();
-        buffer.pos(x1, y2, z).tex(u1, v2).endVertex();
-        buffer.pos(x2, y2, z).tex(u2, v2).endVertex();
-        buffer.pos(x2, y1, z).tex(u2, v1).endVertex();
+        BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
+        buffer.vertex(x1, y1, z).texture(u1, v1).end();
+        buffer.vertex(x1, y2, z).texture(u1, v2).end();
+        buffer.vertex(x2, y2, z).texture(u2, v2).end();
+        buffer.vertex(x2, y1, z).texture(u2, v1).end();
     }
 
     public static void verticalLine(int x, int y1, int y2, float z) {
@@ -185,12 +181,12 @@ public final class Render2D {
         glVertex3f(x2, y, z);
     }
 
-    public static void completeTexture(int x1, int y1, int x2, int y2, float z, ResourceLocation texture) {
+    public static void completeTexture(int x1, int y1, int x2, int y2, float z, Identifier texture) {
         bindTexture(texture);
         textureVertices(x1, y1, x2, y2, z, 0.0F, 0.0F, 1.0F, 1.0F);
     }
 
-    public static void completeTexture(int x1, int y1, int x2, int y2, ResourceLocation texture) {
+    public static void completeTexture(int x1, int y1, int x2, int y2, Identifier texture) {
         completeTexture(x1, y1, x2, y2, 0F, texture);
     }
 
@@ -211,7 +207,7 @@ public final class Render2D {
     }
 
     public static int getXForHorizontallyCenteredText(String text, int left, int right) {
-        return getXForHorizontallyCenteredText(TextRenderer.vanilla(), text, left, right);
+        return getXForHorizontallyCenteredText(TextRenderers.vanilla(), text, left, right);
     }
 
     public static int getXForHorizontallyCenteredText(ITextRenderer textRenderer, String text, int left, int right) {
@@ -220,7 +216,7 @@ public final class Render2D {
     }
 
     public static int getYForVerticallyCenteredText(int top, int bottom) {
-        return getYForVerticallyCenteredText(TextRenderer.vanilla(), top, bottom);
+        return getYForVerticallyCenteredText(TextRenderers.vanilla(), top, bottom);
     }
 
     public static int getYForVerticallyCenteredText(ITextRenderer textRenderer, int top, int bottom) {
@@ -231,7 +227,7 @@ public final class Render2D {
         int y = getYForVerticallyCenteredText(top, bottom);
         GlStateManager.pushMatrix();
         GlStateManager.translatef(0F, 0F, z + 0.1F);
-        fontRenderer().drawString(text, leftX, y, color);
+        fontRenderer().draw(text, leftX, y, color);
         GlStateManager.popMatrix();
     }
 
@@ -244,7 +240,7 @@ public final class Render2D {
         int x = getXForHorizontallyCenteredText(text, left, right);
         GlStateManager.pushMatrix();
         GlStateManager.translatef(0F, 0F, z + 0.1F);
-        fontRenderer().drawString(text, x, topY, color);
+        fontRenderer().draw(text, x, topY, color);
         GlStateManager.popMatrix();
     }
 
@@ -258,7 +254,7 @@ public final class Render2D {
         int y = getYForVerticallyCenteredText(top, bottom);
         GlStateManager.pushMatrix();
         GlStateManager.translatef(0F, 0F, z + 0.1F);
-        fontRenderer().drawString(text, x, y, color);
+        fontRenderer().draw(text, x, y, color);
         GlStateManager.popMatrix();
     }
 

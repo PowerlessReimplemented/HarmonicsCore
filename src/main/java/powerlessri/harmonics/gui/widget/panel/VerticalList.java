@@ -5,14 +5,8 @@ package powerlessri.harmonics.gui.widget.panel;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import powerlessri.harmonics.Config;
-import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.ScissorTest;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -21,11 +15,9 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 import powerlessri.harmonics.utils.Utils;
 
-import javax.annotation.Nonnegative;
 import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static powerlessri.harmonics.gui.Render2D.*;
 
 public class VerticalList<T extends IWidget> extends AbstractContainer<T> implements ResizableWidgetMixin {
@@ -163,36 +155,6 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     protected void drawOverlay() {
     }
 
-    /**
-     * Draw a vanilla style overlay.
-     * <p>
-     * If there is no world loaded, it will draw a dirt background; if a world is loaded, it will simply draw a vertical gradient rectangle
-     * from {@code 0xc0101010} to {@code 0xd0101010}.
-     */
-    protected final void drawDefaultOverlay() {
-        int left = getAbsoluteX();
-        int top = getAbsoluteY();
-        int right = getAbsoluteXRight();
-        int bottom = getAbsoluteYBottom();
-        if (Render2D.minecraft().world != null) {
-            GuiUtils.drawGradientRect(0, left, top, right, bottom, 0xc0101010, 0xd0101010);
-        } else {
-            // Draw dark dirt background
-            GlStateManager.disableLighting();
-            GlStateManager.disableFog();
-            Render2D.bindTexture(AbstractGui.BACKGROUND_LOCATION);
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            float texScale = 32.0F;
-            BufferBuilder renderer = Tessellator.getInstance().getBuffer();
-            renderer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            renderer.pos(left, bottom, 0.0D).tex(left / texScale, (bottom + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-            renderer.pos(right, bottom, 0.0D).tex(right / texScale, (bottom + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-            renderer.pos(right, top, 0.0D).tex(right / texScale, (top + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-            renderer.pos(left, top, 0.0D).tex(left / texScale, (top + (int) scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-            draw();
-        }
-    }
-
     protected void drawBackground() {
     }
 
@@ -246,7 +208,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
         return marginMiddle;
     }
 
-    public void setMarginMiddle(@Nonnegative int marginMiddle) {
+    public void setMarginMiddle(int marginMiddle) {
         this.marginMiddle = Utils.lowerBound(marginMiddle, 0);
     }
 

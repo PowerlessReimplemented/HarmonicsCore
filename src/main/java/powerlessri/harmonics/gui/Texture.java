@@ -1,6 +1,6 @@
 package powerlessri.harmonics.gui;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 public abstract class Texture implements ITexture {
 
@@ -9,7 +9,7 @@ public abstract class Texture implements ITexture {
 
     public static final ITexture NONE = new ITexture() {
         @Override
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return Render2D.INVALID_TEXTURE;
         }
 
@@ -82,22 +82,22 @@ public abstract class Texture implements ITexture {
         }
     };
 
-    public static ITexture portion(ResourceLocation texture, int texWidth, int texHeight, int portionX, int portionY, int portionWidth, int portionHeight) {
+    public static ITexture portion(Identifier texture, int texWidth, int texHeight, int portionX, int portionY, int portionWidth, int portionHeight) {
         if (texWidth == portionWidth && texHeight == portionHeight && portionX == 0 && portionY == 0) {
             return complete(texture, texWidth, texHeight);
         }
         return new PartialTexture(texture, texWidth, texHeight, portionX, portionY, portionWidth, portionHeight);
     }
 
-    public static ITexture portion256x256(ResourceLocation texture, int portionX, int portionY, int portionWidth, int portionHeight) {
+    public static ITexture portion256x256(Identifier texture, int portionX, int portionY, int portionWidth, int portionHeight) {
         return new PartialTexture(texture, 256, 256, portionX, portionY, portionWidth, portionHeight);
     }
 
-    public static ITexture complete(ResourceLocation texture, int width, int height) {
+    public static ITexture complete(Identifier texture, int width, int height) {
         return new CompleteTexture(texture, width, height);
     }
 
-    public static ITexture complete256x256(ResourceLocation texture) {
+    public static ITexture complete256x256(Identifier texture) {
         return new CompleteTexture(texture, 256, 256);
     }
 }

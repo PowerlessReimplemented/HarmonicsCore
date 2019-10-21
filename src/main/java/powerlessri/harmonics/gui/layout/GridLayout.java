@@ -1,17 +1,12 @@
 package powerlessri.harmonics.gui.layout;
 
 import com.google.common.base.Preconditions;
-import io.netty.util.internal.StringUtil;
 import org.apache.commons.lang3.StringUtils;
-import powerlessri.harmonics.gui.layout.properties.BoxSizing;
-import powerlessri.harmonics.gui.layout.properties.IFractionalLengthHandler;
-import powerlessri.harmonics.gui.layout.properties.Length;
+import powerlessri.harmonics.gui.layout.properties.*;
 import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.mixin.ResizableWidgetMixin;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Layout widgets on a non-fixed dimension grid, where each row and column have their individual size. The widgets are layed on the grid so

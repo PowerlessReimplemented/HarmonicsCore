@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class VanillaTextRenderer implements ITextRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.translated(x, y, z + 0.1F);
         GlStateManager.scaled(scaleFactor, scaleFactor, 1F);
-        Minecraft.getInstance().fontRenderer.drawString(text, 0, 0, textColor);
+        MinecraftClient.getInstance().textRenderer.draw(text, 0, 0, textColor);
         GlStateManager.popMatrix();
     }
 
@@ -29,7 +29,7 @@ public class VanillaTextRenderer implements ITextRenderer {
         GlStateManager.translatef(x, y, z + 0.1F);
         GlStateManager.scalef(scaleFactor, scaleFactor, 1F);
         for (String line : text) {
-            Minecraft.getInstance().fontRenderer.drawString(line, 0, 0, textColor);
+            MinecraftClient.getInstance().textRenderer.draw(line, 0, 0, textColor);
             GlStateManager.translatef(0F, fontHeight, 0F);
         }
         GlStateManager.popMatrix();
@@ -37,12 +37,12 @@ public class VanillaTextRenderer implements ITextRenderer {
 
     @Override
     public int calculateWidth(String text) {
-        return (int) (Minecraft.getInstance().fontRenderer.getStringWidth(text) * scaleFactor);
+        return (int) (MinecraftClient.getInstance().textRenderer.getStringWidth(text) * scaleFactor);
     }
 
     @Override
     public String trimToWidth(String text, int width) {
-        return Minecraft.getInstance().fontRenderer.trimStringToWidth(text, (int) (width * getInverseScaleFactor()));
+        return MinecraftClient.getInstance().textRenderer.trimToWidth(text, (int) (width * getInverseScaleFactor()));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class VanillaTextRenderer implements ITextRenderer {
     }
 
     public float getDefaultFontHeight() {
-        return Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
+        return MinecraftClient.getInstance().textRenderer.fontHeight;
     }
 
     @Override

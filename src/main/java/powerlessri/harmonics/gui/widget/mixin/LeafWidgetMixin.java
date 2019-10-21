@@ -94,6 +94,6 @@ public interface LeafWidgetMixin extends IWidget {
     }
 
     @Override
-    default void update(float particleTicks) {
+    default void update(float tickDelta) {
     }
 }

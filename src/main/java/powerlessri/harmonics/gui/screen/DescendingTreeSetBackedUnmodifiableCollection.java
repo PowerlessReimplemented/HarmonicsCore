@@ -1,15 +1,10 @@
 package powerlessri.harmonics.gui.screen;
 
-import mcp.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 final class DescendingTreeSetBackedUnmodifiableCollection<E> extends AbstractCollection<E> {
 
     private final TreeSet<E> s;

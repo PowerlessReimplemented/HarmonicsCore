@@ -5,9 +5,9 @@ import powerlessri.harmonics.gui.widget.IWidget;
 
 public interface ContainerWidgetMixin<T extends IWidget> extends IContainer<T> {
 
-    default void renderChildren(int mouseX, int mouseY, float particleTicks) {
+    default void renderChildren(int mouseX, int mouseY, float tickDelta) {
         for (T child : getChildren()) {
-            child.render(mouseX, mouseY, particleTicks);
+            child.render(mouseX, mouseY, tickDelta);
         }
     }
 
@@ -89,9 +89,9 @@ public interface ContainerWidgetMixin<T extends IWidget> extends IContainer<T> {
     }
 
     @Override
-    default void update(float particleTicks) {
+    default void update(float tickDelta) {
         for (T child : getChildren()) {
-            child.update(particleTicks);
+            child.update(tickDelta);
         }
     }
 }

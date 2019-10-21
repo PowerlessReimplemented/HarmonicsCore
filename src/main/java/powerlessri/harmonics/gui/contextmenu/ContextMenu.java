@@ -2,8 +2,9 @@ package powerlessri.harmonics.gui.contextmenu;
 
 import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Mouse;
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.Config;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -11,7 +12,6 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.window.IPopupWindow;
 import powerlessri.harmonics.gui.window.mixin.*;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +21,10 @@ import static powerlessri.harmonics.gui.Render2D.*;
 public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, WindowOverlayInfoMixin, WindowPropertiesMixin {
 
     public static ContextMenu atCursor() {
-        MouseHelper m = Minecraft.getInstance().mouseHelper;
-        double scale = Minecraft.getInstance().mainWindow.getGuiScaleFactor();
-        double mouseX = m.getMouseX() / scale;
-        double mouseY = m.getMouseY() / scale;
+        Mouse m = MinecraftClient.getInstance().mouse;
+        double scale = MinecraftClient.getInstance().window.getScaleFactor();
+        double mouseX = m.getX() / scale;
+        double mouseY = m.getY() / scale;
         return new ContextMenu((int) mouseX, (int) mouseY);
     }
 
@@ -100,7 +100,7 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
         GlStateManager.disableTexture();
@@ -115,7 +115,7 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
         GlStateManager.enableTexture();
 
         for (Section section : sections) {
-            section.render(mouseX, mouseY, particleTicks);
+            section.render(mouseX, mouseY, tickDelta);
         }
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }

@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.window;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import powerlessri.harmonics.gui.*;
@@ -26,14 +26,14 @@ public class PlayerInventoryWindow extends AbstractPopupWindow {
     public PlayerInventoryWindow(int x, int y, Function<ItemStack, AbstractItemSlot> factory) {
         setPosition(x, y);
 
-        PlayerInventory playerInventory = Minecraft.getInstance().player.inventory;
-        ItemSlotPanel inventory = new ItemSlotPanel(9, 3, playerInventory.mainInventory.subList(9, playerInventory.mainInventory.size()), factory);
+        PlayerInventory playerInventory = MinecraftClient.getInstance().player.inventory;
+        ItemSlotPanel inventory = new ItemSlotPanel(9, 3, playerInventory.main.subList(9, playerInventory.main.size()), factory);
         inventory.setBorderTop(8 + 2);
         inventory.setBorderBottom(4);
         inventory.setLocation(0, 0);
-        ItemSlotPanel hotbar = new ItemSlotPanel(9, 1, playerInventory.mainInventory.subList(0, 9), factory);
+        ItemSlotPanel hotbar = new ItemSlotPanel(9, 1, playerInventory.main.subList(0, 9), factory);
         hotbar.setLocation(0, inventory.getYBottom());
-        SimpleIconButton close = new SimpleIconButton( CLOSE, CLOSE);
+        SimpleIconButton close = new SimpleIconButton(CLOSE, CLOSE);
         close.setLocation(inventory.getWidth() - 8, 0);
         close.setClickAction(b -> discard());
         children = ImmutableList.of(close, inventory, hotbar);
@@ -52,10 +52,10 @@ public class PlayerInventoryWindow extends AbstractPopupWindow {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         renderVanillaStyleBackground();
-        renderChildren(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, tickDelta);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 }

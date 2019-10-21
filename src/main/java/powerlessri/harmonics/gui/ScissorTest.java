@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui;
 
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.Window;
 import powerlessri.harmonics.HarmonicsCore;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -10,9 +10,9 @@ import static org.lwjgl.opengl.GL11.*;
 public final class ScissorTest {
 
     public static ScissorTest scaled(int x, int y, int width, int height) {
-        MainWindow mainWindow = Minecraft.getInstance().mainWindow;
-        double scale = mainWindow.getGuiScaleFactor();
-        return new ScissorTest((int) (x * scale), (int) (mainWindow.getHeight() - ((y + height) * scale)),
+        Window window = MinecraftClient.getInstance().window;
+        double scale = window.getScaleFactor();
+        return new ScissorTest((int) (x * scale), (int) (window.getHeight() - ((y + height) * scale)),
                 (int) (width * scale), (int) (height * scale));
     }
 

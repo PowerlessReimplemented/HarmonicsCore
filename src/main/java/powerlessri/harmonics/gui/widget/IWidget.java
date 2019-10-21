@@ -75,7 +75,7 @@ public interface IWidget {
      * <li>texture: enabled
      * </ul>
      */
-    void render(int mouseX, int mouseY, float particleTicks);
+    void render(int mouseX, int mouseY, float tickDelta);
 
     float getZLevel();
 
@@ -165,5 +165,5 @@ public interface IWidget {
 
     void mouseMoved(double mouseX, double mouseY);
 
-    void update(float particleTicks);
+    void update(float tickDelta);
 }

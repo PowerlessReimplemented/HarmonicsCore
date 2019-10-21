@@ -1,6 +1,7 @@
 package powerlessri.harmonics.gui.window;
 
 import com.google.common.collect.ImmutableList;
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.gui.*;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -11,7 +12,6 @@ import powerlessri.harmonics.gui.widget.navigation.DockedWindow;
 import powerlessri.harmonics.gui.widget.navigation.NavigationBar;
 import powerlessri.harmonics.gui.widget.panel.Panel;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class AbstractDockableWindow<T extends IWidget> extends AbstractWindow implements IPopupWindow {
@@ -51,10 +51,10 @@ public abstract class AbstractDockableWindow<T extends IWidget> extends Abstract
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         renderVanillaStyleBackground();
-        renderChildren(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, tickDelta);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 

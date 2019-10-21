@@ -1,8 +1,8 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.gui.widget.IWidget;
@@ -15,7 +15,7 @@ import java.util.List;
 public class DialogTest extends WidgetScreen {
 
     public DialogTest() {
-        super(new StringTextComponent("Test"));
+        super(new LiteralText("Test"));
     }
 
     @Override
@@ -34,8 +34,8 @@ public class DialogTest extends WidgetScreen {
 
             ColoredTextButton dialog =
                     ColoredTextButton.ofText("Dialog", b -> Dialog.createPrompt("Enter some text:",
-                            (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You have entered: " + t),
-                            (btn, t) -> Minecraft.getInstance().player.sendChatMessage("You clicked cancel")).tryAddSelfToActiveGUI());
+                            (btn, t) -> MinecraftClient.getInstance().player.sendChatMessage("You have entered: " + t),
+                            (btn, t) -> MinecraftClient.getInstance().player.sendChatMessage("You clicked cancel")).tryAddSelfToActiveGUI());
             dialog.attachWindow(this);
 
             this.children = ImmutableList.of(dialog);
@@ -53,10 +53,10 @@ public class DialogTest extends WidgetScreen {
         }
 
         @Override
-        public void render(int mouseX, int mouseY, float particleTicks) {
+        public void render(int mouseX, int mouseY, float tickDelta) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             renderVanillaStyleBackground();
-            renderChildren(mouseX, mouseY, particleTicks);
+            renderChildren(mouseX, mouseY, tickDelta);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
     }

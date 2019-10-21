@@ -1,8 +1,8 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Identifier;
 import powerlessri.harmonics.gui.ITexture;
 import powerlessri.harmonics.gui.Texture;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -21,7 +21,7 @@ import static powerlessri.harmonics.gui.Render2D.scaledWidth;
 public class DockableWindowTest extends WidgetScreen {
 
     public DockableWindowTest() {
-        super(new StringTextComponent("test"));
+        super(new LiteralText("test"));
     }
 
     @Override
@@ -64,10 +64,10 @@ public class DockableWindowTest extends WidgetScreen {
         }
 
         @Override
-        public void render(int mouseX, int mouseY, float particleTicks) {
+        public void render(int mouseX, int mouseY, float tickDelta) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             renderVanillaStyleBackground();
-            renderChildren(mouseX, mouseY, particleTicks);
+            renderChildren(mouseX, mouseY, tickDelta);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
     }
@@ -111,7 +111,7 @@ public class DockableWindowTest extends WidgetScreen {
 
         @Override
         public ITexture getIcon() {
-            return Texture.portion(new ResourceLocation("minecraft:textures/item/bucket.png"), 16, 16, 0, 0, 16, 16);
+            return Texture.portion(new Identifier("minecraft:textures/item/bucket.png"), 16, 16, 0, 0, 16, 16);
         }
     }
 }

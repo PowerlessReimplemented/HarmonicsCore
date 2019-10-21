@@ -94,7 +94,7 @@ public class Slider extends AbstractWidget implements LeafWidgetMixin {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         if (!isEnabled()) {
             return;
         }

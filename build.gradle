@@ -1,173 +1,94 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-    }
+import java.nio.file.Paths
+
+plugins {
+	id 'fabric-loom' version '0.2.5-SNAPSHOT'
+	id 'maven-publish'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
-version = "${mod_version}"
-group = "powerlessri.harmonics"
-archivesBaseName = "${mod_name}"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
 
 sourceSets {
-    testmod {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
+	testmod {
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
 
-        java {
-            srcDir "src/testmod/java"
-        }
-        resources {
-            srcDir "src/testmod/resources"
-        }
-    }
+		java {
+			srcDir "src/testmod/java"
+		}
+		resources {
+			srcDir "src/testmod/resources"
+		}
+	}
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: "${mcp_mappings}"
-    accessTransformer = file('src/resources/main/META-INF/accesstransformer.cfg')
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                harmonics {
-                    source sourceSets.main
-                }
-                hctest {
-                    source sourceSets.testmod
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                harmonics {
-                    source sourceSets.main
-                }
-                hctest {
-                    source sourceSets.testmod
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
-
-            mods {
-                harmonics {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
-}
-
-repositories {
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
-        name = "CurseForge"
-        url = "https://minecraft.curseforge.com/api/maven/"
-    }
+	// TODO load testmod module
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-}
+	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-configurations {
-    testmodCompile.extendsFrom(compile)
-    testmodCompileOnly.extendsFrom(compileOnly)
-    testmodRuntimeOnly.extendsFrom(runtimeOnly)
+	compile 'org.jetbrains:annotations:16.0.2'
 }
 
 processResources {
-    inputs.property "version", project.version
+	inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "META_INF/mods.toml"
-        expand "version": project.version
-    }
-    from(sourceSets.testmod.resources.srcDirs) {
-        include "META_INF/mods.toml"
-    }
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
+		expand "version": project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
+	}
+}
+
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = "sources"
+	from sourceSets.main.allSource
 }
 
 jar {
-    from sourceSets.main.output.classesDirs
-    from sourceSets.main.output.resourcesDir
-
-    manifest {
-        attributes([
-                "Specification-Title"     : "harmonicscore",
-                "Specification-Vendor"    : "harmonicscoresareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "harmonicscoresareus",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
+	from "LICENSE"
 }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
+// configure the maven publication
 publishing {
-    publications {
-        maven(MavenPublication) {
-            artifact reobfArtifact
-            pom {
-                url.set("https://github.com/hnOsmium0001/HarmonicsCore.git")
-            }
-        }
-    }
-    repositories {
-        maven {
-            name = "Github"
-            url = "https://maven.pkg.github.com/hnOsmium0001/HarmonicsCore"
-            credentials {
-                // findProperty will allow these properties to be absent and still run the build, just won't publish
-                username = findProperty("github.username")
-                password = findProperty("github.gpr_token")
-            }
-        }
-    }
+	publications {
+		mavenJava(MavenPublication) {
+			// add all the jars that should be included when publishing to maven
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	// select the repositories you want to publish to
+	repositories {
+		// uncomment to publish to the local maven
+		// mavenLocal()
+	}
 }

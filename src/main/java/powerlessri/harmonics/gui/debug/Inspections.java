@@ -2,9 +2,7 @@ package powerlessri.harmonics.gui.debug;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.render.*;
 import powerlessri.harmonics.Config;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.widget.IWidget;
@@ -63,13 +61,13 @@ public abstract class Inspections implements IRenderEventListener {
 
         @Override
         public void string(String text) {
-            fontRenderer().drawStringWithShadow(text, x, y, 0xffffff);
+            fontRenderer().drawWithShadow(text, x, y, 0xffffff);
             x += fontRenderer().getStringWidth(text);
         }
 
         @Override
         public void line(String line) {
-            fontRenderer().drawStringWithShadow(line, STARTING_X, y, 0xffffff);
+            fontRenderer().drawWithShadow(line, STARTING_X, y, 0xffffff);
             nextLine();
         }
 
@@ -127,7 +125,7 @@ public abstract class Inspections implements IRenderEventListener {
         if (widget instanceof IHighlightRenderer) {
             ((IHighlightRenderer) widget).renderHighlight();
         } else {
-            fontRenderer().drawStringWithShadow("(Widget does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
+            fontRenderer().drawWithShadow("(Widget does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
         }
     }
 
@@ -135,7 +133,7 @@ public abstract class Inspections implements IRenderEventListener {
         if (window instanceof IHighlightRenderer) {
             ((IHighlightRenderer) window).renderHighlight();
         } else {
-            fontRenderer().drawStringWithShadow("(Window does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
+            fontRenderer().drawWithShadow("(Window does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
         }
     }
 
@@ -179,8 +177,8 @@ public abstract class Inspections implements IRenderEventListener {
 
         useBlendingGLStates();
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        BufferBuilder buffer = tessellator.getBufferBuilder();
+        buffer.begin(GL_QUADS, VertexFormats.POSITION_COLOR);
 
         // Can't just do two rectangles because they are transparent
 

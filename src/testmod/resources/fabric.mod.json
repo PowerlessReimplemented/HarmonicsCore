@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "hctest",
+  "version": "${version}",
+  "name": "Harmonics Core Test",
+  "description": "",
+  "authors": [
+    "hnOsmium0001"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/harmonics-core",
+    "sources": "https://github.com/hnOsmium0001/HarmonicsCore/"
+  },
+  "license": "MIT",
+  "icon": "",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "powerlessri.harmonics.testmod.HarmonicsCoreTest"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

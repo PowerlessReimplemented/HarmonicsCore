@@ -1,7 +1,7 @@
 package powerlessri.harmonics.gui.widget.button;
 
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.util.StringIdentifiable;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.ITextReceiver;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
@@ -12,22 +12,22 @@ import java.util.function.IntConsumer;
 
 import static powerlessri.harmonics.gui.Render2D.*;
 
-public class ColoredTextButton extends AbstractWidget implements IButton, LeafWidgetMixin, IStringSerializable {
+public class ColoredTextButton extends AbstractWidget implements IButton, LeafWidgetMixin, StringIdentifiable {
 
     public static ColoredTextButton of(String key) {
-        return ofText(I18n.format(key));
+        return ofText(I18n.translate(key));
     }
 
     public static ColoredTextButton of(String key, IntConsumer action) {
-        return ofText(I18n.format(key), action);
+        return ofText(I18n.translate(key), action);
     }
 
     public static ColoredTextButton of(String key, Object... args) {
-        return ofText(I18n.format(key, args));
+        return ofText(I18n.translate(key, args));
     }
 
     public static ColoredTextButton of(String key, IntConsumer action, Object... args) {
-        return ofText(I18n.format(key, args), action);
+        return ofText(I18n.translate(key, args), action);
     }
 
     public static ColoredTextButton ofText(String text) {
@@ -57,7 +57,7 @@ public class ColoredTextButton extends AbstractWidget implements IButton, LeafWi
     private boolean clicked = false;
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
         int x1 = getAbsoluteX();
@@ -137,19 +137,19 @@ public class ColoredTextButton extends AbstractWidget implements IButton, LeafWi
     }
 
     public void translate(String translationKey) {
-        setText(I18n.format(translationKey));
+        setText(I18n.translate(translationKey));
     }
 
     public void translate(String translationKey, Object... args) {
-        setText(I18n.format(translationKey, args));
+        setText(I18n.translate(translationKey, args));
     }
 
     public void translateRaw(String translationKey) {
-        setTextRaw(I18n.format(translationKey));
+        setTextRaw(I18n.translate(translationKey));
     }
 
     public void translateRaw(String translationKey, Object... args) {
-        setTextRaw(I18n.format(translationKey, args));
+        setTextRaw(I18n.translate(translationKey, args));
     }
 
     @Override
@@ -178,7 +178,7 @@ public class ColoredTextButton extends AbstractWidget implements IButton, LeafWi
     }
 
     @Override
-    public String getName() {
+    public String asString() {
         return text;
     }
 

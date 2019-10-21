@@ -22,11 +22,11 @@ public class Checkbox extends AbstractWidget implements LeafWidgetMixin {
     public BooleanConsumer onStateChange = b -> {};
 
     public Checkbox() {
-        this.setDimensions(9,9);
+        this.setDimensions(9, 9);
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         int x1 = getAbsoluteX();
         int y1 = getAbsoluteY();

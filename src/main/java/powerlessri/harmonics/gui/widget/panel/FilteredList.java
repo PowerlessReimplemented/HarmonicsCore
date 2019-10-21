@@ -1,18 +1,19 @@
 package powerlessri.harmonics.gui.widget.panel;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringIdentifiable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import powerlessri.harmonics.gui.widget.*;
+import powerlessri.harmonics.gui.widget.IWidget;
+import powerlessri.harmonics.gui.widget.TextField;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 
-public class FilteredList<T extends IWidget & IStringSerializable> extends AbstractList<T> {
+public class FilteredList<T extends IWidget & StringIdentifiable> extends AbstractList<T> {
 
-    public static <T extends IWidget & IStringSerializable> Pair<WrappingList, TextField> createSearchableList(List<T> list, String defaultText) {
+    public static <T extends IWidget & StringIdentifiable> Pair<WrappingList, TextField> createSearchableList(List<T> list, String defaultText) {
         Pair<FilteredList<T>, TextField> pair = of(list, defaultText);
         FilteredList<T> filteredList = pair.getLeft();
 
@@ -28,7 +29,7 @@ public class FilteredList<T extends IWidget & IStringSerializable> extends Abstr
         return Pair.of(wrappingList, textField);
     }
 
-    public static <T extends IWidget & IStringSerializable> Pair<FilteredList<T>, TextField> of(List<T> list, String defaultText) {
+    public static <T extends IWidget & StringIdentifiable> Pair<FilteredList<T>, TextField> of(List<T> list, String defaultText) {
         FilteredList<T> filteredList = new FilteredList<>(list);
         filteredList.updateSearch(defaultText);
 
@@ -78,7 +79,7 @@ public class FilteredList<T extends IWidget & IStringSerializable> extends Abstr
         } else {
             searchResult = new ArrayList<>();
             for (T child : backed) {
-                if (StringUtils.containsIgnoreCase(child.getName(), search)) {
+                if (StringUtils.containsIgnoreCase(child.asString(), search)) {
                     searchResult.add(child);
                 }
             }

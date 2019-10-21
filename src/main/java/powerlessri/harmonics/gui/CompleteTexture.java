@@ -1,9 +1,9 @@
 package powerlessri.harmonics.gui;
 
 import com.google.common.base.MoreObjects;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
@@ -11,18 +11,18 @@ import static powerlessri.harmonics.gui.Render2D.*;
 
 class CompleteTexture implements ITexture {
 
-    private ResourceLocation texture;
+    private Identifier texture;
     private int width;
     private int height;
 
-    public CompleteTexture(ResourceLocation texture, int width, int height) {
+    public CompleteTexture(Identifier texture, int width, int height) {
         this.texture = texture;
         this.width = width;
         this.height = height;
     }
 
     @Override
-    public ResourceLocation getResourceLocation() {
+    public Identifier getIdentifier() {
         return texture;
     }
 
@@ -66,11 +66,11 @@ class CompleteTexture implements ITexture {
 
     @Override
     public void vertices(int x1, int y1, int x2, int y2, float z) {
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.pos(x1, y1, z).tex(0D, 0D).endVertex();
-        buffer.pos(x1, y2, z).tex(0D, 1D).endVertex();
-        buffer.pos(x2, y2, z).tex(1D, 1D).endVertex();
-        buffer.pos(x2, y1, z).tex(1D, 0D).endVertex();
+        BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
+        buffer.vertex(x1, y1, z).texture(0D, 0D).end();
+        buffer.vertex(x1, y2, z).texture(0D, 1D).end();
+        buffer.vertex(x2, y2, z).texture(1D, 1D).end();
+        buffer.vertex(x2, y1, z).texture(1D, 0D).end();
     }
 
     @Override

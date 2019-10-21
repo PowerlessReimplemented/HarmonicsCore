@@ -1,7 +1,7 @@
 package powerlessri.harmonics.testmod.gui;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.text.LiteralText;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.layout.FlowLayout;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TextButtonTest extends WidgetScreen {
 
     public TextButtonTest() {
-        super(new StringTextComponent("Test"));
+        super(new LiteralText("Test"));
     }
 
     @Override
@@ -58,10 +58,10 @@ public class TextButtonTest extends WidgetScreen {
         }
 
         @Override
-        public void render(int mouseX, int mouseY, float particleTicks) {
+        public void render(int mouseX, int mouseY, float tickDelta) {
             RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
             renderVanillaStyleBackground();
-            renderChildren(mouseX, mouseY, particleTicks);
+            renderChildren(mouseX, mouseY, tickDelta);
             RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
         }
     }

@@ -1,15 +1,15 @@
 package powerlessri.harmonics.gui.contextmenu;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.IntConsumer;
 
 public class CallbackEntry extends DefaultEntry {
 
     private final IntConsumer callback;
 
-    public CallbackEntry(@Nullable ResourceLocation icon, String translationKey, IntConsumer callback) {
+    public CallbackEntry(@Nullable Identifier icon, String translationKey, IntConsumer callback) {
         super(icon, translationKey);
         this.callback = callback;
     }

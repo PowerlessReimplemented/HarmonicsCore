@@ -30,7 +30,7 @@ public class RadioInput extends AbstractWidget implements IButton, IRadioInput, 
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
         GlStateManager.color3f(1F, 1F, 1F);
         ITexture texture = hovered

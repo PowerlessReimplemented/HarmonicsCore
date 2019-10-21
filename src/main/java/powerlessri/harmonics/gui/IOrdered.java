@@ -1,6 +1,6 @@
 package powerlessri.harmonics.gui;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public interface IOrdered extends Comparable<IOrdered> {
 
@@ -9,7 +9,7 @@ public interface IOrdered extends Comparable<IOrdered> {
     void setOrder(int order);
 
     @Override
-    default int compareTo(@Nonnull IOrdered that) {
+    default int compareTo(@NotNull IOrdered that) {
         return this.getOrder() - that.getOrder();
     }
 }

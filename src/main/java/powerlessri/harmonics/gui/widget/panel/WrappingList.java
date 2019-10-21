@@ -80,11 +80,11 @@ public class WrappingList extends AbstractContainer<IWidget> {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
-        scrollUpArrow.render(mouseX, mouseY, particleTicks);
-        scrollDownArrow.render(mouseX, mouseY, particleTicks);
+        scrollUpArrow.render(mouseX, mouseY, tickDelta);
+        scrollDownArrow.render(mouseX, mouseY, tickDelta);
 
         ScissorTest test = ScissorTest.scaled(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
 
@@ -93,7 +93,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
         for (IWidget child : contents) {
             int cy = child.getY();
             if (cy + child.getHeight() > sTop && cy < sBottom) {
-                child.render(mouseX, mouseY, particleTicks);
+                child.render(mouseX, mouseY, tickDelta);
             }
         }
 

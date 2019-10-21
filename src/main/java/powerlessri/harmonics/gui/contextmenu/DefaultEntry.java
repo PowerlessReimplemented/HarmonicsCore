@@ -1,14 +1,14 @@
 package powerlessri.harmonics.gui.contextmenu;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import powerlessri.harmonics.gui.Render2D;
 import powerlessri.harmonics.gui.debug.RenderEventDispatcher;
 import powerlessri.harmonics.gui.widget.AbstractWidget;
 import powerlessri.harmonics.gui.widget.mixin.LeafWidgetMixin;
 import powerlessri.harmonics.gui.window.IWindow;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 
 import static powerlessri.harmonics.gui.Render2D.*;
@@ -20,10 +20,10 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
     public static final int RENDERED_ICON_WIDTH = 8;
     public static final int RENDERED_ICON_HEIGHT = 8;
 
-    private final ResourceLocation icon;
+    private final Identifier icon;
     private final String translationKey;
 
-    public DefaultEntry(@Nullable ResourceLocation icon, String translationKey) {
+    public DefaultEntry(@Nullable Identifier icon, String translationKey) {
         this.icon = icon;
         this.translationKey = translationKey;
         Dimension bounds = getDimensions();
@@ -32,7 +32,7 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
 
         int x = getAbsoluteX();
@@ -47,7 +47,7 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
             GlStateManager.enableTexture();
         }
 
-        ResourceLocation icon = getIcon();
+        Identifier icon = getIcon();
         if (icon != null) {
             int iconX = x + MARGIN_SIDES;
             int iconY = y + MARGIN_SIDES;
@@ -62,7 +62,7 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
 
     @Nullable
     @Override
-    public ResourceLocation getIcon() {
+    public Identifier getIcon() {
         return icon;
     }
 

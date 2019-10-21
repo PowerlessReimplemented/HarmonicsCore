@@ -160,9 +160,9 @@ public class NavigationBar extends AbstractContainer<IWidget> {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float particleTicks) {
+    public void render(int mouseX, int mouseY, float tickDelta) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
-        renderChildren(mouseX, mouseY, particleTicks);
+        renderChildren(mouseX, mouseY, tickDelta);
         render.accept(this);
         RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
