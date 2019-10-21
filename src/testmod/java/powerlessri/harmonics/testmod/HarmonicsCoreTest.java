@@ -27,7 +27,6 @@ public class HarmonicsCoreTest implements ModInitializer {
 
     public HarmonicsCoreTest() {
         instance = this;
-        System.out.println("Load");
     }
 
     @Override

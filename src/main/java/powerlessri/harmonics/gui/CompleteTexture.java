@@ -67,10 +67,10 @@ class CompleteTexture implements ITexture {
     @Override
     public void vertices(int x1, int y1, int x2, int y2, float z) {
         BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
-        buffer.vertex(x1, y1, z).texture(0D, 0D).end();
-        buffer.vertex(x1, y2, z).texture(0D, 1D).end();
-        buffer.vertex(x2, y2, z).texture(1D, 1D).end();
-        buffer.vertex(x2, y1, z).texture(1D, 0D).end();
+        buffer.vertex(x1, y1, z).texture(0D, 0D).next();
+        buffer.vertex(x1, y2, z).texture(0D, 1D).next();
+        buffer.vertex(x2, y2, z).texture(1D, 1D).next();
+        buffer.vertex(x2, y1, z).texture(1D, 0D).next();
     }
 
     @Override

@@ -89,10 +89,10 @@ public final class Render2D {
         int red = (color >> 16) & 255;
         int green = (color >> 8) & 255;
         int blue = color & 255;
-        buffer.vertex(x1, y1, z).color(red, green, blue, alpha).end();
-        buffer.vertex(x2, y2, z).color(red, green, blue, alpha).end();
-        buffer.vertex(x3, y3, z).color(red, green, blue, alpha).end();
-        buffer.vertex(x4, y4, z).color(red, green, blue, alpha).end();
+        buffer.vertex(x1, y1, z).color(red, green, blue, alpha).next();
+        buffer.vertex(x2, y2, z).color(red, green, blue, alpha).next();
+        buffer.vertex(x3, y3, z).color(red, green, blue, alpha).next();
+        buffer.vertex(x4, y4, z).color(red, green, blue, alpha).next();
     }
 
     public static void coloredRect(Point position, Dimension dimensions, float z, int color) {
@@ -113,10 +113,10 @@ public final class Render2D {
         int green = (color >> 8) & 255;
         int blue = color & 255;
         BufferBuilder renderer = Tessellator.getInstance().getBufferBuilder();
-        renderer.vertex(x1, y1, z).color(red, green, blue, alpha).end();
-        renderer.vertex(x1, y2, z).color(red, green, blue, alpha).end();
-        renderer.vertex(x2, y2, z).color(red, green, blue, alpha).end();
-        renderer.vertex(x2, y1, z).color(red, green, blue, alpha).end();
+        renderer.vertex(x1, y1, z).color(red, green, blue, alpha).next();
+        renderer.vertex(x1, y2, z).color(red, green, blue, alpha).next();
+        renderer.vertex(x2, y2, z).color(red, green, blue, alpha).next();
+        renderer.vertex(x2, y1, z).color(red, green, blue, alpha).next();
     }
 
     public static void coloredRect(int x1, int y1, int x2, int y2, int color) {
@@ -134,10 +134,10 @@ public final class Render2D {
         int b2 = color2 & 255;
 
         BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
-        buffer.vertex(x2, y1, z).color(r1, g1, b1, a1).end();
-        buffer.vertex(x1, y1, z).color(r1, g1, b1, a1).end();
-        buffer.vertex(x1, y2, z).color(r2, g2, b2, a2).end();
-        buffer.vertex(x2, y2, z).color(r2, g2, b2, a2).end();
+        buffer.vertex(x2, y1, z).color(r1, g1, b1, a1).next();
+        buffer.vertex(x1, y1, z).color(r1, g1, b1, a1).next();
+        buffer.vertex(x1, y2, z).color(r2, g2, b2, a2).next();
+        buffer.vertex(x2, y2, z).color(r2, g2, b2, a2).next();
     }
 
     public static void horizontalGradientRect(int x1, int y1, int x2, int y2, float z, int color1, int color2) {
@@ -151,10 +151,10 @@ public final class Render2D {
         int b2 = color2 & 255;
 
         BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
-        buffer.vertex(x1, y1, z).color(r1, g1, b1, a1).end();
-        buffer.vertex(x1, y2, z).color(r1, g1, b1, a1).end();
-        buffer.vertex(x2, y2, z).color(r2, g2, b2, a2).end();
-        buffer.vertex(x2, y1, z).color(r2, g2, b2, a2).end();
+        buffer.vertex(x1, y1, z).color(r1, g1, b1, a1).next();
+        buffer.vertex(x1, y2, z).color(r1, g1, b1, a1).next();
+        buffer.vertex(x2, y2, z).color(r2, g2, b2, a2).next();
+        buffer.vertex(x2, y1, z).color(r2, g2, b2, a2).next();
     }
 
     public static void thickBeveledBox(int x1, int y1, int x2, int y2, float z, int thickness, int topLeftColor, int bottomRightColor, int fillColor) {
@@ -165,10 +165,10 @@ public final class Render2D {
 
     public static void textureVertices(int x1, int y1, int x2, int y2, float z, float u1, float v1, float u2, float v2) {
         BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
-        buffer.vertex(x1, y1, z).texture(u1, v1).end();
-        buffer.vertex(x1, y2, z).texture(u1, v2).end();
-        buffer.vertex(x2, y2, z).texture(u2, v2).end();
-        buffer.vertex(x2, y1, z).texture(u2, v1).end();
+        buffer.vertex(x1, y1, z).texture(u1, v1).next();
+        buffer.vertex(x1, y2, z).texture(u1, v2).next();
+        buffer.vertex(x2, y2, z).texture(u2, v2).next();
+        buffer.vertex(x2, y1, z).texture(u2, v1).next();
     }
 
     public static void verticalLine(int x, int y1, int y2, float z) {

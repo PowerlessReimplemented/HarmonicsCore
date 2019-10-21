@@ -83,10 +83,10 @@ class PartialTexture implements ITexture {
         float u2 = px2 * uFactor;
         float v2 = py2 * vFactor;
         BufferBuilder buffer = Tessellator.getInstance().getBufferBuilder();
-        buffer.vertex(x1, y1, z).texture(u1, v1).end();
-        buffer.vertex(x1, y2, z).texture(u1, v2).end();
-        buffer.vertex(x2, y2, z).texture(u2, v2).end();
-        buffer.vertex(x2, y1, z).texture(u2, v1).end();
+        buffer.vertex(x1, y1, z).texture(u1, v1).next();
+        buffer.vertex(x1, y2, z).texture(u1, v2).next();
+        buffer.vertex(x2, y2, z).texture(u2, v2).next();
+        buffer.vertex(x2, y1, z).texture(u2, v1).next();
     }
 
     @Override
