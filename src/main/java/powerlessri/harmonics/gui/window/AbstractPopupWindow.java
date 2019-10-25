@@ -8,8 +8,8 @@ import powerlessri.harmonics.gui.debug.ITextReceiver;
  */
 public abstract class AbstractPopupWindow extends AbstractWindow implements IPopupWindow {
 
-    private int initialDragLocalX = -1;
-    private int initialDragLocalY = -1;
+    private int initialDragX = -1;
+    private int initialDragY = -1;
     private boolean alive = true;
     private int order;
 
@@ -20,8 +20,8 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
         }
         if (isInside(mouseX, mouseY)) {
             setFocusedWidget(null);
-            initialDragLocalX = (int) mouseX - getX();
-            initialDragLocalY = (int) mouseY - getY();
+            initialDragX = (int) mouseX - getX();
+            initialDragY = (int) mouseY - getY();
             return true;
         }
         return false;
@@ -33,8 +33,8 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
             return true;
         }
         if (isDragging()) {
-            int x = (int) mouseX - initialDragLocalX;
-            int y = (int) mouseY - initialDragLocalY;
+            int x = (int) mouseX - initialDragX;
+            int y = (int) mouseY - initialDragY;
             setPosition(x, y);
             return true;
         }
@@ -47,15 +47,15 @@ public abstract class AbstractPopupWindow extends AbstractWindow implements IPop
             return true;
         }
         if (isInside(mouseX, mouseY)) {
-            initialDragLocalX = -1;
-            initialDragLocalY = -1;
+            initialDragX = -1;
+            initialDragY = -1;
             return true;
         }
         return false;
     }
 
     private boolean isDragging() {
-        return initialDragLocalX != -1 && initialDragLocalY != -1;
+        return initialDragX != -1 && initialDragY != -1;
     }
 
     public void discard() {

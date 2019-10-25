@@ -54,7 +54,7 @@ public class ItemSlotPanel extends AbstractContainer<AbstractItemSlot> {
     }
 
     @Override
-    public List<AbstractItemSlot> getChildren() {
+    public List<AbstractItemSlot> getPanels() {
         return children;
     }
 

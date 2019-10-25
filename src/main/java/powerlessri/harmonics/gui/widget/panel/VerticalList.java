@@ -121,7 +121,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
         int height = getHeight();
 
         ScissorTest test = ScissorTest.scaled(left, top, width, height);
-        for (T child : getChildren()) {
+        for (T child : getPanels()) {
             child.render(mouseX, mouseY, partialTicks);
         }
         drawOverlay();
@@ -197,7 +197,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     }
 
     @Override
-    public List<T> getChildren() {
+    public List<T> getPanels() {
         return elements;
     }
 
@@ -205,7 +205,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
     public void reflow() {
         int offset = (int) -scrollDistance;
         int y = 0;
-        for (T child : getChildren()) {
+        for (T child : getPanels()) {
             child.setY(y + offset);
             y += child.getFullHeight() + getMarginMiddle();
         }
@@ -231,7 +231,7 @@ public class VerticalList<T extends IWidget> extends AbstractContainer<T> implem
 
     protected int getContentHeight() {
         int contentHeight = 0;
-        for (T child : getChildren()) {
+        for (T child : getPanels()) {
             contentHeight += child.getFullHeight() + getMarginMiddle();
         }
         // Remove last unnecessary border

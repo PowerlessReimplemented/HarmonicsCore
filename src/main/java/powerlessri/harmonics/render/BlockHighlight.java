@@ -3,9 +3,12 @@ package powerlessri.harmonics.render;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,7 +16,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import powerlessri.harmonics.HarmonicsCore;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.glLineWidth;
@@ -59,15 +64,15 @@ public final class BlockHighlight {
         Minecraft mc = Minecraft.getInstance();
 
         ClientPlayerEntity p = mc.player;
-        double eyeHeight = p.getEyeHeight();
-        double doubleX = p.lastTickPosX + (p.posX - p.lastTickPosX) * partialTicks;
-        double doubleY = p.lastTickPosY + (p.posY - p.lastTickPosY) * partialTicks + eyeHeight;
-        double doubleZ = p.lastTickPosZ + (p.posZ - p.lastTickPosZ) * partialTicks;
+        Vec3d v = p.getEyePosition(partialTicks);
+        double x = v.x;
+        double y = v.y;
+        double z = v.z;
 
         GlStateManager.pushMatrix();
         GlStateManager.color3f(1F, 0F, 0F);
         GlStateManager.lineWidth(3);
-        GlStateManager.translated(-doubleX, -doubleY, -doubleZ);
+        GlStateManager.translated(-x, -y, -z);
 
         GlStateManager.disableDepthTest();
         GlStateManager.disableTexture();
@@ -87,9 +92,10 @@ public final class BlockHighlight {
     }
 
     public static void renderOutlines(ClientPlayerEntity p, Set<BlockPos> coordinates, int r, int g, int b, float partialTicks) {
-        double doubleX = p.lastTickPosX + (p.posX - p.lastTickPosX) * partialTicks;
-        double doubleY = p.lastTickPosY + (p.posY - p.lastTickPosY) * partialTicks;
-        double doubleZ = p.lastTickPosZ + (p.posZ - p.lastTickPosZ) * partialTicks;
+        Vec3d v = p.getEyePosition(partialTicks);
+        double x = v.x;
+        double y = v.y;
+        double z = v.z;
 
         RenderHelper.disableStandardItemLighting();
         Minecraft.getInstance().gameRenderer.disableLightmap();
@@ -100,7 +106,7 @@ public final class BlockHighlight {
         GlStateManager.depthMask(false);
 
         GlStateManager.pushMatrix();
-        GlStateManager.translated(-doubleX, -doubleY, -doubleZ);
+        GlStateManager.translated(-x, -y, -z);
 
         renderOutlines(coordinates, r, g, b, 4);
 

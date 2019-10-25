@@ -23,7 +23,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
         // Reattaching
         if (oldParent != null) {
             // Inherit the (possible) new window reference
-            for (T child : getChildren()) {
+            for (T child : getPanels()) {
                 child.attach(this);
             }
         }
@@ -31,8 +31,8 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
 
     public void notifyChildrenForPositionChange() {
         // Prevent NPE when containers setting coordinates before child widgets get initialized
-        if (getChildren() != null) {
-            for (T child : getChildren()) {
+        if (getPanels() != null) {
+            for (T child : getPanels()) {
                 child.onParentPositionChanged();
             }
         }
@@ -71,7 +71,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     public void adjustMinContent() {
         int rightmost = 0;
         int bottommost = 0;
-        for (IWidget child : getChildren()) {
+        for (IWidget child : getPanels()) {
             int right = child.getX() + child.getFullWidth();
             int bottom = child.getY() + child.getFullHeight();
             if (right > rightmost) {
@@ -86,7 +86,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
 
     public void adjustMinWidth() {
         int rightmost = 0;
-        for (IWidget child : getChildren()) {
+        for (IWidget child : getPanels()) {
             int right = child.getX() + child.getFullWidth();
             if (right > rightmost) {
                 rightmost = right;
@@ -97,7 +97,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
 
     public void adjustMinHeight() {
         int bottommost = 0;
-        for (IWidget child : getChildren()) {
+        for (IWidget child : getPanels()) {
             int bottom = child.getY() + child.getFullHeight();
             if (bottom > bottommost) {
                 bottommost = bottom;
@@ -121,7 +121,7 @@ public abstract class AbstractContainer<T extends IWidget> extends AbstractWidge
     }
 
     private static void propagateBuildActionMenu(IContainer<?> container, ContextMenuBuilder builder) {
-        for (IWidget child : container.getChildren()) {
+        for (IWidget child : container.getPanels()) {
             if (child instanceof AbstractWidget) {
                 ((AbstractWidget) child).buildContextMenu(builder);
             } else if (child instanceof IContainer<?>) {

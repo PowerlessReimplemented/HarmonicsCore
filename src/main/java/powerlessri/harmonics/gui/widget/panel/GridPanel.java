@@ -11,7 +11,7 @@ import java.util.Collection;
 public class GridPanel<T extends IWidget> extends AbstractContainer<T> {
 
     @Override
-    public Collection<T> getChildren() {
+    public Collection<T> getPanels() {
         return ImmutableList.of();
     }
 

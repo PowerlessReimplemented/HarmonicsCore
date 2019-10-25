@@ -111,7 +111,7 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
         int height = getHeight();
 
         ScissorTest test = ScissorTest.scaled(left, top, width, height);
-        for (T child : getChildren()) {
+        for (T child : getPanels()) {
             child.render(mouseX, mouseY, partialTicks);
         }
         drawOverlay();
@@ -157,7 +157,7 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
     }
 
     @Override
-    public List<T> getChildren() {
+    public List<T> getPanels() {
         return elements;
     }
 
@@ -165,7 +165,7 @@ public class HorizontalList<T extends IWidget> extends AbstractContainer<T> impl
     public void reflow() {
         int offset = (int) -scrollDistance;
         int x = 0;
-        for (T child : getChildren()) {
+        for (T child : getPanels()) {
             child.setX(x + offset);
             x += child.getFullWidth() + getMarginMiddle();
         }

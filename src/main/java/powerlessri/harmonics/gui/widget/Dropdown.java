@@ -54,7 +54,7 @@ public class Dropdown<B extends IWidget, L extends B, P extends B> extends Abstr
     }
 
     @Override
-    public Collection<B> getChildren() {
+    public Collection<B> getPanels() {
         return children;
     }
 
