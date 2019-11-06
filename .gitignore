@@ -21,3 +21,4 @@
 
 # Project files
 !src/
+!.github/
