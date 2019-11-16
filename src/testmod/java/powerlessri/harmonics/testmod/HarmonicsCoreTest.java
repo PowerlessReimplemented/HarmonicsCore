@@ -18,19 +18,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.*;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import powerlessri.harmonics.gui.screen.WidgetScreen;
 import powerlessri.harmonics.testmod.gui.*;
-import powerlessri.harmonics.testmod.registry.RegistryHandler;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 @Mod(HarmonicsCoreTest.MODID)
 public class HarmonicsCoreTest {
@@ -47,8 +42,6 @@ public class HarmonicsCoreTest {
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> bus.addListener(this::clientSetup));
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-
-        RegistryHandler.setup();
     }
 
     private Map<String, Supplier<WidgetScreen>> guiTests = new HashMap<>();
