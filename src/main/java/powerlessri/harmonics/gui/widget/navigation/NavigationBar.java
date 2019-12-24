@@ -99,7 +99,7 @@ public class NavigationBar extends AbstractContainer<IWidget> {
     }
 
     @Override
-    public Collection<IWidget> getPanels() {
+    public Collection<IWidget> getChildren() {
         return children;
     }
 

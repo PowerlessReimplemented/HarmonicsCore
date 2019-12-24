@@ -33,7 +33,8 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
     private final List<Section> sections;
     private IEntry focusedEntry;
 
-    private boolean alive = true;
+    protected boolean alive = true;
+    private int order = -1;
 
     public ContextMenu(int x, int y) {
         this(new Point(x, y));
@@ -77,8 +78,8 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
             xOff = left;
         } else {
             int right = getX() + getWidth() + minDistance;
-            if (right > scaledWidth()) {
-                xOff = right - scaledWidth();
+            if (right > windowWidth()) {
+                xOff = right - windowWidth();
             }
         }
 
@@ -87,8 +88,8 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
             yOff = top;
         } else {
             int bottom = getY() + getHeight() + minDistance;
-            if (bottom > scaledHeight()) {
-                yOff = bottom - scaledHeight();
+            if (bottom > windowHeight()) {
+                yOff = bottom - windowHeight();
             }
         }
 
@@ -129,7 +130,7 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!isInside(mouseX, mouseY)) {
-            alive = false;
+            discard();
         }
         WindowEventHandlerMixin.super.mouseClicked(mouseX, mouseY, button);
         return false;
@@ -188,11 +189,13 @@ public class ContextMenu implements IPopupWindow, WindowEventHandlerMixin, Windo
 
     @Override
     public int getOrder() {
-        return Integer.MAX_VALUE;
+        return order;
     }
 
     @Override
     public void setOrder(int order) {
+        // Ensure high order by setting the 31th bit (highest in i32) to 1
+        this.order = order | (0b1 << 30);
     }
 
     public void addSection(Section section) {

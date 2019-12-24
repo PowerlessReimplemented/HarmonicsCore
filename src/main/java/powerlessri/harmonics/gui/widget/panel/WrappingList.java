@@ -144,7 +144,7 @@ public class WrappingList extends AbstractContainer<IWidget> {
     }
 
     @Override
-    public List<IWidget> getPanels() {
+    public List<IWidget> getChildren() {
         return children;
     }
 

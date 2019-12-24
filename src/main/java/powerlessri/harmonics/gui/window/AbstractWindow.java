@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 import java.awt.*;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
-import static powerlessri.harmonics.gui.Render2D.scaledHeight;
-import static powerlessri.harmonics.gui.Render2D.scaledWidth;
+import static powerlessri.harmonics.gui.Render2D.windowHeight;
+import static powerlessri.harmonics.gui.Render2D.windowWidth;
 
 public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin, WindowOverlayInfoMixin, WindowPropertiesMixin {
 
@@ -99,8 +99,8 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
     }
 
     public void centralize() {
-        position.x = scaledWidth() / 2 - getWidth() / 2;
-        position.y = scaledHeight() / 2 - getHeight() / 2;
+        position.x = windowWidth() / 2 - getWidth() / 2;
+        position.y = windowHeight() / 2 - getHeight() / 2;
         updatePosition();
     }
 
@@ -108,12 +108,12 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
     }
 
     public void moveToBottom() {
-        position.y = scaledHeight() - border.height;
+        position.y = windowHeight() - border.height;
         updatePosition();
     }
 
     public void moveToVerticalCenter() {
-        position.y = scaledHeight() / 2 - border.height / 2;
+        position.y = windowHeight() / 2 - border.height / 2;
         updatePosition();
     }
 
@@ -128,13 +128,37 @@ public abstract class AbstractWindow implements IWindow, WindowEventHandlerMixin
     }
 
     public void moveToHorizontalCenter() {
-        position.x = scaledWidth() / 2 - border.width / 2;
+        position.x = windowWidth() / 2 - border.width / 2;
         updatePosition();
     }
 
     public void moveToRight() {
-        position.x = scaledWidth() - border.width;
+        position.x = windowWidth() - border.width;
         updatePosition();
+    }
+
+    public void alignLeft(int left) {
+        position.x = left;
+    }
+
+    public void alignCenterX(int left, int right) {
+        position.x = Render2D.computeCenterX(left, right, border.width);
+    }
+
+    public void alignRight(int right) {
+        position.x = Render2D.computeRightX(right, border.width);
+    }
+
+    public void alignTop(int top) {
+        position.y = top;
+    }
+
+    public void alignCenterY(int top, int bottom) {
+        position.y = Render2D.computeCenterY(top, bottom, border.height);
+    }
+
+    public void alignBottom(int bottom) {
+        position.y = Render2D.computeBottomY(bottom, border.height);
     }
 
     protected final void updatePosition() {

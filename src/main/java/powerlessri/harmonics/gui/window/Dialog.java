@@ -153,7 +153,7 @@ public class Dialog extends AbstractPopupWindow {
         onPreReflow.run();
         buttons.adjustMinHeight();
         // Calculate the min width of the buttons
-        FlowLayout.horizontal(buttons.getPanels(), 0, 0, 2);
+        FlowLayout.horizontal(buttons.getChildren(), 0, 0, 2);
 
         FlowLayout.vertical(children, 0, 0, 0);
         updateDimensions();
@@ -228,7 +228,7 @@ public class Dialog extends AbstractPopupWindow {
     }
 
     public void bindRemoveSelf(int buttonID) {
-        IButton button = buttons.getPanels().get(buttonID);
+        IButton button = buttons.getChildren().get(buttonID);
         if (button.hasClickAction()) {
             IntConsumer oldAction = button.getClickAction();
             button.setClickAction(b -> {
@@ -241,7 +241,7 @@ public class Dialog extends AbstractPopupWindow {
     }
 
     public void bindRemoveSelf2LastButton() {
-        bindRemoveSelf(buttons.getPanels().size() - 1);
+        bindRemoveSelf(buttons.getChildren().size() - 1);
     }
 
     @SuppressWarnings("UnusedReturnValue")

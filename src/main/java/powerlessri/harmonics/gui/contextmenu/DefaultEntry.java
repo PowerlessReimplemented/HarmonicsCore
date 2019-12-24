@@ -34,7 +34,11 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
     @Override
     public void render(int mouseX, int mouseY, float particleTicks) {
         RenderEventDispatcher.onPreRender(this, mouseX, mouseY);
+        renderContents(mouseX, mouseY, particleTicks);
+        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
+    }
 
+    protected void renderContents(int mouseX, int mouseY, float particleTicks) {
         int x = getAbsoluteX();
         int y = getAbsoluteY();
         int y2 = getAbsoluteYBottom();
@@ -52,12 +56,14 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
             int iconX = x + MARGIN_SIDES;
             int iconY = y + MARGIN_SIDES;
 
-            completeTexture(iconX, iconY, iconX + RENDERED_ICON_WIDTH, iconY + RENDERED_ICON_HEIGHT, icon);
+            beginTexturedQuad();
+            bindTexture(icon);
+            completeTexture(iconX, iconY, iconX + RENDERED_ICON_WIDTH, iconY + RENDERED_ICON_HEIGHT, 0F);
+            draw();
         }
 
         int textX = x + MARGIN_SIDES + RENDERED_ICON_WIDTH + 2;
         Render2D.renderVerticallyCenteredText(getText(), textX, y, y2, getZLevel(), 0xffffffff);
-        RenderEventDispatcher.onPostRender(this, mouseX, mouseY);
     }
 
     @Nullable
@@ -80,11 +86,11 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
         return (ContextMenu) super.getWindow();
     }
 
-    private int computeWidth() {
+    protected int computeWidth() {
         return MARGIN_SIDES + RENDERED_ICON_WIDTH + 2 + Render2D.fontRenderer().getStringWidth(getText()) + MARGIN_SIDES;
     }
 
-    private int computeHeight() {
+    protected int computeHeight() {
         return MARGIN_SIDES + RENDERED_ICON_HEIGHT + MARGIN_SIDES;
     }
 
@@ -92,5 +98,10 @@ public class DefaultEntry extends AbstractWidget implements IEntry, LeafWidgetMi
     public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         getContextMenu().discard();
         return true;
+    }
+
+    @Override
+    public boolean forceAlive() {
+        return false;
     }
 }

@@ -77,7 +77,7 @@ public class Section extends AbstractContainer<IEntry> {
     }
 
     @Override
-    public Collection<IEntry> getPanels() {
+    public Collection<IEntry> getChildren() {
         return entries;
     }
 

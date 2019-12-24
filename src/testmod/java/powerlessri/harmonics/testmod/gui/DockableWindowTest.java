@@ -16,7 +16,7 @@ import powerlessri.harmonics.gui.window.*;
 
 import java.util.List;
 
-import static powerlessri.harmonics.gui.Render2D.scaledWidth;
+import static powerlessri.harmonics.gui.Render2D.windowWidth;
 
 public class DockableWindowTest extends WidgetScreen {
 
@@ -38,7 +38,7 @@ public class DockableWindowTest extends WidgetScreen {
             setContents(100, 80);
             centralize();
 
-            DockingBar dockingBar = new DockingBar((int) (scaledWidth() * (3F / 5F)), 20);
+            DockingBar dockingBar = new DockingBar((int) (windowWidth() * (3F / 5F)), 20);
             dockingBar.moveToHorizontalCenter();
             dockingBar.moveToBottom();
             WidgetScreen.assertActive().addWindow(dockingBar);

@@ -127,7 +127,7 @@ public abstract class Inspections implements IRenderEventListener {
         if (widget instanceof IHighlightRenderer) {
             ((IHighlightRenderer) widget).renderHighlight();
         } else {
-            fontRenderer().drawStringWithShadow("(Widget does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
+            fontRenderer().drawStringWithShadow("(Widget does not support highlight)", 0, windowHeight() - Render2D.fontHeight(), 0xffffff);
         }
     }
 
@@ -135,7 +135,7 @@ public abstract class Inspections implements IRenderEventListener {
         if (window instanceof IHighlightRenderer) {
             ((IHighlightRenderer) window).renderHighlight();
         } else {
-            fontRenderer().drawStringWithShadow("(Window does not support highlight)", 0, scaledHeight() - Render2D.fontHeight(), 0xffffff);
+            fontRenderer().drawStringWithShadow("(Window does not support highlight)", 0, windowHeight() - Render2D.fontHeight(), 0xffffff);
         }
     }
 

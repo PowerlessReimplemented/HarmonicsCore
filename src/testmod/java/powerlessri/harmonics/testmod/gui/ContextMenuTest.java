@@ -40,7 +40,15 @@ public class ContextMenuTest extends WidgetScreen {
 
                     Section section2 = builder.getSection("Section2");
                     section2.addChildren(new DefaultEntry(null, "S2 Test1"));
-                    section2.addChildren(new DefaultEntry(null, "S2T2"));
+
+                    // Construct submenu
+                    // TODO add builder for creating submenu
+                    SubContextMenu scm = new SubContextMenu();
+                    Section section = new Section();
+                    scm.addSection(section);
+                    section.addChildren(new DefaultEntry(null, "Sub menu entry 1"));
+                    scm.reflow();
+                    section2.addChildren(new ExpandableEntry<>(null, "S2T2", scm));
                     section2.addChildren(new CallbackEntry(null, "S2 Test3", b -> Render2D.minecraft().player.sendChatMessage("You clicked on an entry below S2T2")));
 
                     Section section3 = builder.getSection("Section3");

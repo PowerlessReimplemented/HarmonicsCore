@@ -6,10 +6,7 @@ import powerlessri.harmonics.gui.widget.IWidget;
 import powerlessri.harmonics.gui.widget.navigation.DockedWindow;
 import powerlessri.harmonics.gui.widget.panel.HorizontalList;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static powerlessri.harmonics.gui.Render2D.scaledHeight;
 
 public class DockingBar extends AbstractWindow {
 

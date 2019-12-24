@@ -26,4 +26,13 @@ public interface IEntry extends IWidget, ResizableWidgetMixin {
     Dimension getDimensions();
 
     void attach(ContextMenu contextMenu);
+
+    /**
+     * If returns {@code true}, the context menu this entry belongs to will be forced to keep alive regardless of it's defined discard
+     * condition. This is used for keep nested sub-menus alive when they are not hovered.
+     * <p>
+     * This should not effect invokation of {@link ContextMenu#discard()}, only other direct ways of marking a context menu dead. An example
+     * can be seen in {@link SubContextMenu#kill()}
+     */
+    boolean forceAlive();
 }

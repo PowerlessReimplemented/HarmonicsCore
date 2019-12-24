@@ -10,10 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import powerlessri.harmonics.HarmonicsCore;
-import powerlessri.harmonics.gui.screen.WidgetScreen;
 
 import java.awt.*;
-import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -32,6 +30,7 @@ public final class Render2D {
     public static final ResourceLocation BACK = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/back.png");
     public static final ResourceLocation CLOSE = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/close.png");
     public static final ResourceLocation ITEM_SLOT = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/item_slot.png");
+    public static final ResourceLocation RIGHT_ARROW_SHORT = new ResourceLocation(HarmonicsCore.MODID, "textures/gui/icons/right_arrow_short.png");
 
     private Render2D() {
     }
@@ -48,11 +47,11 @@ public final class Render2D {
         return Minecraft.getInstance();
     }
 
-    public static int scaledWidth() {
+    public static int windowWidth() {
         return Minecraft.getInstance().mainWindow.getScaledWidth();
     }
 
-    public static int scaledHeight() {
+    public static int windowHeight() {
         return Minecraft.getInstance().mainWindow.getScaledHeight();
     }
 
@@ -185,13 +184,8 @@ public final class Render2D {
         glVertex3f(x2, y, z);
     }
 
-    public static void completeTexture(int x1, int y1, int x2, int y2, float z, ResourceLocation texture) {
-        bindTexture(texture);
+    public static void completeTexture(int x1, int y1, int x2, int y2, float z) {
         textureVertices(x1, y1, x2, y2, z, 0.0F, 0.0F, 1.0F, 1.0F);
-    }
-
-    public static void completeTexture(int x1, int y1, int x2, int y2, ResourceLocation texture) {
-        completeTexture(x1, y1, x2, y2, 0F, texture);
     }
 
     public static int computeCenterY(int top, int bottom, int height) {

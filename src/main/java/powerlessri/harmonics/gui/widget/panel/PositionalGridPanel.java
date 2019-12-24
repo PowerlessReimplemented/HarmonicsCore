@@ -16,7 +16,7 @@ public class PositionalGridPanel<T extends IWidget> extends AbstractContainer<T>
     }
 
     @Override
-    public Collection<T> getPanels() {
+    public Collection<T> getChildren() {
         return children;
     }
 

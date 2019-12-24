@@ -8,7 +8,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.apache.commons.lang3.tuple.Triple;
-import org.lwjgl.glfw.GLFW;
 import powerlessri.harmonics.HarmonicsCore;
 import powerlessri.harmonics.collections.CompositeCollection;
 import powerlessri.harmonics.gui.debug.Inspections;
@@ -20,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static powerlessri.harmonics.gui.Render2D.*;
 
 public abstract class WidgetScreen extends Screen implements IGuiEventListener {
@@ -129,7 +129,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
 
         while (!tooltipRenderQueue.isEmpty()) {
             Triple<List<String>, Integer, Integer> entry = tooltipRenderQueue.remove();
-            GuiUtils.drawHoveringText(entry.getLeft(), entry.getMiddle(), entry.getRight(), scaledWidth(), scaledHeight(), Integer.MAX_VALUE, fontRenderer());
+            GuiUtils.drawHoveringText(entry.getLeft(), entry.getMiddle(), entry.getRight(), windowWidth(), windowHeight(), Integer.MAX_VALUE, fontRenderer());
         }
     }
 
@@ -219,7 +219,7 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
         if (super.keyPressed(keyCode, scanCode, modifiers)) {
             return true;
         }
-        if (keyCode == GLFW.GLFW_KEY_E) {
+        if (keyCode == GLFW_KEY_E) {
             this.onClose();
             Minecraft.getInstance().player.closeScreen();
             return true;
@@ -259,9 +259,9 @@ public abstract class WidgetScreen extends Screen implements IGuiEventListener {
     }
 
     public void addPopupWindow(IPopupWindow popup) {
+        popup.setOrder(nextOrderIndex());
         popupWindows.add(popup);
         popup.onAdded(this);
-        raiseWindowToTop(popup);
     }
 
     public void removePopupWindow(IPopupWindow popup) {

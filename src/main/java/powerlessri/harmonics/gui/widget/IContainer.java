@@ -5,12 +5,12 @@ import java.util.Iterator;
 
 public interface IContainer<T extends IWidget> extends IWidget {
 
-    Collection<T> getPanels();
+    Collection<T> getChildren();
 
     void reflow();
 
     /**
-     * Add the given children to the collection returned by {@link #getPanels()}. This should also immediately attach the widget to this
+     * Add the given children to the collection returned by {@link #getChildren()}. This should also immediately attach the widget to this
      * container widget.
      *
      * @throws UnsupportedOperationException If this container implementation does not support adding child widgets.

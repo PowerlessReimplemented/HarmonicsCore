@@ -20,7 +20,7 @@ public class Panel<T extends IWidget> extends AbstractContainer<T> implements Re
     private boolean paused = false;
 
     @Override
-    public List<T> getPanels() {
+    public List<T> getChildren() {
         return children;
     }
 

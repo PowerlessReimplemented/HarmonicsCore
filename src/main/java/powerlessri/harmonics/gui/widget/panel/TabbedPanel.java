@@ -43,7 +43,7 @@ public class TabbedPanel<P extends IWidget> extends AbstractContainer<IWidget> {
     }
 
     @Override
-    public Collection<IWidget> getPanels() {
+    public Collection<IWidget> getChildren() {
         return children;
     }
 
